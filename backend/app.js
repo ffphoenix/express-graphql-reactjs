@@ -1,14 +1,67 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import myGraphQLSchema from './models/schema';
-import { graphqlExpress } from 'apollo-server-express';
+import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
+import { makeExecutableSchema } from 'graphql-tools';
+import jwt from 'express-jwt';
 
-// const myGraphQLSchema = // ... define or import your schema here!
-const PORT = 3000;
+// Some fake data
+const books = [
+    {
+        title: "Harry Potter and the Sorcerer's stone",
+        author: 'J.K. Rowling',
+    },
+    {
+        title: 'Jurassic Park',
+        author: 'Michael Crichton',
+    },
+];
 
+// The GraphQL schema in string form
+const typeDefs = `
+  type Query { books: [Book] }
+  type Book { title: String, author: String }
+`;
+
+// The resolvers
+const resolvers = {
+    Query: { books: () => books },
+};
+
+// Put together a schema
+const schema = makeExecutableSchema({
+    typeDefs,
+    resolvers,
+});
+
+// Initialize the app
 const app = express();
 
-// bodyParser is needed just for POST.
-app.use('/graphql', bodyParser.json(), graphqlExpress({ schema: myGraphQLSchema }));
+// var isRevokedCallback = function(req, payload, done){
+//     var issuer = payload.iss;
+//     var tokenId = payload.jti;
+//
+//     data.getRevokedToken(issuer, tokenId, function(err, token){
+//         if (err) { return done(err); }
+//         return done(null, !!token);
+//     });
+// };
+const jwtCheck = jwt({ secret: '2fadsfdasfasd21312312' }).unless({path: ['/login']}); // change out your secret for each environment
 
-app.listen(PORT);
+app.use(jwtCheck);
+
+// The GraphQL endpoint
+app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }));
+
+// GraphiQL, a visual editor for queries
+app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
+
+app.use(function (err, req, res, next) {
+    if (err.name === 'UnauthorizedError') {
+        res.status(401).send('invalid token...');
+    }
+});
+
+// Start the server
+app.listen(4000, () => {
+    console.log('Go to http://localhost:4000/graphiql to run queries!');
+});
