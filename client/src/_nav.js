@@ -9,5 +9,10 @@ export default {
         text: 'NEW',
       },
     },
+    {
+      name: 'Users',
+      url: '/users',
+      icon: 'icon-alert',
+    },
   ],
 };

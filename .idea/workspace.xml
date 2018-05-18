@@ -2,15 +2,216 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1b45e7a2-aabf-4e23-bdc2-ac1f2420590c" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/frontend/src/actions/userActions.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/frontend/src/components/user/User.js" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/client/src/components/user/User.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/server/.gitignore" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/server/db/migration.js" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/server/tests/ui/homepage.js" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/backend/app.js" afterPath="$PROJECT_DIR$/backend/app.js" />
-      <change beforePath="$PROJECT_DIR$/backend/package-lock.json" afterPath="$PROJECT_DIR$/backend/package-lock.json" />
-      <change beforePath="$PROJECT_DIR$/backend/package.json" afterPath="$PROJECT_DIR$/backend/package.json" />
-      <change beforePath="$PROJECT_DIR$/base-express" afterPath="$PROJECT_DIR$/base-express" />
+      <change beforePath="$PROJECT_DIR$/apollo-server/index.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/apollo-server/package-lock.json" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/backend/app.js" afterPath="$PROJECT_DIR$/server/app.js" />
+      <change beforePath="$PROJECT_DIR$/backend/controllers/comments.js" afterPath="$PROJECT_DIR$/server/controllers/comments.js" />
+      <change beforePath="$PROJECT_DIR$/backend/controllers/index.js" afterPath="$PROJECT_DIR$/server/controllers/index.js" />
+      <change beforePath="$PROJECT_DIR$/backend/controllers/users.js" afterPath="$PROJECT_DIR$/server/controllers/users.js" />
+      <change beforePath="$PROJECT_DIR$/backend/helpers/date.js" afterPath="$PROJECT_DIR$/server/tests/helpers/date.js" />
+      <change beforePath="$PROJECT_DIR$/backend/middlewares/auth.js" afterPath="$PROJECT_DIR$/server/tests/middlewares/auth.js" />
+      <change beforePath="$PROJECT_DIR$/backend/middlewares/users.js" afterPath="$PROJECT_DIR$/server/tests/middlewares/users.js" />
+      <change beforePath="$PROJECT_DIR$/backend/models/comment.js" afterPath="$PROJECT_DIR$/server/models/comment.js" />
+      <change beforePath="$PROJECT_DIR$/backend/models/schema.js" afterPath="$PROJECT_DIR$/server/models/schema.js" />
+      <change beforePath="$PROJECT_DIR$/backend/models/user.js" afterPath="$PROJECT_DIR$/server/models/user.js" />
+      <change beforePath="$PROJECT_DIR$/backend/package-lock.json" afterPath="$PROJECT_DIR$/server/package-lock.json" />
+      <change beforePath="$PROJECT_DIR$/backend/package.json" afterPath="$PROJECT_DIR$/server/package.json" />
+      <change beforePath="$PROJECT_DIR$/backend/public/css/style.css" afterPath="$PROJECT_DIR$/server/public/css/style.css" />
+      <change beforePath="$PROJECT_DIR$/backend/public/img/logo.png" afterPath="$PROJECT_DIR$/server/public/img/logo.png" />
+      <change beforePath="$PROJECT_DIR$/backend/public/libs/empty.js" afterPath="$PROJECT_DIR$/server/public/libs/empty.js" />
+      <change beforePath="$PROJECT_DIR$/backend/tests/controllers/comments.js" afterPath="$PROJECT_DIR$/server/tests/controllers/comments.js" />
+      <change beforePath="$PROJECT_DIR$/backend/tests/helpers/date.js" afterPath="$PROJECT_DIR$/server/helpers/date.js" />
+      <change beforePath="$PROJECT_DIR$/backend/tests/integration/loading.js" afterPath="$PROJECT_DIR$/server/tests/integration/loading.js" />
+      <change beforePath="$PROJECT_DIR$/backend/tests/middlewares/auth.js" afterPath="$PROJECT_DIR$/server/middlewares/auth.js" />
+      <change beforePath="$PROJECT_DIR$/backend/tests/middlewares/users.js" afterPath="$PROJECT_DIR$/server/middlewares/users.js" />
+      <change beforePath="$PROJECT_DIR$/backend/tests/models/comment.js" afterPath="$PROJECT_DIR$/server/tests/models/comment.js" />
+      <change beforePath="$PROJECT_DIR$/backend/tests/ui/homepage.js" afterPath="$PROJECT_DIR$/server/helpers/mysql-connection.js" />
+      <change beforePath="$PROJECT_DIR$/base-express" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/frontend/.editorconfig" afterPath="$PROJECT_DIR$/client/.editorconfig" />
+      <change beforePath="$PROJECT_DIR$/frontend/.gitignore" afterPath="$PROJECT_DIR$/client/.gitignore" />
+      <change beforePath="$PROJECT_DIR$/frontend/LICENSE" afterPath="$PROJECT_DIR$/client/LICENSE" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" afterPath="$PROJECT_DIR$/client/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/assets/.gitkeep" afterPath="$PROJECT_DIR$/client/public/assets/.gitkeep" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/assets/img/avatars/1.jpg" afterPath="$PROJECT_DIR$/client/public/assets/img/avatars/1.jpg" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/assets/img/avatars/2.jpg" afterPath="$PROJECT_DIR$/client/public/assets/img/avatars/2.jpg" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/assets/img/avatars/3.jpg" afterPath="$PROJECT_DIR$/client/public/assets/img/avatars/3.jpg" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/assets/img/avatars/4.jpg" afterPath="$PROJECT_DIR$/client/public/assets/img/avatars/4.jpg" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/assets/img/avatars/5.jpg" afterPath="$PROJECT_DIR$/client/public/assets/img/avatars/5.jpg" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/assets/img/avatars/6.jpg" afterPath="$PROJECT_DIR$/client/public/assets/img/avatars/6.jpg" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/assets/img/avatars/7.jpg" afterPath="$PROJECT_DIR$/client/public/assets/img/avatars/7.jpg" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/assets/img/avatars/8.jpg" afterPath="$PROJECT_DIR$/client/public/assets/img/avatars/8.jpg" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/assets/img/favicon.png" afterPath="$PROJECT_DIR$/client/public/assets/img/favicon.png" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/favicon.ico" afterPath="$PROJECT_DIR$/client/public/favicon.ico" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/index.html" afterPath="$PROJECT_DIR$/client/public/index.html" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/manifest.json" afterPath="$PROJECT_DIR$/client/public/manifest.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.css" afterPath="$PROJECT_DIR$/client/src/App.css" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.js" afterPath="$PROJECT_DIR$/client/src/App.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.test.js" afterPath="$PROJECT_DIR$/client/src/App.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/_nav.js" afterPath="$PROJECT_DIR$/client/src/_nav.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/actions/userActions.js" afterPath="$PROJECT_DIR$/client/src/actions/userActions.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/assets/img/brand/logo.svg" afterPath="$PROJECT_DIR$/client/src/assets/img/brand/logo.svg" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/assets/img/brand/sygnet.svg" afterPath="$PROJECT_DIR$/client/src/assets/img/brand/sygnet.svg" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/user/User.js" afterPath="$PROJECT_DIR$/server/README.md" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/containers/DefaultLayout/DefaultAside.js" afterPath="$PROJECT_DIR$/client/src/containers/DefaultLayout/DefaultAside.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/containers/DefaultLayout/DefaultFooter.js" afterPath="$PROJECT_DIR$/client/src/containers/DefaultLayout/DefaultFooter.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/containers/DefaultLayout/DefaultHeader.js" afterPath="$PROJECT_DIR$/client/src/containers/DefaultLayout/DefaultHeader.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/containers/DefaultLayout/DefaultLayout.js" afterPath="$PROJECT_DIR$/client/src/containers/DefaultLayout/DefaultLayout.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/containers/DefaultLayout/__tests__/DefaultAside.test.js" afterPath="$PROJECT_DIR$/client/src/containers/DefaultLayout/__tests__/DefaultAside.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/containers/DefaultLayout/__tests__/DefaultFooter.test.js" afterPath="$PROJECT_DIR$/client/src/containers/DefaultLayout/__tests__/DefaultFooter.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/containers/DefaultLayout/__tests__/DefaultHeader.test.js" afterPath="$PROJECT_DIR$/client/src/containers/DefaultLayout/__tests__/DefaultHeader.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/containers/DefaultLayout/index.js" afterPath="$PROJECT_DIR$/client/src/containers/DefaultLayout/index.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/containers/DefaultLayout/package.json" afterPath="$PROJECT_DIR$/client/src/containers/DefaultLayout/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/containers/index.js" afterPath="$PROJECT_DIR$/client/src/containers/index.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/index.css" afterPath="$PROJECT_DIR$/client/src/index.css" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/index.js" afterPath="$PROJECT_DIR$/client/src/index.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/polyfill.js" afterPath="$PROJECT_DIR$/client/src/polyfill.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/registerServiceWorker.js" afterPath="$PROJECT_DIR$/client/src/registerServiceWorker.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/routes.js" afterPath="$PROJECT_DIR$/client/src/routes.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/scss/_custom.scss" afterPath="$PROJECT_DIR$/client/src/scss/_custom.scss" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/scss/_ie-fix.scss" afterPath="$PROJECT_DIR$/client/src/scss/_ie-fix.scss" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/scss/_variables.scss" afterPath="$PROJECT_DIR$/client/src/scss/_variables.scss" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/scss/style.css" afterPath="$PROJECT_DIR$/client/src/scss/style.css" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/scss/style.scss" afterPath="$PROJECT_DIR$/client/src/scss/style.scss" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/scss/vendors/_variables.scss" afterPath="$PROJECT_DIR$/client/src/scss/vendors/_variables.scss" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/scss/vendors/chart.js/chart.css" afterPath="$PROJECT_DIR$/client/src/scss/vendors/chart.js/chart.css" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/scss/vendors/chart.js/chart.scss" afterPath="$PROJECT_DIR$/client/src/scss/vendors/chart.js/chart.scss" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/setupTests.js" afterPath="$PROJECT_DIR$/client/src/setupTests.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/utils/AddAccountPackage.js" afterPath="$PROJECT_DIR$/client/src/utils/AddAccountPackage.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/utils/ApiClient.js" afterPath="$PROJECT_DIR$/client/src/utils/ApiClient.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/utils/RatingStar.js" afterPath="$PROJECT_DIR$/client/src/utils/RatingStar.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/utils/ResponseError.js" afterPath="$PROJECT_DIR$/client/src/utils/ResponseError.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/utils/constants.js" afterPath="$PROJECT_DIR$/client/src/utils/constants.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/utils/history.js" afterPath="$PROJECT_DIR$/client/src/utils/history.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/utils/rentalCalculate.js" afterPath="$PROJECT_DIR$/client/src/utils/rentalCalculate.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/utils/utils.js" afterPath="$PROJECT_DIR$/client/src/utils/utils.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/utils/validationRules.js" afterPath="$PROJECT_DIR$/client/src/utils/validationRules.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Breadcrumbs/Breadcrumbs.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Breadcrumbs/Breadcrumbs.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Breadcrumbs/Breadcrumbs.test.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Breadcrumbs/Breadcrumbs.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Breadcrumbs/package.json" afterPath="$PROJECT_DIR$/client/src/views/Base/Breadcrumbs/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Cards/Cards.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Cards/Cards.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Cards/Cards.test.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Cards/Cards.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Cards/package.json" afterPath="$PROJECT_DIR$/client/src/views/Base/Cards/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Carousels/Carousels.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Carousels/Carousels.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Carousels/Carousels.test.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Carousels/Carousels.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Carousels/package.json" afterPath="$PROJECT_DIR$/client/src/views/Base/Carousels/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Collapses/Collapses.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Collapses/Collapses.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Collapses/Collapses.test.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Collapses/Collapses.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Collapses/package.json" afterPath="$PROJECT_DIR$/client/src/views/Base/Collapses/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Dropdowns/Dropdowns.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Dropdowns/Dropdowns.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Dropdowns/Dropdowns.test.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Dropdowns/Dropdowns.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Dropdowns/package.json" afterPath="$PROJECT_DIR$/client/src/views/Base/Dropdowns/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Forms/Forms.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Forms/Forms.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Forms/Forms.test.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Forms/Forms.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Forms/package.json" afterPath="$PROJECT_DIR$/client/src/views/Base/Forms/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Jumbotrons/Jumbotrons.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Jumbotrons/Jumbotrons.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Jumbotrons/Jumbotrons.test.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Jumbotrons/Jumbotrons.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Jumbotrons/package.json" afterPath="$PROJECT_DIR$/client/src/views/Base/Jumbotrons/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/ListGroups/ListGroups.js" afterPath="$PROJECT_DIR$/client/src/views/Base/ListGroups/ListGroups.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/ListGroups/ListGroups.test.js" afterPath="$PROJECT_DIR$/client/src/views/Base/ListGroups/ListGroups.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/ListGroups/package.json" afterPath="$PROJECT_DIR$/client/src/views/Base/ListGroups/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Navbars/Navbars.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Navbars/Navbars.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Navbars/Navbars.test.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Navbars/Navbars.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Navbars/package.json" afterPath="$PROJECT_DIR$/client/src/views/Base/Navbars/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Navs/Navs.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Navs/Navs.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Navs/Navs.test.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Navs/Navs.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Navs/package.json" afterPath="$PROJECT_DIR$/client/src/views/Base/Navs/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Paginations/Paginations.test.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Paginations/Paginations.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Paginations/Pagnations.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Paginations/Pagnations.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Paginations/package.json" afterPath="$PROJECT_DIR$/client/src/views/Base/Paginations/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Popovers/Popovers.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Popovers/Popovers.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Popovers/Popovers.test.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Popovers/Popovers.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Popovers/package.json" afterPath="$PROJECT_DIR$/client/src/views/Base/Popovers/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/ProgressBar/ProgressBar.js" afterPath="$PROJECT_DIR$/client/src/views/Base/ProgressBar/ProgressBar.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/ProgressBar/ProgressBar.test.js" afterPath="$PROJECT_DIR$/client/src/views/Base/ProgressBar/ProgressBar.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/ProgressBar/package.json" afterPath="$PROJECT_DIR$/client/src/views/Base/ProgressBar/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Switches/Switches.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Switches/Switches.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Switches/Switches.test.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Switches/Switches.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Switches/package.json" afterPath="$PROJECT_DIR$/client/src/views/Base/Switches/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Tables/Tables.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Tables/Tables.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Tables/Tables.test.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Tables/Tables.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Tables/package.json" afterPath="$PROJECT_DIR$/client/src/views/Base/Tables/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Tabs/Tabs.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Tabs/Tabs.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Tabs/Tabs.test.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Tabs/Tabs.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Tabs/package.json" afterPath="$PROJECT_DIR$/client/src/views/Base/Tabs/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Tooltips/Tooltips.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Tooltips/Tooltips.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Tooltips/Tooltips.test.js" afterPath="$PROJECT_DIR$/client/src/views/Base/Tooltips/Tooltips.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/Tooltips/package.json" afterPath="$PROJECT_DIR$/client/src/views/Base/Tooltips/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Base/index.js" afterPath="$PROJECT_DIR$/client/src/views/Base/index.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Buttons/BrandButtons/BrandButtons.js" afterPath="$PROJECT_DIR$/client/src/views/Buttons/BrandButtons/BrandButtons.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Buttons/BrandButtons/BrandButtons.test.js" afterPath="$PROJECT_DIR$/client/src/views/Buttons/BrandButtons/BrandButtons.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Buttons/BrandButtons/package.json" afterPath="$PROJECT_DIR$/client/src/views/Buttons/BrandButtons/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Buttons/ButtonDropdowns/ButtonDropdowns.js" afterPath="$PROJECT_DIR$/client/src/views/Buttons/ButtonDropdowns/ButtonDropdowns.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Buttons/ButtonDropdowns/ButtonDropdowns.test.js" afterPath="$PROJECT_DIR$/client/src/views/Buttons/ButtonDropdowns/ButtonDropdowns.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Buttons/ButtonDropdowns/package.json" afterPath="$PROJECT_DIR$/client/src/views/Buttons/ButtonDropdowns/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Buttons/ButtonGroups/ButtonGroups.js" afterPath="$PROJECT_DIR$/client/src/views/Buttons/ButtonGroups/ButtonGroups.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Buttons/ButtonGroups/ButtonGroups.test.js" afterPath="$PROJECT_DIR$/client/src/views/Buttons/ButtonGroups/ButtonGroups.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Buttons/ButtonGroups/package.json" afterPath="$PROJECT_DIR$/client/src/views/Buttons/ButtonGroups/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Buttons/Buttons/Buttons.js" afterPath="$PROJECT_DIR$/client/src/views/Buttons/Buttons/Buttons.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Buttons/Buttons/Buttons.test.js" afterPath="$PROJECT_DIR$/client/src/views/Buttons/Buttons/Buttons.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Buttons/Buttons/package.json" afterPath="$PROJECT_DIR$/client/src/views/Buttons/Buttons/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Buttons/index.js" afterPath="$PROJECT_DIR$/client/src/views/Buttons/index.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Charts/Charts.js" afterPath="$PROJECT_DIR$/client/src/views/Charts/Charts.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Charts/Charts.test.js" afterPath="$PROJECT_DIR$/client/src/views/Charts/Charts.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Charts/package.json" afterPath="$PROJECT_DIR$/client/src/views/Charts/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Dashboard/Dashboard.js" afterPath="$PROJECT_DIR$/client/src/views/Dashboard/Dashboard.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Dashboard/Dashboard.test.js" afterPath="$PROJECT_DIR$/client/src/views/Dashboard/Dashboard.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Dashboard/package.json" afterPath="$PROJECT_DIR$/client/src/views/Dashboard/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Icons/CoreUIIcons/CoreUIIcons.js" afterPath="$PROJECT_DIR$/client/src/views/Icons/CoreUIIcons/CoreUIIcons.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Icons/CoreUIIcons/CoreUIIcons.test.js" afterPath="$PROJECT_DIR$/client/src/views/Icons/CoreUIIcons/CoreUIIcons.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Icons/CoreUIIcons/package.json" afterPath="$PROJECT_DIR$/client/src/views/Icons/CoreUIIcons/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Icons/Flags/Flags.js" afterPath="$PROJECT_DIR$/client/src/views/Icons/Flags/Flags.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Icons/Flags/Flags.test.js" afterPath="$PROJECT_DIR$/client/src/views/Icons/Flags/Flags.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Icons/Flags/package.json" afterPath="$PROJECT_DIR$/client/src/views/Icons/Flags/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Icons/FontAwesome/FontAwesome.js" afterPath="$PROJECT_DIR$/client/src/views/Icons/FontAwesome/FontAwesome.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Icons/FontAwesome/FontAwesome.test.js" afterPath="$PROJECT_DIR$/client/src/views/Icons/FontAwesome/FontAwesome.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Icons/FontAwesome/package.json" afterPath="$PROJECT_DIR$/client/src/views/Icons/FontAwesome/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Icons/SimpleLineIcons/SimpleLineIcons.js" afterPath="$PROJECT_DIR$/client/src/views/Icons/SimpleLineIcons/SimpleLineIcons.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Icons/SimpleLineIcons/SimpleLineIcons.test.js" afterPath="$PROJECT_DIR$/client/src/views/Icons/SimpleLineIcons/SimpleLineIcons.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Icons/SimpleLineIcons/package.json" afterPath="$PROJECT_DIR$/client/src/views/Icons/SimpleLineIcons/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Icons/index.js" afterPath="$PROJECT_DIR$/client/src/views/Icons/index.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Notifications/Alerts/Alerts.js" afterPath="$PROJECT_DIR$/client/src/views/Notifications/Alerts/Alerts.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Notifications/Alerts/Alerts.test.js" afterPath="$PROJECT_DIR$/client/src/views/Notifications/Alerts/Alerts.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Notifications/Alerts/package.json" afterPath="$PROJECT_DIR$/client/src/views/Notifications/Alerts/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Notifications/Badges/Badges.js" afterPath="$PROJECT_DIR$/client/src/views/Notifications/Badges/Badges.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Notifications/Badges/Badges.test.js" afterPath="$PROJECT_DIR$/client/src/views/Notifications/Badges/Badges.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Notifications/Badges/package.json" afterPath="$PROJECT_DIR$/client/src/views/Notifications/Badges/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Notifications/Modals/Modals.js" afterPath="$PROJECT_DIR$/client/src/views/Notifications/Modals/Modals.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Notifications/Modals/Modals.test.js" afterPath="$PROJECT_DIR$/client/src/views/Notifications/Modals/Modals.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Notifications/Modals/package.json" afterPath="$PROJECT_DIR$/client/src/views/Notifications/Modals/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Notifications/index.js" afterPath="$PROJECT_DIR$/client/src/views/Notifications/index.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Pages/Login/Login.js" afterPath="$PROJECT_DIR$/client/src/views/Pages/Login/Login.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Pages/Login/Login.test.js" afterPath="$PROJECT_DIR$/client/src/views/Pages/Login/Login.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Pages/Login/package.json" afterPath="$PROJECT_DIR$/client/src/views/Pages/Login/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Pages/Page404/Page404.js" afterPath="$PROJECT_DIR$/client/src/views/Pages/Page404/Page404.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Pages/Page404/Page404.test.js" afterPath="$PROJECT_DIR$/client/src/views/Pages/Page404/Page404.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Pages/Page404/package.json" afterPath="$PROJECT_DIR$/client/src/views/Pages/Page404/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Pages/Page500/Page500.js" afterPath="$PROJECT_DIR$/client/src/views/Pages/Page500/Page500.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Pages/Page500/Page500.test.js" afterPath="$PROJECT_DIR$/client/src/views/Pages/Page500/Page500.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Pages/Page500/package.json" afterPath="$PROJECT_DIR$/client/src/views/Pages/Page500/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Pages/Register/Register.js" afterPath="$PROJECT_DIR$/client/src/views/Pages/Register/Register.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Pages/Register/Register.test.js" afterPath="$PROJECT_DIR$/client/src/views/Pages/Register/Register.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Pages/Register/package.json" afterPath="$PROJECT_DIR$/client/src/views/Pages/Register/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Pages/index.js" afterPath="$PROJECT_DIR$/client/src/views/Pages/index.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Theme/Colors/Colors.js" afterPath="$PROJECT_DIR$/client/src/views/Theme/Colors/Colors.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Theme/Colors/Colors.test.js" afterPath="$PROJECT_DIR$/client/src/views/Theme/Colors/Colors.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Theme/Colors/package.json" afterPath="$PROJECT_DIR$/client/src/views/Theme/Colors/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Theme/Typography/Typography.js" afterPath="$PROJECT_DIR$/client/src/views/Theme/Typography/Typography.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Theme/Typography/Typography.test.js" afterPath="$PROJECT_DIR$/client/src/views/Theme/Typography/Typography.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Theme/Typography/package.json" afterPath="$PROJECT_DIR$/client/src/views/Theme/Typography/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Theme/index.js" afterPath="$PROJECT_DIR$/client/src/views/Theme/index.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Widgets/Widget01.js" afterPath="$PROJECT_DIR$/client/src/views/Widgets/Widget01.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Widgets/Widget02.js" afterPath="$PROJECT_DIR$/client/src/views/Widgets/Widget02.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Widgets/Widget03.js" afterPath="$PROJECT_DIR$/client/src/views/Widgets/Widget03.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Widgets/Widget04.js" afterPath="$PROJECT_DIR$/client/src/views/Widgets/Widget04.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Widgets/Widgets.js" afterPath="$PROJECT_DIR$/client/src/views/Widgets/Widgets.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Widgets/Widgets.test.js" afterPath="$PROJECT_DIR$/client/src/views/Widgets/Widgets.test.js" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/Widgets/package.json" afterPath="$PROJECT_DIR$/client/src/views/Widgets/package.json" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/index.js" afterPath="$PROJECT_DIR$/client/src/views/index.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -21,41 +222,73 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="userActions.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/frontend/src/actions/userActions.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-162">
-              <caret line="10" column="18" lean-forward="false" selection-start-line="10" selection-start-column="18" selection-end-line="10" selection-end-column="18" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="User.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/frontend/src/components/user/User.js">
+      <file leaf-file-name="schema.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/models/schema.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <caret line="0" column="21" lean-forward="false" selection-start-line="0" selection-start-column="6" selection-end-line="0" selection-end-column="21" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="_nav.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/frontend/src/_nav.js">
+      <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/app.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="90">
+              <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#30#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="comment.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/models/comment.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="342">
+              <caret line="19" column="1" lean-forward="false" selection-start-line="19" selection-start-column="1" selection-end-line="19" selection-end-column="1" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="user.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/models/user.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="162">
+              <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="mysql-connection.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/server/helpers/mysql-connection.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="126">
+              <caret line="7" column="3" lean-forward="true" selection-start-line="7" selection-start-column="3" selection-end-line="7" selection-end-column="3" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="package.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/package.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="450">
+              <caret line="25" column="36" lean-forward="true" selection-start-line="25" selection-start-column="36" selection-end-line="25" selection-end-column="36" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="migration.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/db/migration.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="198">
-              <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="routes.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/frontend/src/routes.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="558">
-              <caret line="187" column="63" lean-forward="false" selection-start-line="187" selection-start-column="63" selection-end-line="187" selection-end-column="63" />
+              <caret line="11" column="28" lean-forward="false" selection-start-line="11" selection-start-column="28" selection-end-line="11" selection-end-column="28" />
               <folding />
             </state>
           </provider>
@@ -79,12 +312,16 @@
       <find>history</find>
       <find>AssetModal</find>
       <find>Pagination</find>
+      <find>react-scripts</find>
+      <find>back</find>
+      <find>server</find>
     </findStrings>
     <replaceStrings>
       <replace>UserModal</replace>
     </replaceStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/frontend/src</dir>
+      <dir>$PROJECT_DIR$/frontend</dir>
     </dirStrings>
   </component>
   <component name="Git.Settings">
@@ -100,17 +337,29 @@
         <option value="$PROJECT_DIR$/base-express/.gitignore" />
         <option value="$PROJECT_DIR$/backend/models/schema.js" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/frontend/src/_nav.js" />
-        <option value="$PROJECT_DIR$/frontend/src/containers/DefaultLayout/DefaultLayout.js" />
         <option value="$PROJECT_DIR$/frontend/src/containers/DefaultLayout/DefaultHeader.js" />
         <option value="$PROJECT_DIR$/frontend/src/components/Users.js" />
         <option value="$PROJECT_DIR$/frontend/package.json" />
         <option value="$PROJECT_DIR$/frontend/src/actions/userActions.js" />
         <option value="$PROJECT_DIR$/frontend/src/components/gridPanel/GridPanel.js" />
         <option value="$PROJECT_DIR$/frontend/src/components/user/UserModal.js" />
-        <option value="$PROJECT_DIR$/backend/app.js" />
         <option value="$PROJECT_DIR$/frontend/src/components/user/UserDatagrid.js" />
+        <option value="$PROJECT_DIR$/backend/app.js" />
+        <option value="$PROJECT_DIR$/frontend/src/containers/DefaultLayout/DefaultLayout.js" />
         <option value="$PROJECT_DIR$/frontend/src/routes.js" />
+        <option value="$PROJECT_DIR$/frontend/src/_nav.js" />
+        <option value="$PROJECT_DIR$/frontend/src/components/user/User.js" />
+        <option value="$PROJECT_DIR$/frontend/src/polyfill.js" />
+        <option value="$PROJECT_DIR$/frontend/src/index.js" />
+        <option value="$PROJECT_DIR$/server/.gitignore" />
+        <option value="$PROJECT_DIR$/server/package.json" />
+        <option value="$PROJECT_DIR$/server/db/migrations.js" />
+        <option value="$PROJECT_DIR$/server/db/migrations/1526644117649_create_table_users.js" />
+        <option value="$PROJECT_DIR$/server/db/migrations/1526644722411_create_table_users.js" />
+        <option value="$PROJECT_DIR$/server/README.md" />
+        <option value="$PROJECT_DIR$/server/app.js" />
+        <option value="$PROJECT_DIR$/server/models/user.js" />
+        <option value="$PROJECT_DIR$/server/helpers/mysql-connection.js" />
       </list>
     </option>
   </component>
@@ -127,10 +376,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="NodeModulesDirectoryManager">
-    <handled-path value="$PROJECT_DIR$/apollo-server/node_modules" />
-    <handled-path value="$PROJECT_DIR$/backend/node_modules" />
-    <handled-path value="$PROJECT_DIR$/base-express/node_modules" />
-    <handled-path value="$PROJECT_DIR$/frontend/node_modules" />
+    <handled-path value="$PROJECT_DIR$/client/node_modules" />
+    <handled-path value="$PROJECT_DIR$/server/node_modules" />
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds" extendedState="6">
@@ -187,39 +434,37 @@
             <path>
               <item name="LGN-Task" type="b2602c69:ProjectViewProjectNode" />
               <item name="LGN-Task" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="backend" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="client" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="LGN-Task" type="b2602c69:ProjectViewProjectNode" />
               <item name="LGN-Task" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="frontend" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="LGN-Task" type="b2602c69:ProjectViewProjectNode" />
               <item name="LGN-Task" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="frontend" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="db" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="LGN-Task" type="b2602c69:ProjectViewProjectNode" />
               <item name="LGN-Task" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="frontend" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="actions" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="db" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="migrations" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="LGN-Task" type="b2602c69:ProjectViewProjectNode" />
               <item name="LGN-Task" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="frontend" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="components" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="helpers" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="LGN-Task" type="b2602c69:ProjectViewProjectNode" />
               <item name="LGN-Task" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="frontend" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="utils" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="server" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="models" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
           </expand>
           <select />
@@ -241,6 +486,7 @@
       <recent name="$PROJECT_DIR$/frontend/src/components" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/server" />
       <recent name="$PROJECT_DIR$/backend" />
     </key>
   </component>
@@ -270,12 +516,12 @@
       <option name="presentableId" value="Default" />
       <updated>1526028662294</updated>
       <workItem from="1526028664352" duration="16156000" />
-      <workItem from="1526455805022" duration="18329000" />
+      <workItem from="1526455805022" duration="32494000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="34485000" />
+    <option name="totallyTimeSpent" value="48650000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
@@ -309,56 +555,13 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="4" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/base-express/node_modules/express/node_modules/statuses/LICENSE">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/base-express/node_modules/express/node_modules/statuses/codes.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-376">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/base-express/node_modules/express/lib/router/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2214">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/base-express/node_modules/express/node_modules/statuses/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/base-express/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" column="2" lean-forward="false" selection-start-line="1" selection-start-column="2" selection-end-line="1" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/base-express/node_modules/express/lib/express.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1236">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/helpers/date.js">
+    <entry file="file://$PROJECT_DIR$/server/middlewares/auth.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -366,7 +569,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/middlewares/users.js">
+    <entry file="file://$PROJECT_DIR$/server/controllers/users.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -374,63 +577,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/backend/middlewares/auth.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/controllers/users.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/models/user.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/models/comment.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="19" column="1" lean-forward="false" selection-start-line="19" selection-start-column="1" selection-end-line="19" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/models/schema.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="21" lean-forward="false" selection-start-line="0" selection-start-column="6" selection-end-line="0" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" column="5" lean-forward="false" selection-start-line="1" selection-start-column="5" selection-end-line="1" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="414">
-          <caret line="23" column="36" lean-forward="false" selection-start-line="23" selection-start-column="36" selection-end-line="23" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/controllers/comments.js">
+    <entry file="file://$PROJECT_DIR$/server/controllers/comments.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="72">
           <caret line="4" column="6" lean-forward="false" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="6" />
@@ -438,17 +585,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/public/assets/img/avatars/1.jpg">
+    <entry file="file://$PROJECT_DIR$/client/public/assets/img/avatars/1.jpg">
       <provider selected="true" editor-type-id="images">
         <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/frontend/CONTRIBUTING.md">
@@ -462,7 +601,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/LICENSE">
+    <entry file="file://$PROJECT_DIR$/client/LICENSE">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -492,7 +631,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/views/Icons/index.js">
+    <entry file="file://$PROJECT_DIR$/client/src/views/Icons/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -500,7 +639,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/views/Icons/SimpleLineIcons/SimpleLineIcons.js">
+    <entry file="file://$PROJECT_DIR$/client/src/views/Icons/SimpleLineIcons/SimpleLineIcons.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -508,7 +647,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/App.test.js">
+    <entry file="file://$PROJECT_DIR$/client/src/App.test.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -516,7 +655,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/.editorconfig">
+    <entry file="file://$PROJECT_DIR$/client/.editorconfig">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -524,7 +663,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/public/index.html">
+    <entry file="file://$PROJECT_DIR$/client/public/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -532,7 +671,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/public/manifest.json">
+    <entry file="file://$PROJECT_DIR$/client/public/manifest.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
           <caret line="15" column="0" lean-forward="false" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
@@ -540,25 +679,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/polyfill.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="22" column="31" lean-forward="false" selection-start-line="22" selection-start-column="31" selection-end-line="22" selection-end-column="31" />
-          <folding>
-            <marker date="1526473710943" expanded="true" signature="0:26" ph="/*...*/" />
-            <marker date="1526473710943" expanded="true" signature="28:95" ph="/**...*/" />
-            <marker date="1526473710943" expanded="true" signature="96:380" ph="//..." />
-            <marker date="1526473710943" expanded="false" signature="504:549" ph="..." />
-            <marker date="1526473710943" expanded="true" signature="551:615" ph="/**...*/" />
-            <marker date="1526473710943" expanded="true" signature="649:690" ph="/**...*/" />
-            <marker date="1526473710943" expanded="true" signature="691:821" ph="//..." />
-            <marker date="1526473710943" expanded="true" signature="898:1329" ph="{...}" />
-            <marker date="1526473710943" expanded="true" signature="1006:1241" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/node_modules/macaddress/index.js">
+    <entry file="file://$PROJECT_DIR$/client/node_modules/macaddress/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -566,7 +687,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/App.css">
+    <entry file="file://$PROJECT_DIR$/client/src/App.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -574,15 +695,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" column="15" lean-forward="false" selection-start-line="1" selection-start-column="15" selection-end-line="1" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/containers/DefaultLayout/index.js">
+    <entry file="file://$PROJECT_DIR$/client/src/containers/DefaultLayout/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -590,17 +703,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/containers/DefaultLayout/DefaultLayout.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="34" column="41" lean-forward="false" selection-start-line="34" selection-start-column="40" selection-end-line="34" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#41#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/containers/DefaultLayout/__tests__/DefaultAside.test.js">
+    <entry file="file://$PROJECT_DIR$/client/src/containers/DefaultLayout/__tests__/DefaultAside.test.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -610,7 +713,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/containers/DefaultLayout/DefaultHeader.js">
+    <entry file="file://$PROJECT_DIR$/client/src/containers/DefaultLayout/DefaultHeader.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
           <caret line="41" column="0" lean-forward="false" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
@@ -620,7 +723,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/views/Base/Tables/Tables.js">
+    <entry file="file://$PROJECT_DIR$/client/src/views/Base/Tables/Tables.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-5130">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -630,15 +733,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/registerServiceWorker.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1980">
-          <caret line="110" column="6" lean-forward="false" selection-start-line="110" selection-start-column="2" selection-end-line="110" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/setupTests.js">
+    <entry file="file://$PROJECT_DIR$/client/src/setupTests.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -650,14 +745,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="954">
-          <caret line="53" column="3" lean-forward="false" selection-start-line="53" selection-start-column="3" selection-end-line="53" selection-end-column="3" />
           <folding />
         </state>
       </provider>
@@ -678,28 +765,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/App.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="702">
-          <caret line="39" column="0" lean-forward="true" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#41#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/apollo-server/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="223">
           <caret line="18" column="20" lean-forward="false" selection-start-line="18" selection-start-column="17" selection-end-line="18" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/backend/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1098">
-          <caret line="65" column="44" lean-forward="false" selection-start-line="65" selection-start-column="44" selection-end-line="65" selection-end-column="44" />
           <folding />
         </state>
       </provider>
@@ -712,7 +781,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/actions/userActions.js">
+    <entry file="file://$PROJECT_DIR$/client/src/actions/userActions.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-162">
           <caret line="10" column="18" lean-forward="false" selection-start-line="10" selection-start-column="18" selection-end-line="10" selection-end-column="18" />
@@ -720,7 +789,15 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/components/user/User.js">
+    <entry file="file://$PROJECT_DIR$/client/src/App.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="522">
+          <caret line="31" column="12" lean-forward="true" selection-start-line="31" selection-start-column="12" selection-end-line="31" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/containers/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -728,18 +805,194 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/_nav.js">
+    <entry file="file://$PROJECT_DIR$/client/src/containers/DefaultLayout/DefaultLayout.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+        <state relative-caret-position="144">
+          <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+          <folding>
+            <element signature="e#407#441#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/containers/DefaultLayout/DefaultFooter.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="19" column="23" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#41#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/_nav.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="17" column="2" lean-forward="false" selection-start-line="17" selection-start-column="2" selection-end-line="17" selection-end-column="2" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/routes.js">
+    <entry file="file://$PROJECT_DIR$/client/src/routes.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="558">
-          <caret line="187" column="63" lean-forward="false" selection-start-line="187" selection-start-column="63" selection-end-line="187" selection-end-column="63" />
+        <state relative-caret-position="3186">
+          <caret line="180" column="40" lean-forward="false" selection-start-line="180" selection-start-column="40" selection-end-line="180" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/registerServiceWorker.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="714">
+          <caret line="87" column="80" lean-forward="false" selection-start-line="87" selection-start-column="80" selection-end-line="87" selection-end-column="80" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/components/user/User.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#41#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="72">
+          <caret line="20" column="26" lean-forward="false" selection-start-line="20" selection-start-column="26" selection-end-line="20" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/polyfill.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="468">
+          <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="false" />
+            <element signature="e#497#521#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#19#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="1" column="5" lean-forward="false" selection-start-line="1" selection-start-column="5" selection-end-line="1" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="72">
+          <caret line="4" column="17" lean-forward="false" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/models/schema.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="21" lean-forward="false" selection-start-line="0" selection-start-column="6" selection-end-line="0" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/models/comment.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="19" column="1" lean-forward="false" selection-start-line="19" selection-start-column="1" selection-end-line="19" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/db/migrations/1526644117649_create_table_users.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="3" column="1" lean-forward="true" selection-start-line="3" selection-start-column="1" selection-end-line="3" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/db/migrations/1526644722411_create_table_users.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="2" column="43" lean-forward="false" selection-start-line="2" selection-start-column="43" selection-end-line="2" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="72">
+            <caret line="4" column="11" lean-forward="false" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="11" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="25" column="36" lean-forward="true" selection-start-line="25" selection-start-column="36" selection-end-line="25" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#30#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/db/migration.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="11" column="28" lean-forward="false" selection-start-line="11" selection-start-column="28" selection-end-line="11" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/models/user.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/helpers/mysql-connection.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="7" column="3" lean-forward="true" selection-start-line="7" selection-start-column="3" selection-end-line="7" selection-end-column="3" />
           <folding />
         </state>
       </provider>

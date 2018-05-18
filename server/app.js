@@ -45,8 +45,7 @@ const app = express();
 //         return done(null, !!token);
 //     });
 // };
-const jwtCheck = jwt({ secret: '2fadsfdasfasd21312312' }).unless({path: ['/login']}); // change out your secret for each environment
-
+const jwtCheck = jwt({ secret: '2fadsfdasfasd21312312' }).unless({path: ['/graphql', '/graphiql', '/login']}); // change out your secret for each environment
 app.use(jwtCheck);
 
 // The GraphQL endpoint
