@@ -1,8 +1,9 @@
 import mysql from 'mysql';
-var pool  = mysql.createPool({
+
+module.exports  = mysql.createPool({
     connectionLimit : 10,
-    host            : 'example.org',
-    user            : 'bob',
-    password        : 'secret',
-    database        : 'my_db'
+    host     : 'localhost',
+    user     : 'root',
+    password : 'root',
+    database : 'task'
 });

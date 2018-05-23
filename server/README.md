@@ -1,3 +1,5 @@
+![npm](https://img.shields.io/npm/v/npm.svg)
+
 Server express + apollo 
 =========================
 Init 
@@ -25,3 +27,4 @@ Migrate
 ```
 node db/migration.js up
 ```
+****
