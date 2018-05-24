@@ -1,16 +1,22 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-    var Users = sequelize.define('users' , {
+    var users = sequelize.define('users' , {
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true
         },
-        name: {
+        username: {
             type: DataTypes.STRING,
             allowNull: false,
+            unique: {
+                args: true,
+                message: 'Username must be unique.',
+                fields: [sequelize.fn('lower', sequelize.col('username'))]
+            },
             validate: {
-                notEmpty: true
+                notEmpty: true,
+                is: ["^[a-zA-Z0-9]+$",'i']
             }
         },
         password: {
@@ -23,13 +29,21 @@ module.exports = (sequelize, DataTypes) => {
         email: {
             type: DataTypes.STRING,
             allowNull: false,
+            unique: {
+                args: true,
+                message: 'Email must be unique.',
+                fields: [sequelize.fn('lower', sequelize.col('email'))]
+            },
             validate: {
-                notEmpty: true
+                notEmpty: true,
+                isEmail: true
             }
         }
     }, {
-        timestamps: false,
-        freezeTableName: true
+        timestamps: true,
+        freezeTableName: true,
+        paranoid: true,
+        underscored: true
     });
-    return Users;
+    return users;
 };

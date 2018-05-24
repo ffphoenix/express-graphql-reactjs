@@ -1,15 +1,9 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
-import { makeExecutableSchema } from 'graphql-tools';
+import { formatError as formatApolloError } from 'apollo-errors';
 import schema from './resolvers';
 import jwt from 'express-jwt';
-
-// Put together a schema
-// const  = makeExecutableSchema({
-//     userSchema,
-//     userResolvers,
-// });
 
 // Initialize the app
 const app = express();
@@ -23,11 +17,32 @@ const app = express();
 //         return done(null, !!token);
 //     });
 // };
+
+const formatError = function (error) {
+    const { originalError } = error;
+    if (originalError !== undefined
+        && originalError.name == 'SequelizeValidationError') {
+        let procErrors = {};
+        for (let i = 0; i < originalError.errors.length; i++) {
+            let error = originalError.errors[i];
+            if (!procErrors.hasOwnProperty(error.path)){
+                procErrors[error.path] = {};
+            }
+            procErrors[error.path][error.validatorKey] = error.message
+        }
+        return {
+            message : 'Bad input',
+            data : procErrors
+        }
+    }
+    return formatApolloError(error)
+}
+
 const jwtCheck = jwt({ secret: '2fadsfdasfasd21312312' }).unless({path: ['/graphql', '/graphiql', '/login']}); // change out your secret for each environment
 app.use(jwtCheck);
 
 // The GraphQL endpoint
-app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }));
+app.use('/graphql', bodyParser.json(), graphqlExpress({ formatError, schema }));
 
 // GraphiQL, a visual editor for queries
 app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));

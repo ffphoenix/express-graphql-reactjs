@@ -8,7 +8,7 @@ module.exports = {
     },
     production: {
         host     : 'localhost',
-        username     : 'root',
+        username : 'root',
         password : 'root',
         database : 'task',
         dialect  : 'mysql',
