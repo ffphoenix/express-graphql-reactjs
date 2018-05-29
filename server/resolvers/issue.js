@@ -25,7 +25,7 @@ const queries = {
         },
         resolve: resolver(models.issue)
     },
-    issue: {
+    issues: {
         type: new GraphQLList(issueType),
         args: {
             limit: {

@@ -21,7 +21,7 @@ const app = express();
 const formatError = function (error) {
     const { originalError } = error;
     if (originalError !== undefined
-        && originalError.name == 'SequelizeValidationError') {
+        && originalError.name === 'SequelizeValidationError') {
         let procErrors = {};
         for (let i = 0; i < originalError.errors.length; i++) {
             let error = originalError.errors[i];
@@ -36,7 +36,7 @@ const formatError = function (error) {
         }
     }
     return formatApolloError(error)
-}
+};
 
 const jwtCheck = jwt({ secret: '2fadsfdasfasd21312312' }).unless({path: ['/graphql', '/graphiql', '/login']}); // change out your secret for each environment
 app.use(jwtCheck);
