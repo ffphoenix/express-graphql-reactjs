@@ -2,9 +2,11 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import { formatError as formatApolloError } from 'apollo-errors';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
+import { execute, subscribe } from 'graphql';
 import schema from './resolvers';
 import jwt from 'express-jwt';
-
+import cors from 'cors';
 // Initialize the app
 const app = express();
 
@@ -40,6 +42,7 @@ const formatError = function (error) {
 
 const jwtCheck = jwt({ secret: '2fadsfdasfasd21312312' }).unless({path: ['/graphql', '/graphiql', '/login']}); // change out your secret for each environment
 app.use(jwtCheck);
+app.use(cors());
 
 // The GraphQL endpoint
 app.use('/graphql', bodyParser.json(), graphqlExpress({ formatError, schema }));
@@ -54,6 +57,11 @@ app.use(function (err, req, res, next) {
 });
 
 // Start the server
-app.listen(4000, () => {
+const httpServer = app.listen(4000, () => {
     console.log('Go to http://localhost:4000/graphiql to run queries!');
 });
+//
+SubscriptionServer.create(
+    {schema: schema, execute, subscribe},
+    {server: httpServer, path: '/graphql'},
+)

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { AUTH_TOKEN } from '../constants'
 import { graphql, compose } from 'react-apollo'
+import { Button, Card, CardBody, CardGroup, Col, Container, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
 import gql from 'graphql-tag'
 
 class Login extends Component {
@@ -25,7 +26,7 @@ class Login extends Component {
                                                     <i className="icon-user"></i>
                                                 </InputGroupText>
                                             </InputGroupAddon>
-                                                <input
+                                                <Input
                                                     value={this.state.email}
                                                     onChange={e => this.setState({ email: e.target.value })}
                                                     type="text"
@@ -38,7 +39,7 @@ class Login extends Component {
                                                     <i className="icon-lock"></i>
                                                 </InputGroupText>
                                             </InputGroupAddon>
-                                            <input
+                                            <Input
                                                 value={this.state.password}
                                                 onChange={e => this.setState({ password: e.target.value })}
                                                 type="password"
@@ -55,16 +56,7 @@ class Login extends Component {
                                         </Row>
                                     </CardBody>
                                 </Card>
-                                <Card className="text-white bg-primary py-5 d-md-down-none" style={{ width: 44 + '%' }}>
-                                    <CardBody className="text-center">
-                                        <div>
-                                            <h2>Sign up</h2>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                                                labore et dolore magna aliqua.</p>
-                                            <Button color="primary" className="mt-3" active>Register Now!</Button>
-                                        </div>
-                                    </CardBody>
-                                </Card>
+
                             </CardGroup>
                         </Col>
                     </Row>
@@ -74,12 +66,12 @@ class Login extends Component {
     }
 
     _confirm = async () => {
-        const { name, password } = this.state
+        const { email, password } = this.state
         const result = await this.props.loginMutation({
             variables: {
                 email,
                 password
-            },
+            }
         })
         const { token } = result.data.login
         this._saveUserData(token)

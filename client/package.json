@@ -19,8 +19,10 @@
     "apollo-boost": "^0.1.6",
     "apollo-cache-inmemory": "^1.2.1",
     "apollo-client": "^2.3.1",
+    "apollo-client-preset": "^1.0.8",
     "apollo-link": "^1.2.2",
     "apollo-link-http": "^1.5.4",
+    "apollo-link-ws": "^1.0.8",
     "bootstrap": "^4.1.1",
     "chart.js": "^2.7.2",
     "classnames": "^2.2.5",
@@ -31,6 +33,7 @@
     "font-awesome": "^4.7.0",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
+    "moment": "^2.22.1",
     "prop-types": "^15.6.1",
     "react": "^16.3.2",
     "react-apollo": "^2.1.4",
@@ -42,7 +45,8 @@
     "react-router-dom": "^4.2.2",
     "react-test-renderer": "^16.3.2",
     "reactstrap": "^6.0.1",
-    "simple-line-icons": "^2.4.1"
+    "simple-line-icons": "^2.4.1",
+    "subscriptions-transport-ws": "^0.9.9"
   },
   "devDependencies": {
     "babel-jest": "^22.4.3",
