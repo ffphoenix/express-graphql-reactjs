@@ -55,9 +55,9 @@ const createUserFunc  = {
     },
     description: 'Create a new user',
     resolve: function(obj, {input}, context) {
-        console.log(' Context : ',context);
         return bcrypt.hash(input.password, 10).then(function(hash) {
-            input.password = hash;
+            if (input.password !== '' && input.password !== undefined)
+                input.password = hash;
             input.created_at = new Date();
             input.updated_at = new Date();
             return models.users.create(input);

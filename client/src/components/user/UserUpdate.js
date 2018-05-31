@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
-import { FEED_QUERY } from './UserList'
+import { FEED_QUERY } from './UserSchema'
 
 class UserCreate extends Component {
     state = {

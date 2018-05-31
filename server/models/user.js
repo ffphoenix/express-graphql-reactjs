@@ -16,14 +16,14 @@ module.exports = (sequelize, DataTypes) => {
             },
             validate: {
                 notEmpty: true,
-                is: ["^[a-zA-Z0-9]+$",'i']
+                is: ["^[a-zA-Z0-9]+$",'i'],
             }
         },
         password: {
             type: DataTypes.STRING,
             allowNull: false,
             validate: {
-                notEmpty: true
+                notEmpty: true,
             }
         },
         email: {

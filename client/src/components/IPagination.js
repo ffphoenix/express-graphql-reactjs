@@ -4,6 +4,8 @@ import React, {Component} from "react";
 class IPagination extends Component {
 
     render() {
+
+        console.log(this.props)
         return (
             <Pagination>
                 <PaginationItem>

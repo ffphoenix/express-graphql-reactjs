@@ -1,48 +1,37 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
-    Badge,
     Button,
-    ButtonDropdown,
     Card,
     CardBody,
-    CardFooter,
     CardHeader,
-    Col,
-    Collapse,
-    DropdownItem,
-    DropdownMenu,
-    DropdownToggle,
-    Form,
     FormGroup,
-    FormText,
-    FormFeedback,
     Input,
-    InputGroup,
-    InputGroupAddon,
-    InputGroupText,
     Label,
-    Row,
+    FormFeedback,
 } from 'reactstrap';
-
+import { Link } from 'react-router-dom'
 import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
-import { FEED_QUERY } from './UserList'
-import baseApollo from '../baseApollo'
+import { CREATE_MUTATION } from './UserSchema'
+import BaseForm, { CREATE_QUERY_NAME }from '../base/BaseForm'
 
-class UserCreate extends baseApollo {
+class UserCreate extends BaseForm {
+
     state = {
-        username: '',
-        email: '',
-        password: '',
+        data : {
+            username: '',
+            email: '',
+            password: '',
+        },
+        errors : {}
     }
 
     constructor(props) {
         super(props);
-
-        this.handleClick = this._create.bind(this);
+        this.mode = this.CREATE_MODE;
     }
 
     render() {
+        const  { data : formData, errors } = this.state;
         return (
             <Card>
                 <CardHeader>
@@ -52,54 +41,34 @@ class UserCreate extends baseApollo {
                 <CardBody>
                     <FormGroup>
                         <Label htmlFor="username">User name</Label>
-                        <Input type="text" id="username" placeholder="Enter user name"
-                               value={this.state.username} onChange={this.handleChange} />
+                        <Input type="text" invalid={errors.username !== undefined} id="username" placeholder="Enter user name"
+                               name="username"
+                               value={formData.username} onChange={this.handleChange} />
+                        {errors.username ? (<FormFeedback>{errors.username[Object.keys(errors.username)[0]]}</FormFeedback>) : ''}
                     </FormGroup>
                     <FormGroup>
                         <Label htmlFor="email">Email</Label>
-                        <Input type="text" id="email" placeholder="Enter user email"
-                               value={this.state.email} onChange={this.handleChange}/>
+                        <Input type="text" invalid={errors.email !== undefined} id="email" placeholder="Enter user email"
+                               name="email"
+                               value={formData.email} onChange={this.handleChange}/>
+                        {errors.email ? (<FormFeedback>{errors.email[Object.keys(errors.email)[0]]}</FormFeedback>) : ''}
                     </FormGroup>
                     <FormGroup>
                         <Label htmlFor="password">Password</Label>
-                        <Input type="password" id="password" placeholder="Enter password"
-                               value={this.state.password} onChange={this.handleChange}/>
+                        <Input type="password" invalid={errors.password !== undefined} id="password" placeholder="Enter password"
+                               name="password"
+                               value={formData.password} onChange={this.handleChange}/>
+                        {errors.password ? Object.keys(errors.password).map((index) => (<FormFeedback key={index}>{errors.password[index]}</FormFeedback>)) : ''}
                     </FormGroup>
                     <div className="form-actions">
-                        <Button type="submit" color="primary" onClick={this.handleClick}>Save changes</Button>
-                        <Button color="secondary">Cancel</Button>
+                        <Button type="submit" color="primary" onClick={this.handleSendData}>Save changes</Button>
+                        <Link className="btn btn-secondary" to={`/users`} >Cancel</Link>
                     </div>
                 </CardBody>
             </Card>
         )
     }
 
-    _create = async () => {
-        const { username, email, password } = this.state
-        await this.props.postMutation({
-            variables: {
-                input : {
-                    username : username,
-                    email : email,
-                    password : password
-                }
-            },
-            update: (store, { data: { post } }) => {
 
-            },
-        })
-        this.props.history.push(`/new/1`)
-    }
 }
-
-const POST_MUTATION = gql`
-  mutation UserMutation($input: modifUserType!) {
-    createUser(input: $input) {
-      id
-      username
-      email
-    }
-  }
-`
-
-export default graphql(POST_MUTATION, { name: 'postMutation' })(UserCreate)
+export default graphql(CREATE_MUTATION, { name: CREATE_QUERY_NAME })(UserCreate)

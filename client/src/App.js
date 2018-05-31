@@ -22,20 +22,14 @@ import Login from './components/login'
 // Apollo
 import ApolloClient from "apollo-client";
 import { ApolloProvider } from "react-apollo";
-import { ApolloLink, split } from 'apollo-client-preset';
+import { ApolloLink } from 'apollo-client-preset';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { WebSocketLink } from 'apollo-link-ws';
 import { HttpLink }      from 'apollo-link-http';
 import { getOperationAST } from 'graphql';
-import {SubscriptionClient, addGraphQLSubscriptions} from 'subscriptions-transport-ws';
-
-// import { renderRoutes } from 'react-router-config';
+import {SubscriptionClient} from 'subscriptions-transport-ws';
 
 class App extends Component {
-    constructor(...args) {
-        super(...args);
-
-    }
 
     render() {
         const AUTH_TOKEN = 'token-auth';
@@ -64,18 +58,17 @@ class App extends Component {
                 const operationAST = getOperationAST(operation.query, operation.operationName);
                 return !!operationAST && operationAST.operation === 'subscription';
             },
-            httpLink,
+            wsLink,
             httpLinkWithAuthToken
-
         );
 
-        this.client = new ApolloClient({
+        const client = new ApolloClient({
             cache: new InMemoryCache(),
             link : link
         });
 
         return (
-            <ApolloProvider client={this.client}>
+            <ApolloProvider client={client}>
                 <HashRouter>
                     <Switch>
                         <Route exact path="/login" name="Login Page" component={Login}/>
