@@ -24,8 +24,9 @@ const routes = [
   { path: '/', exact: true, name: 'Home', component: DefaultLayout },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/users/create', name: 'UserCreate', component: UserCreate },
-  { path: '/users/update/:id', name: 'UserCreate', component: UserUpdate },
+  { path: '/users/update/:id', name: 'UserUpdate', component: UserUpdate },
   { path: '/users', name: 'Users', component: UserList },
+
 
 ];
 

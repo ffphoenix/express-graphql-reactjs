@@ -1,69 +1,82 @@
-import React, { Component } from 'react'
+import React from 'react';
+import {
+    Button,
+    Card,
+    CardBody,
+    CardHeader,
+    FormGroup,
+    Input,
+    Label,
+} from 'reactstrap';
+import { Link } from 'react-router-dom'
 import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
-import { FEED_QUERY } from './UserSchema'
+import { UPDATE_MUTATION, FEED_ONE_QUERY, FEED_QUERY, CREATE_QUERY_NAME, UPDATE_QUERY_NAME } from './UserSchema'
+import BaseForm from '../base/BaseForm'
+import InputGroupError from "../InputGroupError";
 
-class UserCreate extends Component {
+class UserUpdate extends BaseForm {
+
     state = {
-        description: '',
-        url: '',
+        data : {
+            username: '',
+            email: '',
+            password: '',
+        },
+        errors : {}
+    }
+
+    constructor(props) {
+        super(props);
+        console.log(this);
+        this.mode = this.UPDATE_MODE;
+        this.feedQuery = FEED_QUERY;
+        this.feedOneQuery = FEED_ONE_QUERY;
+        this.createQueryName = CREATE_QUERY_NAME;
+        this.updateFeedQuery = UPDATE_QUERY_NAME;
     }
 
     render() {
+        const  { data : formData, errors } = this.state;
         return (
-            <div>
-                test
-            </div>
+            <Card>
+                <CardHeader>
+                    <strong>User</strong>
+                    <small> update</small>
+                </CardHeader>
+                <CardBody>
+                    <FormGroup>
+                        <Label htmlFor="username">User name</Label>
+                        <Input type="text" invalid={errors.username !== undefined} id="username" placeholder="Enter user name"
+                               name="username"
+                               value={formData.username} onChange={this.handleChange} />
+                        <InputGroupError error={errors.username}/>
+                    </FormGroup>
+                    <FormGroup>
+                        <Label htmlFor="email">Email</Label>
+                        <Input type="text" invalid={errors.email !== undefined} id="email" placeholder="Enter user email"
+                               name="email"
+                               value={formData.email} onChange={this.handleChange}/>
+                        <InputGroupError error={errors.email}/>
+                    </FormGroup>
+                    <FormGroup>
+                        <Label htmlFor="password">Password</Label>
+                        <Input type="password" invalid={errors.password !== undefined} id="password" placeholder="Enter password"
+                               name="password"
+                               value={formData.password} onChange={this.handleChange}/>
+                        <InputGroupError error={errors.password}/>
+                    </FormGroup>
+                    <div className="form-actions custom-control-inline">
+                        <div className="pr-1">
+                            <Button className="" type="submit" color="primary" onClick={this.handleSendData}>Save changes</Button>
+                        </div>
+                        <div className="pr-1">
+                            <Link className="btn btn-secondary" to={`/users`} >Cancel</Link>
+                        </div>
+                    </div>
+                </CardBody>
+            </Card>
         )
-    }
-
-    _createLink = async () => {
-        const { description, url } = this.state
-        await this.props.postMutation({
-            variables: {
-                description,
-                url,
-            },
-            update: (store, { data: { post } }) => {
-                const first = 10
-                const skip = 0
-                const orderBy = 'createdAt_DESC'
-                const data = store.readQuery({
-                    query: FEED_QUERY,
-                    variables: { first, skip, orderBy },
-                })
-                data.feed.links.splice(0, 0, post)
-                data.feed.links.pop()
-                store.writeQuery({
-                    query: FEED_QUERY,
-                    data,
-                    variables: { first, skip, orderBy },
-                })
-            },
-        })
-        this.props.history.push(`/new/1`)
     }
 }
 
-const POST_MUTATION = gql`
-  mutation PostMutation($description: String!, $url: String!) {
-    post(description: $description, url: $url) {
-      id
-      createdAt
-      url
-      description
-      postedBy {
-        id
-        name
-      }
-      votes {
-        id
-        user {
-          id
-        }
-      }
-    }
-  }
-`
-
-export default graphql(POST_MUTATION, { name: 'postMutation' })(UserCreate)
+export default graphql(UPDATE_MUTATION, { name: UPDATE_QUERY_NAME })(UserUpdate)

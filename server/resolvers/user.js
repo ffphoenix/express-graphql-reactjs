@@ -1,4 +1,4 @@
-import {resolver, attributeFields} from 'graphql-sequelize';
+import {resolver, attributeFields, JSONType} from 'graphql-sequelize';
 import bcrypt from 'bcrypt';
 import {
     GraphQLObjectType,
@@ -7,6 +7,7 @@ import {
     GraphQLNonNull,
     GraphQLInt,
     GraphQLString,
+
 } from 'graphql';
 
 import models from '../models';
@@ -15,6 +16,18 @@ const userType = new GraphQLObjectType({
     name: 'User',
     description: 'A user',
     fields: attributeFields(models.users, {exclude : ['password']})
+});
+
+const userListType = new GraphQLObjectType({
+    name: 'UserList',
+    fields : {
+        rows:  {
+            type : new GraphQLList(userType)
+        },
+        count:  {
+            type : GraphQLInt
+        }
+    }
 });
 
 const queries = {
@@ -28,16 +41,23 @@ const queries = {
         resolve: resolver(models.users)
     },
     users: {
-        type: new GraphQLList(userType),
+        type: userListType,
         args: {
             limit: {
                 type: GraphQLInt
             },
-            order: {
+            orderBy: {
                 type: GraphQLString
-            }
+            },
+            offset: {
+                type: GraphQLInt
+            },
         },
-        resolve: resolver(models.users)
+        resolve: function(obj, args, context) {
+            return models.users.findAndCountAll(args).then( result => {
+                return result;
+            });
+        }
     }
 };
 

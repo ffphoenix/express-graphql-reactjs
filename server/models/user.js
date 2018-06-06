@@ -38,7 +38,15 @@ module.exports = (sequelize, DataTypes) => {
                 notEmpty: true,
                 isEmail: true
             }
+        },
+        create_date: {
+            type: new DataTypes.VIRTUAL(DataTypes.DATE, ['created_at']),
+            get: function() {
+                const date = new Date(this.get('created_at'));
+                return date.toLocaleString();
+            }
         }
+
     }, {
         timestamps: true,
         freezeTableName: true,

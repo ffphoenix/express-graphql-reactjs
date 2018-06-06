@@ -4,41 +4,37 @@ import React, {Component} from "react";
 class IPagination extends Component {
 
     render() {
+        const data = {
+            total : this.props.pagesTotal,
+            ...this.props.settings
+        }
 
-        console.log(this.props)
+        let pages = [];
+        for (let i = 1; i <= data.total; ++i ){
+            pages.push(
+                <PaginationItem active={(i === data.page)}  key={i}>
+                <PaginationLink tag="button" onClick={() => this.props.handleChangePage(i)}>
+                    {i}
+                </PaginationLink></PaginationItem>
+            );
+        }
         return (
             <Pagination>
-                <PaginationItem>
-                    <PaginationLink previous tag="button"/>
-                </PaginationItem>
-                <PaginationItem>
-                    <PaginationLink tag="button">
-                        1
-                    </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                    <PaginationLink tag="button">
-                        2
-                    </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                    <PaginationLink tag="button">
-                        3
-                    </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                    <PaginationLink tag="button">
-                        4
-                    </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                    <PaginationLink tag="button">
-                        5
-                    </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                    <PaginationLink next tag="button"/>
-                </PaginationItem>
+                {(data.page > 1 && data.total > 1) ?
+                    (<PaginationItem>
+                        <PaginationLink previous tag="button"
+                            onClick={() => this.props.handleChangePage(data.page - 1)}
+                        />
+                    </PaginationItem>) : ''
+                }
+                {pages}
+                {(data.page < data.total && data.total > 1) ?
+                    (<PaginationItem>
+                        <PaginationLink next tag="button"
+                            onClick={() => this.props.handleChangePage(data.page + 1)}
+                        />
+                    </PaginationItem>) : ''
+                }
             </Pagination>
         );
     }
