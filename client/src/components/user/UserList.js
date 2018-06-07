@@ -60,10 +60,10 @@ class UserList extends BaseList {
                                     <Table hover bordered striped responsive>
                                         <thead>
                                         <tr>
-                                            <th>id</th>
-                                            <th>Username</th>
-                                            <th>Email</th>
-                                            <th>Create Date</th>
+                                            <th className="sorting desc">ID</th>
+                                            <th className="sorting">Username</th>
+                                            <th className="sorting">Email</th>
+                                            <th className="sorting">Create Date</th>
                                             <th className="text-center"></th>
                                         </tr>
                                         </thead>

@@ -6,7 +6,9 @@ class BaseList extends React.Component {
         limit : 10,
         offset : 0,
         page: 1,
-        orderBy : 'createdAt_DESC'
+        orderBy : 'createdAt_DESC',
+        sort : 'code',
+        dir: 'desc',
     }
 
     constructor(props) {
