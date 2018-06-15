@@ -1,7 +1,10 @@
 import gql from 'graphql-tag'
 
-export const CREATE_QUERY_NAME = 'createUser';
+export const CREATE_QUERY_NAME = 'createMutation';
 export const UPDATE_QUERY_NAME = 'updateMutation';
+export const FEED_QUERY_NAME   = 'users';
+export const FEED_QUERY_ONE_NAME   = 'user';
+
 
 export const CREATE_MUTATION = gql`
   mutation createMutation($input: modifUserType!) {
@@ -15,8 +18,8 @@ export const CREATE_MUTATION = gql`
 `;
 
 export const UPDATE_MUTATION = gql`
-  mutation UserMutation($input: modifUserType!) {
-    createUser(input: $input) {
+  mutation updateMutation($id: Int!, $input: updateUserType!) {
+    updateUser(id: $id, input: $input) {
       id
       username
       email
@@ -25,14 +28,14 @@ export const UPDATE_MUTATION = gql`
 `;
 
 export const FEED_QUERY = gql`
-    query users($offset: Int!, $limit: Int!, $orderBy: String!) {
-        users (offset: $offset, limit: $limit, orderBy: $orderBy) {
+    query users($offset: Int, $limit: Int, $order: String, $search: String) {
+        users (offset: $offset, limit: $limit, order: $order, search : $search) {
             count
             rows {
                 id      
                 email
                 username
-                created_at
+                create_date
             }
         }
     }

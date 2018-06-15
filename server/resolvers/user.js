@@ -1,4 +1,5 @@
 import {resolver, attributeFields, JSONType} from 'graphql-sequelize';
+import { Op } from 'sequelize';
 import bcrypt from 'bcrypt';
 import {
     GraphQLObjectType,
@@ -7,6 +8,7 @@ import {
     GraphQLNonNull,
     GraphQLInt,
     GraphQLString,
+    getNullableType
 
 } from 'graphql';
 
@@ -44,16 +46,26 @@ const queries = {
         type: userListType,
         args: {
             limit: {
-                type: GraphQLInt
+                type: getNullableType(GraphQLInt)
             },
-            orderBy: {
-                type: GraphQLString
+            order: {
+                type: getNullableType(GraphQLString)
             },
             offset: {
-                type: GraphQLInt
+                type: getNullableType(GraphQLInt)
             },
+            search: {
+                type: getNullableType(GraphQLString)
+            }
         },
         resolve: function(obj, args, context) {
+            args.order = [args.order.split(' ')];
+            if (args.search !== undefined && args.search !== '') {
+                args.where = {
+                    username : { [Op.like] : '%' + args.search + '%' },
+                    email : { [Op.like] : '%' + args.search + '%' }
+                }
+            }
             return models.users.findAndCountAll(args).then( result => {
                 return result;
             });
@@ -64,6 +76,10 @@ const queries = {
 const modifUserType = new GraphQLInputObjectType({
     name: 'modifUserType',
     fields: attributeFields(models.users, {only : ['username', 'password', 'email']})
+});
+const updateUserType = new GraphQLInputObjectType({
+    name: 'updateUserType',
+    fields: attributeFields(models.users, {only : ['username', 'email']})
 });
 
 const createUserFunc  = {
@@ -90,7 +106,7 @@ const updateUserFunc  = {
     type: userType,
     args: {
         id : { type : new GraphQLNonNull(GraphQLInt) },
-        input : { type : modifUserType }
+        input : { type : updateUserType }
     },
     description: 'Update an existed user',
     resolve: function(obj, args) {
@@ -98,6 +114,8 @@ const updateUserFunc  = {
             .findById(args.id)
             .then((quote) => {
                 args.input.password = quote.get('password');
+                // if (args.input.password !== '' && args.input.password !== undefined)
+                //     args.input.password = hash;
                 args.input.updated_at = new Date();
                 return quote.update(args.input);
             });

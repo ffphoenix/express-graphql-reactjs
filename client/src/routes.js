@@ -1,9 +1,7 @@
 import React from 'react';
 import Loadable from 'react-loadable'
 import DefaultLayout from './containers/DefaultLayout';
-import UserList from './components/user/UserList'
-import UserCreate from "./components/user/UserCreate";
-import UserUpdate from "./components/user/UserUpdate";
+import {Grid as UserList, Create as UserCreate, Update as UserUpdate} from './components/user'
 
 function Loading() {
   return <div>Loading...</div>;

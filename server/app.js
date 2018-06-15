@@ -1,9 +1,9 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
-import { formatError as formatApolloError } from 'apollo-errors';
+import { formatError as formatApolloError, isInstance } from 'apollo-errors';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
-import { execute, subscribe } from 'graphql';
+import { execute, subscribe, GraphQLError } from 'graphql';
 import schema from './resolvers';
 import jwt from 'express-jwt';
 import cors from 'cors';
@@ -12,6 +12,7 @@ const app = express();
 
 const formatError = function (error) {
     const { originalError } = error;
+
     if (originalError !== undefined
         && originalError.name === 'SequelizeValidationError') {
         let procErrors = {};
@@ -24,7 +25,13 @@ const formatError = function (error) {
         }
         return {
             message : 'Bad input',
-            data : procErrors
+            data : procErrors,
+        }
+    }
+    if (error instanceof GraphQLError) {
+        return {
+            message : error.message,
+            data : []
         }
     }
     return formatApolloError(error)

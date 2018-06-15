@@ -11,7 +11,7 @@ import {
 import { Link } from 'react-router-dom'
 import { graphql } from 'react-apollo'
 import { CREATE_MUTATION, FEED_QUERY, CREATE_QUERY_NAME, UPDATE_QUERY_NAME } from './UserSchema'
-import BaseForm from '../base/BaseForm'
+import BaseForm from '../grid/BaseForm'
 import InputGroupError from "../InputGroupError";
 
 class UserCreate extends BaseForm {
