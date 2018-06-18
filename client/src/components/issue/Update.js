@@ -17,11 +17,11 @@ import { UPDATE_MUTATION,
     CREATE_QUERY_NAME,
     UPDATE_QUERY_NAME,
     FEED_QUERY_ONE_NAME
-} from './UserSchema'
+} from './Schema'
 import BaseForm from '../grid/BaseForm'
-import InputGroupError from "../InputGroupError";
+import InputGroupError from "../grid/formElements/InputGroupError";
 
-class UserUpdate extends BaseForm {
+class Update extends BaseForm {
 
     state = {
         data : {
@@ -107,4 +107,4 @@ export default
             name: UPDATE_QUERY_NAME
         }),
         withApollo
-    )(UserUpdate);
+    )(Update);

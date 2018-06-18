@@ -2,11 +2,11 @@ import React from 'react';
 import { Card, CardBody, CardHeader } from 'reactstrap';
 import { FEED_QUERY, FEED_QUERY_NAME } from './Schema'
 
-import BaseList from "../grid/BaseList";
-import BaseListFilters from "../grid/BaseListFilters";
+import BaseGrid from "../grid/BaseGrid";
 import BaseTable from "../grid/BaseTable";
+import BaseListFilters from "../grid/BaseListFilters";
 
-class List extends BaseList {
+class Grid extends BaseGrid {
     constructor(props) {
         super(props);
     }
@@ -72,4 +72,4 @@ class List extends BaseList {
     }
 }
 
-export default (UserList);
+export default (Grid);

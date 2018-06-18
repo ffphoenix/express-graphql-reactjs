@@ -1,16 +1,36 @@
 import React from 'react'
-import { lifecycle } from 'recompose'
+
+import {
+    Button,
+    Card,
+    CardBody,
+    CardHeader,
+    FormGroup,
+    Input,
+    Label,
+    Form
+} from 'reactstrap';
+import { Link } from 'react-router-dom'
+import CustomFormGroup from "./formElements/CustomFormGroup";
+
 export default class BaseForm extends React.Component {
-    httpDataUpdated = false;
+
+    ELEMENT_TYPE_INPUT = `input`;
+    ELEMENT_TYPE_PASSWORD = `password`;
+    ELEMENT_TYPE_SELECT = `select`;
+    ELEMENT_TYPE_CHECKBOX = `checkbox`;
+    ELEMENT_TYPE_RADIO = `radio`;
+    ELEMENT_TYPE_AUTOCOMPLETE = `autocomplete`; //autocomplete
 
     CREATE_MODE = 'create';
     UPDATE_MODE = 'update';
 
-    feedQuery = null;
+    backURL = ``;
     feedOneQuery = null;
     createQueryName  = null;
     updateQueryName  = null;
     feedOneQueryName = null;
+    feedQueryName = null;
     mode = '';
 
     constructor(props) {
@@ -50,23 +70,19 @@ export default class BaseForm extends React.Component {
         event.stopPropagation();
 
         if (this.mode === this.CREATE_MODE) {
-            console.log('send---->',this.props);
-            return;
             this.props[this.createQueryName]({
                 variables: {
                     input: this.state.data
-                }
+                },
+                refetchQueries: [this.feedQueryName]
             })
             .then(response => {
-
-
-                this.props.history.push(`/users`);
+                this.props.history.push(`/` + this.backURL);
             })
             .catch(response => {
                 if (response.graphQLErrors !== undefined) {
                     let newState = this.state;
                     newState.errors = response.graphQLErrors[0].data;
-
                     this.setState(newState);
                 }
             })
@@ -79,8 +95,7 @@ export default class BaseForm extends React.Component {
                 }
             })
             .then(response => {
-
-                this.props.history.push(`/users`);
+                this.props.history.push(`/` + this.backURL);
             })
             .catch(response => {
                 if (response.graphQLErrors !== undefined) {
@@ -90,5 +105,52 @@ export default class BaseForm extends React.Component {
                 }
             })
         }
+    }
+
+    renderForm(options) {
+
+        return (
+            <Form>
+                {this.renderFormElements(options)}
+                <div className="form-actions custom-control-inline">
+                    <div className="pr-1">
+                        <Button className="" type="submit" color="primary" onClick={this.handleSendData}>Save changes</Button>
+                    </div>
+                    <div className="pr-1">
+                        <Link className="btn btn-secondary" to={`/` + this.backURL} >Cancel</Link>
+                    </div>
+                </div>
+            </Form>
+        )
+    }
+
+
+    renderFormElements(options){
+        let formElements = [];
+        for (let key in options) {
+            let option = options[key];
+            if (option.type === undefined) {
+                continue;
+            }
+
+            if (this.state.data[key] !== undefined) {
+                option.value = this.state.data[key];
+            }
+
+            if (this.state.errors[key] !== undefined) {
+                option.error = this.state.errors[key];
+            }
+
+            option.key = key;
+            option.handleChange = this.handleChange;
+
+            switch (option.type) {
+                case this.ELEMENT_TYPE_INPUT :
+                case this.ELEMENT_TYPE_PASSWORD :
+                    formElements.push(<CustomFormGroup key={key} options={option}/>)
+            }
+        }
+
+        return formElements;
     }
 }

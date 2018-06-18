@@ -1,5 +1,6 @@
 import gql from 'graphql-tag'
 
+export const DELETE_QUERY_NAME = 'deleteMutation';
 export const CREATE_QUERY_NAME = 'createMutation';
 export const UPDATE_QUERY_NAME = 'updateMutation';
 export const FEED_QUERY_NAME   = 'users';
@@ -20,6 +21,16 @@ export const CREATE_MUTATION = gql`
 export const UPDATE_MUTATION = gql`
   mutation updateMutation($id: Int!, $input: updateUserType!) {
     updateUser(id: $id, input: $input) {
+      id
+      username
+      email
+    }
+  }
+`;
+
+export const DELETE_MUTATION = gql`
+  mutation deleteMutation($id: Int!) {
+    deleteUser(id: $id) {
       id
       username
       email

@@ -9,12 +9,12 @@ import {
     Label,
 } from 'reactstrap';
 import { Link } from 'react-router-dom'
-import { graphql } from 'react-apollo'
-import { CREATE_MUTATION, FEED_QUERY, CREATE_QUERY_NAME, UPDATE_QUERY_NAME } from './UserSchema'
+import { graphql, withApollo, compose } from 'react-apollo'
+import { CREATE_MUTATION, FEED_QUERY, CREATE_QUERY_NAME, UPDATE_QUERY_NAME } from './Schema'
 import BaseForm from '../grid/BaseForm'
-import InputGroupError from "../InputGroupError";
+import InputGroupError from "../grid/formElements/InputGroupError";
 
-class UserCreate extends BaseForm {
+class Create extends BaseForm {
 
     state = {
         data : {
@@ -80,4 +80,8 @@ class UserCreate extends BaseForm {
 
 
 }
-export default graphql(CREATE_MUTATION, { name: CREATE_QUERY_NAME })(UserCreate)
+
+export default compose(
+    graphql(CREATE_MUTATION, { name: CREATE_QUERY_NAME }),
+    withApollo
+)(Create)

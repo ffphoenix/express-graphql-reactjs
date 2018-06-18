@@ -30,9 +30,10 @@ class BaseListFilters extends React.Component {
         this.setState(newState);
     }
 
-    getRenderedText(options) {
+    getRenderedText(key, options) {
+        key = key + options.name;
         return (
-            <FormGroup key={options.name} className="pr-1">
+            <FormGroup key={key} className="pr-1">
                 <InputGroup>
                     <Input type="text" id={options.name} value={this.state[options.name]} name="search" onChange={this.handleChange} placeholder={options.name} />
                 </InputGroup>
@@ -42,13 +43,15 @@ class BaseListFilters extends React.Component {
 
     render() {
         const options = this.props.options;
-        console.log(this.props);
         let renderedFilters = [];
         for (let key in options.filters) {
             let filter = options.filters[key];
             switch (filter.type) {
                 case 'text' :
-                    renderedFilters.push(this.getRenderedText(filter))
+                    renderedFilters.push(this.getRenderedText(key, filter));
+                    break;
+                default :
+                    break;
             }
         }
 

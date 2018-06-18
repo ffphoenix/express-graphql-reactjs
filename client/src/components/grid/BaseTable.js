@@ -3,16 +3,11 @@ import {
     Table,
     Button
 } from 'reactstrap';
-import { Link } from 'react-router-dom'
 import { Query } from 'react-apollo';
 
 import IPagination from '../IPagination'
 
 class BaseTable extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
 
     getTableHeader(options) {
         let header = [];
@@ -77,12 +72,13 @@ class BaseTable extends React.Component {
     render() {
         console.log('render Base Table', this.props);
         const options = this.props.options;
+        let vars = {...this.props.filters, ...this.props.filters.filters};
 
         return (
             <div>
                 <Query
                     query={this.props.query}
-                    variables={ this.props.filters }
+                    variables={ vars }
                     notifyOnNetworkStatusChange
                 >
                     {({ loading, error, data, refetch, networkStatus }) => {

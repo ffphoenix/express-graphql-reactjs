@@ -14,6 +14,8 @@ class BaseGrid extends React.Component {
         }
     }
 
+    deleteQueryName = ``;
+
     constructor(props) {
         super(props);
         this.handleChangePage = this.handleChangePage.bind(this);
@@ -64,12 +66,26 @@ class BaseGrid extends React.Component {
     }
 
     handleEditAction(id) {
-        console.log(id);
-        this.props.history.push(`/users/update/` + id);
+        this.props.history.push(`/` + this.backURL + `/update/` + id);
     }
 
     handleDeleteAction(id) {
-        console.log('del');
+        this.props[this.deleteQueryName]({
+            variables: {
+                id: id
+            },
+            refetchQueries: [this.feedQueryName]
+        })
+        .then(response => {
+            this.props.history.push(`/` + this.backURL);
+        })
+        .catch(response => {
+            if (response.graphQLErrors !== undefined) {
+                let newState = this.state;
+                newState.errors = response.graphQLErrors[0].data;
+                this.setState(newState);
+            }
+        })
     }
 }
 

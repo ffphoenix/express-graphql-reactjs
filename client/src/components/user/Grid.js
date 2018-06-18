@@ -1,14 +1,19 @@
 import React from 'react';
 import { Card, CardBody, CardHeader } from 'reactstrap';
-import { FEED_QUERY, FEED_QUERY_NAME } from './Schema'
+import {DELETE_MUTATION, DELETE_QUERY_NAME, FEED_QUERY, FEED_QUERY_NAME} from './Schema';
+import { graphql } from 'react-apollo';
 
 import BaseGrid from "../grid/BaseGrid";
 import BaseTable from "../grid/BaseTable";
-import BaseListFilters from "../grid/BaseListFilters";
+import BaseTableFilters from "../grid/BaseTableFilters";
 
 class Grid extends BaseGrid {
-    constructor(props) {
+
+    constructor(props){
         super(props);
+        this.backURL = `users`;
+        this.deleteQueryName = DELETE_QUERY_NAME;
+        this.feedQueryName = FEED_QUERY_NAME;
     }
 
     render() {
@@ -54,7 +59,9 @@ class Grid extends BaseGrid {
                     <i className="fa fa-align-justify"></i> Users List
                 </CardHeader>
                 <CardBody>
-                    <BaseListFilters options={filterOptions} />
+                    <BaseTableFilters
+                        onFilter={this.onFilter}
+                        options={filterOptions} />
                     <br/>
                     <BaseTable
                         options={tableOptions}
@@ -72,4 +79,6 @@ class Grid extends BaseGrid {
     }
 }
 
-export default (Grid);
+export default graphql(DELETE_MUTATION, {
+    name: 'deleteMutation'
+})(Grid);
