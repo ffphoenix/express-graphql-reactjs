@@ -62,8 +62,8 @@ const queries = {
             args.order = [args.order.split(' ')];
             if (args.search !== undefined && args.search !== '') {
                 args.where = {
-                    username : { [Op.like] : '%' + args.search + '%' },
-                    email : { [Op.like] : '%' + args.search + '%' }
+                    [Op.or]: {username : { [Op.like] : '%' + args.search + '%' },
+                    email : { [Op.like] : '%' + args.search + '%' }}
                 }
             }
             return models.users.findAndCountAll(args).then( result => {

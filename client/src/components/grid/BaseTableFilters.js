@@ -12,12 +12,12 @@ class BaseListFilters extends React.Component {
 
     state = {
         search: ''
-    }
+    };
 
     constructor(props) {
         super(props);
-        console.log(props);
         this.handleChange = this.handleChange.bind(this);
+        this.handleKeyPress = this.handleKeyPress.bind(this);
     }
 
     handleChange(event) {
@@ -30,12 +30,20 @@ class BaseListFilters extends React.Component {
         this.setState(newState);
     }
 
+    handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            this.props.onFilter(event, this.state);
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    }
+
     getRenderedText(key, options) {
         key = key + options.name;
         return (
             <FormGroup key={key} className="pr-1">
                 <InputGroup>
-                    <Input type="text" id={options.name} value={this.state[options.name]} name="search" onChange={this.handleChange} placeholder={options.name} />
+                    <Input type="text" id={options.name} value={this.state[options.name]} name="search" onKeyPress={(e) => this.handleKeyPress(e)} onChange={this.handleChange} placeholder={options.name} />
                 </InputGroup>
             </FormGroup>
         )
@@ -58,7 +66,7 @@ class BaseListFilters extends React.Component {
         return (
             <Form action="" method="post" inline>
                 <FormGroup className="pr-1">
-                    <Link to={`/users/create`}><Button color="primary">Create new</Button></Link>
+                    <Link to={`/`+ this.props.url +`/create`}><Button color="primary">Create new</Button></Link>
                 </FormGroup>
                 {renderedFilters}
 

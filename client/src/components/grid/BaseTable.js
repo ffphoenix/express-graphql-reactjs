@@ -70,7 +70,6 @@ class BaseTable extends React.Component {
     }
 
     render() {
-        console.log('render Base Table', this.props);
         const options = this.props.options;
         let vars = {...this.props.filters, ...this.props.filters.filters};
 
@@ -83,8 +82,8 @@ class BaseTable extends React.Component {
                 >
                     {({ loading, error, data, refetch, networkStatus }) => {
                         if (networkStatus === 4) return <tr><td>"Refetching!"</td></tr>;
-                        if (loading) return null;
-                        if (error) return <tr><td>`Error!: ${error}`</td></tr>;
+                        if (loading) return <div>Loading</div>;
+                        if (error) return <div>`Error!: ${error}`</div>;
 
                         const totalPages = Math.ceil(data[this.props.queryName].count / this.props.filters.limit);
                         return (

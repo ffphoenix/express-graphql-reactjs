@@ -4,8 +4,7 @@ export const DELETE_QUERY_NAME = 'deleteMutation';
 export const CREATE_QUERY_NAME = 'createMutation';
 export const UPDATE_QUERY_NAME = 'updateMutation';
 export const FEED_QUERY_NAME   = 'users';
-export const FEED_QUERY_ONE_NAME   = 'user';
-
+export const FEED_QUERY_ONE_NAME = 'user';
 
 export const CREATE_MUTATION = gql`
   mutation createMutation($input: modifUserType!) {
@@ -29,13 +28,13 @@ export const UPDATE_MUTATION = gql`
 `;
 
 export const DELETE_MUTATION = gql`
-  mutation deleteMutation($id: Int!) {
-    deleteUser(id: $id) {
-      id
-      username
-      email
+    mutation deleteMutation($id: Int!) {
+        deleteUser(id: $id) {
+            id
+            username
+            email
+        }
     }
-  }
 `;
 
 export const FEED_QUERY = gql`
