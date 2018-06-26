@@ -1,16 +1,66 @@
 import React, { Component } from 'react'
-import { AUTH_TOKEN } from '../constants'
-import { graphql, compose } from 'react-apollo'
-import { Button, Card, CardBody, CardGroup, Col, Container, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
-import gql from 'graphql-tag'
+import { AUTH_TOKEN } from '../config'
+import {
+    Button,
+    Card,
+    CardBody,
+    CardGroup,
+    Col,
+    Container,
+    Input,
+    InputGroup,
+    InputGroupAddon,
+    InputGroupText,
+    Row,
+    Alert
+} from 'reactstrap';
+import axios from 'axios';
 
-class Login extends Component {
+export default class Login extends Component {
     state = {
-        password: '',
-        email: '',
+        data : {
+            password: '',
+            email: ''
+        },
+        error : null
+    };
+
+    constructor(props){
+        super(props);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        if (localStorage.getItem(AUTH_TOKEN)) {
+            this.props.history.push(`/`);
+        }
+    }
+
+    handleChange(e) {
+        const name = e.target.name;
+        let newState = this.state;
+        newState.data[name] = e.target.value;
+        newState.error = null;
+        this.setState(newState);
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+
+        const variables = this.state.data;
+        axios.post(`http://localhost:4000/api/login`, variables )
+            .then(res => {
+                if (res.data.success === true){
+                    if (res.data.token){
+                        localStorage.setItem(AUTH_TOKEN, res.data.token);
+                        this.props.history.push(`/`);
+                    }
+                } else if (res.data.error){
+                    this.setState({error : res.data.error})
+                }
+            })
     }
 
     render() {
+        const formData = this.state;
         return (
             <div className="app flex-row align-items-center">
                 <Container>
@@ -27,8 +77,9 @@ class Login extends Component {
                                                 </InputGroupText>
                                             </InputGroupAddon>
                                                 <Input
-                                                    value={this.state.email}
-                                                    onChange={e => this.setState({ email: e.target.value })}
+                                                    name='email'
+                                                    value={formData.data.email}
+                                                    onChange={this.handleChange}
                                                     type="text"
                                                     placeholder="Your Email"
                                                 />
@@ -40,15 +91,17 @@ class Login extends Component {
                                                 </InputGroupText>
                                             </InputGroupAddon>
                                             <Input
-                                                value={this.state.password}
-                                                onChange={e => this.setState({ password: e.target.value })}
+                                                name='password'
+                                                value={formData.data.password}
+                                                onChange={this.handleChange}
                                                 type="password"
-                                                placeholder="Choose a safe password"
+                                                placeholder="Your Password"
                                             />
                                         </InputGroup>
+                                        {formData.error ? (<Alert color="danger">{formData.error}</Alert>) : ''}
                                         <Row>
                                             <Col xs="6">
-                                                <Button color="primary" className="px-4">Login</Button>
+                                                <Button color="primary" className="px-4" onClick={this.handleSubmit}>Login</Button>
                                             </Col>
                                             <Col xs="6" className="text-right">
                                                 <Button color="link" className="px-0">Forgot password?</Button>
@@ -64,33 +117,4 @@ class Login extends Component {
             </div>
         )
     }
-
-    _confirm = async () => {
-        const { email, password } = this.state
-        const result = await this.props.loginMutation({
-            variables: {
-                email,
-                password
-            }
-        })
-        const { token } = result.data.login
-        this._saveUserData(token)
-        this.props.history.push(`/`)
-    }
-
-    _saveUserData = (token) => {
-        localStorage.setItem(AUTH_TOKEN, token)
-    }
 }
-
-const LOGIN_MUTATION = gql`
-  mutation LoginMutation($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      token
-    }
-  }
-`
-
-export default compose(
-    graphql(LOGIN_MUTATION, { name: 'loginMutation' }),
-)(Login)

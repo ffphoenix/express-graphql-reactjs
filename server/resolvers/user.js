@@ -91,6 +91,7 @@ const createUserFunc  = {
     },
     description: 'Create a new user',
     resolve: function(obj, {input}, context) {
+        console.log(context);
         return bcrypt.hash(input.password, 10).then(function(hash) {
             if (input.password !== '' && input.password !== undefined)
                 input.password = hash;

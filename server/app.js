@@ -6,7 +6,10 @@ import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { execute, subscribe, GraphQLError } from 'graphql';
 import schema from './resolvers';
 import jwt from 'express-jwt';
+import authModule from './middlewares/auth';
 import cors from 'cors';
+import config from './config/config';
+
 // Initialize the app
 const app = express();
 
@@ -36,23 +39,38 @@ const formatError = function (error) {
     }
     return formatApolloError(error)
 };
-
-const jwtCheck = jwt({ secret: '2fadsfdasfasd21312312' }).unless({path: ['/graphql', '/graphiql', '/login']}); // change out your secret for each environment
+const jwtCheck = jwt({ secret: config.jwt_secret }).unless({path: ['/login']})
 app.use(jwtCheck);
 app.use(cors());
+app.use(bodyParser.json());
+
+app.use('/api', authModule);
 
 // The GraphQL endpoint
-app.use('/graphql', bodyParser.json(), graphqlExpress({ formatError, schema }));
+// app.use('/graphql', bodyParser.json(), graphqlExpress({ formatError, schema }));
+app.use('/graphql', bodyParser.json(), graphqlExpress(request => {
+    return {
+        schema: schema,
+        context: {
+            startTime: Date.now(),
+            user : request.user,
+            headers : request.rawHeaders
+        },
+        formatError
+    };
+    }
+));
 
 // GraphiQL, a visual editor for queries
 app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
 
 app.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
-        res.status(401).send('invalid token...');
+        res.status(401).json({
+            error: 'invalid token'
+        });
     }
 });
-
 // Start the server
 const httpServer = app.listen(4000, () => {
     console.log('Go to http://localhost:4000/graphiql to run queries!');

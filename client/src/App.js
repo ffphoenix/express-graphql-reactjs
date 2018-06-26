@@ -27,12 +27,12 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { WebSocketLink } from 'apollo-link-ws';
 import { HttpLink }      from 'apollo-link-http';
 import { getOperationAST } from 'graphql';
-import {SubscriptionClient} from 'subscriptions-transport-ws';
-
+import { SubscriptionClient } from 'subscriptions-transport-ws';
+import { AUTH_TOKEN } from './config'
 class App extends Component {
 
     render() {
-        const AUTH_TOKEN = 'token-auth';
+
 
         const httpLink = new HttpLink({uri : `http://localhost:4000/graphql`});
 

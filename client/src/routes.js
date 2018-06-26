@@ -3,6 +3,7 @@ import Loadable from 'react-loadable'
 import DefaultLayout from './containers/DefaultLayout';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import {Grid as UserList, Create as UserCreate, Update as UserUpdate} from './components/user'
+import {AUTH_TOKEN} from "./config";
 
 function Loading() {
   return <div>Loading...</div>;
@@ -25,19 +26,26 @@ const routes = [
 export default routes;
 
 export function PrivateRoutes ({props}) {
-    let authed = true;
-    let routesSwitch = [];
+    const token = localStorage.getItem(AUTH_TOKEN);
 
-    if (authed === false) {
+    if (token === null || token === undefined) {
         return (<Redirect to={{pathname: '/login', state: {from: props.location}}} />);
     }
 
-    console.log(localStorage.getItem('token-auth'));
-    for (let key in routes) {
+    let routesSwitch = [];
+    for (let key in routes)  {
         let route = routes[key];
-        routesSwitch.push(<Route key={key} path={route.path} exact={route.exact} name={route.name} render={props => (
-            <route.component {...props} />
-        )} />)
+
+        if (route.component !== undefined) {
+            routesSwitch.push(
+                <Route key={key}
+                       path={route.path}
+                       exact={route.exact}
+                       name={route.name}
+                       render={ props => (
+                           <route.component {...props} />
+                       )}/>)
+        }
     }
     return (<Switch>{routesSwitch}</Switch>)
 }

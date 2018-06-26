@@ -25,7 +25,7 @@ class DefaultLayout extends Component {
     return (
       <div className="app">
         <AppHeader fixed>
-          <DefaultHeader />
+          <DefaultHeader {...this.props}/>
         </AppHeader>
         <div className="app-body">
           <AppSidebar fixed display="lg">

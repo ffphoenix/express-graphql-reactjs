@@ -12,5 +12,6 @@ module.exports = {
         password : 'root',
         database : 'task',
         dialect  : 'mysql',
-    }
+    },
+    jwt_secret : 'fa4wTs2*r4IIIda3151%'
 };
