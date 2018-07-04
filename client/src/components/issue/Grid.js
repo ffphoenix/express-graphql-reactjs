@@ -1,14 +1,19 @@
 import React from 'react';
 import { Card, CardBody, CardHeader } from 'reactstrap';
-import { FEED_QUERY, FEED_QUERY_NAME } from './Schema'
+import {DELETE_MUTATION, DELETE_QUERY_NAME, FEED_QUERY, FEED_QUERY_NAME, MODULE_URL} from './Schema';
+import { graphql } from 'react-apollo';
 
 import BaseGrid from "../grid/BaseGrid";
 import BaseTable from "../grid/BaseTable";
-import BaseListFilters from "../grid/BaseListFilters";
+import BaseTableFilters from "../grid/BaseTableFilters";
 
 class Grid extends BaseGrid {
-    constructor(props) {
+
+    constructor(props){
         super(props);
+        this.backURL = MODULE_URL;
+        this.deleteQueryName = DELETE_QUERY_NAME;
+        this.feedQueryName = FEED_QUERY_NAME;
     }
 
     render() {
@@ -28,13 +33,9 @@ class Grid extends BaseGrid {
                     sorted : true,
                     name : 'ID'
                 },
-                'email' : {
+                'title' : {
                     sorted : true,
-                    name : 'Email'
-                },
-                'username' : {
-                    sorted : true,
-                    name : 'Username'
+                    name : 'Title'
                 },
                 'create_date' : {
                     sorted : {
@@ -51,10 +52,13 @@ class Grid extends BaseGrid {
 
             <Card>
                 <CardHeader>
-                    <i className="fa fa-align-justify"></i> Users List
+                    <i className="fa fa-align-justify"></i> Issues List
                 </CardHeader>
                 <CardBody>
-                    <BaseListFilters options={filterOptions} />
+                    <BaseTableFilters
+                        url={MODULE_URL}
+                        onFilter={this.onFilter}
+                        options={filterOptions} />
                     <br/>
                     <BaseTable
                         options={tableOptions}
@@ -72,4 +76,6 @@ class Grid extends BaseGrid {
     }
 }
 
-export default (Grid);
+export default graphql(DELETE_MUTATION, {
+    name: 'deleteMutation'
+})(Grid);

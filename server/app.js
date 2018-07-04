@@ -39,7 +39,7 @@ const formatError = function (error) {
     }
     return formatApolloError(error)
 };
-const jwtCheck = jwt({ secret: config.jwt_secret }).unless({path: ['/login']})
+const jwtCheck = jwt({ secret: config.jwt_secret }).unless({path: ['/api/login']})
 app.use(jwtCheck);
 app.use(cors());
 app.use(bodyParser.json());
@@ -67,7 +67,10 @@ app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
 app.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
         res.status(401).json({
-            error: 'invalid token'
+            errors: {
+                code : 'invalid_token',
+                message : 'invalid token'
+            }
         });
     }
 });

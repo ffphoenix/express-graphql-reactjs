@@ -5,23 +5,23 @@ import {
     CardHeader,
 } from 'reactstrap';
 import { graphql, withApollo, compose } from 'react-apollo'
-import { CREATE_MUTATION, FEED_QUERY_NAME, CREATE_QUERY_NAME, UPDATE_QUERY_NAME } from './Schema'
+import { CREATE_MUTATION, FEED_QUERY_NAME, CREATE_QUERY_NAME, UPDATE_QUERY_NAME, MODULE_URL } from './Schema'
 import BaseForm from '../grid/BaseForm'
 
 class Create extends BaseForm {
 
     state = {
         data : {
-            username: '',
-            email: '',
-            password: '',
+            title: '',
+            short_name: '',
+            description: '',
         },
         errors : {}
     }
 
     constructor(props) {
         super(props);
-        this.backURL = `users`;
+        this.backURL = MODULE_URL;
         this.mode = this.CREATE_MODE;
         this.feedQueryName = FEED_QUERY_NAME;
         this.createQueryName = CREATE_QUERY_NAME;
@@ -30,27 +30,27 @@ class Create extends BaseForm {
 
     render() {
         const options = {
-            username: {
+            title: {
                 type: this.ELEMENT_TYPE_INPUT,
-                label: 'Username',
-                placeholder: 'Enter username...'
+                label: 'Title',
+                placeholder: 'Enter title...'
             },
-            email: {
+            short_name: {
                 type: this.ELEMENT_TYPE_INPUT,
-                label: 'Email',
-                placeholder: 'Enter email...'
+                label: 'Short name',
+                placeholder: 'Enter Short name...'
             },
-            password: {
+            description: {
                 type: this.ELEMENT_TYPE_PASSWORD,
-                label: 'Pass',
-                placeholder: 'Enter password...'
+                label: 'Description',
+                placeholder: 'Enter Description...'
             },
         }
 
         return (
             <Card>
                 <CardHeader>
-                    <strong>User</strong>
+                    <strong>Project</strong>
                     <small> create</small>
                 </CardHeader>
                 <CardBody>

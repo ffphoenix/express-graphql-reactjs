@@ -14,5 +14,15 @@ export default {
       url: '/users',
       icon: 'icon-alert',
     },
+    {
+      name: 'Projects',
+      url: '/projects',
+      icon: 'icon-alert',
+    },
+    {
+      name: 'Issues',
+      url: '/issues',
+      icon: 'icon-alert',
+    },
   ],
 };

@@ -60,7 +60,7 @@ class Grid extends BaseGrid {
                 </CardHeader>
                 <CardBody>
                     <BaseTableFilters
-                        url='users'
+                        url={this.backURL}
                         onFilter={this.onFilter}
                         options={filterOptions} />
                     <br/>

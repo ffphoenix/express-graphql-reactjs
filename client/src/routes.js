@@ -3,6 +3,8 @@ import Loadable from 'react-loadable'
 import DefaultLayout from './containers/DefaultLayout';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import {Grid as UserList, Create as UserCreate, Update as UserUpdate} from './components/user'
+import {Grid as ProjectList, Create as ProjectCreate, Update as ProjectUpdate} from './components/projects'
+import {Grid as IssuetList, Create as IssueCreate, Update as IssueUpdate} from './components/issue'
 import {AUTH_TOKEN} from "./config";
 
 function Loading() {
@@ -20,6 +22,12 @@ const routes = [
     { path: '/users/create', name: 'UserCreate', component: UserCreate },
     { path: '/users/update/:id', name: 'UserUpdate', component: UserUpdate },
     { path: '/users', name: 'Users', component: UserList },
+    { path: '/projects/create', name: 'ProjectCreate', component: ProjectCreate },
+    { path: '/projects/update/:id', name: 'ProjectCreate', component: ProjectUpdate },
+    { path: '/projects', name: 'Projects', component: ProjectList },
+    { path: '/issues/create', name: 'IssueCreate', component: IssueCreate },
+    { path: '/issues/update/:id', name: 'IssueUpdate', component: IssueUpdate },
+    { path: '/issues', name: 'Issues', component: IssuetList },
 
 ];
 

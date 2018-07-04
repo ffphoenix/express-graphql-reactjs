@@ -1,4 +1,5 @@
-import {resolver, attributeFields} from 'graphql-sequelize';
+import {resolver, attributeFields, JSONType} from 'graphql-sequelize';
+import { Op } from 'sequelize';
 import {
     GraphQLObjectType,
     GraphQLInputObjectType,
@@ -6,13 +7,28 @@ import {
     GraphQLNonNull,
     GraphQLInt,
     GraphQLString,
+    getNullableType
+
 } from 'graphql';
+
 import models from '../models';
 
 const issueType = new GraphQLObjectType({
     name: 'Issue',
     description: 'A issue',
-    fields: attributeFields(models.issue)
+    fields: attributeFields(models.issues)
+});
+
+const issueListType = new GraphQLObjectType({
+    name: 'IssueList',
+    fields : {
+        rows:  {
+            type : new GraphQLList(issueType)
+        },
+        count:  {
+            type : GraphQLInt
+        }
+    }
 });
 
 const queries = {
@@ -23,25 +39,42 @@ const queries = {
                 type: new GraphQLNonNull(GraphQLInt)
             }
         },
-        resolve: resolver(models.issue)
+        resolve: resolver(models.issues)
     },
     issues: {
-        type: new GraphQLList(issueType),
+        type: issueListType,
         args: {
             limit: {
-                type: GraphQLInt
+                type: getNullableType(GraphQLInt)
             },
             order: {
-                type: GraphQLString
+                type: getNullableType(GraphQLString)
+            },
+            offset: {
+                type: getNullableType(GraphQLInt)
+            },
+            search: {
+                type: getNullableType(GraphQLString)
             }
         },
-        resolve: resolver(models.issue)
+        resolve: function(obj, args, context) {
+            args.order = [args.order.split(' ')];
+            if (args.search !== undefined && args.search !== '') {
+                args.where = {
+                    [Op.or]: {issuename : { [Op.like] : '%' + args.search + '%' },
+                        email : { [Op.like] : '%' + args.search + '%' }}
+                }
+            }
+            return models.issues.findAndCountAll(args).then( result => {
+                return result;
+            });
+        }
     }
 };
 
 const modifIssueType = new GraphQLInputObjectType({
     name: 'modifIssueType',
-    fields: attributeFields(models.issue, {only : ['title', 'description']})
+    fields: attributeFields(models.issues, {only : ['short_name', 'title', 'description']})
 });
 
 const createIssueFunc  = {
@@ -55,7 +88,7 @@ const createIssueFunc  = {
     resolve: function(obj, {input}, context) {
         input.created_at = new Date();
         input.updated_at = new Date();
-        return models.issue.create(input);
+        return models.issues.create(input);
     }
 
 };
@@ -68,7 +101,7 @@ const updateIssueFunc  = {
     },
     description: 'Update an existed issue',
     resolve: function(obj, args) {
-        return models.issue
+        return models.issues
             .findById(args.id)
             .then((quote) => {
                 args.input.updated_at = new Date();
@@ -85,7 +118,7 @@ const deleteIssueFunc  = {
     },
     description: 'Update an existed issue',
     resolve: function(obj, args) {
-        return models.issue
+        return models.issues
             .findById(args.id)
             .then((quote) => {
                 return quote.destroy();

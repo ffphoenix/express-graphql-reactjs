@@ -6,11 +6,12 @@ import {
 } from 'reactstrap';
 
 import { graphql, compose, withApollo } from 'react-apollo'
-import { UPDATE_MUTATION,
+import {
+    UPDATE_MUTATION,
     FEED_ONE_QUERY,
     CREATE_QUERY_NAME,
     UPDATE_QUERY_NAME,
-    FEED_QUERY_ONE_NAME
+    FEED_QUERY_ONE_NAME, MODULE_URL
 } from './Schema'
 import BaseForm from '../grid/BaseForm'
 
@@ -18,16 +19,16 @@ class Update extends BaseForm {
 
     state = {
         data : {
-            username: '',
-            email: '',
-            password: null,
+            title: '',
+            short_name: '',
+            description: '',
         },
         errors : {}
     };
 
     constructor(props) {
         super(props);
-        this.backURL = `users`;
+        this.backURL = MODULE_URL;
         this.mode = this.UPDATE_MODE;
         this.feedOneQuery = FEED_ONE_QUERY;
         this.createQueryName = CREATE_QUERY_NAME;
@@ -42,26 +43,26 @@ class Update extends BaseForm {
         if (error) return (<div>`Error! ${error.message}`</div>);
 
         const options = {
-            username: {
+            title: {
                 type: this.ELEMENT_TYPE_INPUT,
-                label: 'Username',
-                placeholder: 'Enter username...'
+                label: 'Title',
+                placeholder: 'Enter title...'
             },
-            email: {
+            short_name: {
                 type: this.ELEMENT_TYPE_INPUT,
-                label: 'Email',
-                placeholder: 'Enter email...'
+                label: 'Short name',
+                placeholder: 'Enter Short name...'
             },
-            password: {
+            description: {
                 type: this.ELEMENT_TYPE_PASSWORD,
-                label: 'Pass',
-                placeholder: 'Enter password...'
+                label: 'Description',
+                placeholder: 'Enter Description...'
             },
         }
         return (
             <Card>
                 <CardHeader>
-                    <strong>User</strong>
+                    <strong>Project</strong>
                     <small> update</small>
                 </CardHeader>
                 <CardBody>

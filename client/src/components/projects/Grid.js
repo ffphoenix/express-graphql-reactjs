@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardBody, CardHeader } from 'reactstrap';
-import {DELETE_MUTATION, DELETE_QUERY_NAME, FEED_QUERY, FEED_QUERY_NAME} from './Schema';
+import {DELETE_MUTATION, DELETE_QUERY_NAME, FEED_QUERY, FEED_QUERY_NAME, MODULE_URL} from './Schema';
 import { graphql } from 'react-apollo';
 
 import BaseGrid from "../grid/BaseGrid";
@@ -11,7 +11,7 @@ class Grid extends BaseGrid {
 
     constructor(props){
         super(props);
-        this.backURL = `users`;
+        this.backURL = MODULE_URL;
         this.deleteQueryName = DELETE_QUERY_NAME;
         this.feedQueryName = FEED_QUERY_NAME;
     }
@@ -33,13 +33,13 @@ class Grid extends BaseGrid {
                     sorted : true,
                     name : 'ID'
                 },
-                'email' : {
+                'title' : {
                     sorted : true,
-                    name : 'Email'
+                    name : 'Title'
                 },
-                'username' : {
+                'short_name' : {
                     sorted : true,
-                    name : 'Username'
+                    name : 'Short Name'
                 },
                 'create_date' : {
                     sorted : {
@@ -56,11 +56,11 @@ class Grid extends BaseGrid {
 
             <Card>
                 <CardHeader>
-                    <i className="fa fa-align-justify"></i> Users List
+                    <i className="fa fa-align-justify"></i> Projects List
                 </CardHeader>
                 <CardBody>
                     <BaseTableFilters
-                        url='users'
+                        url={MODULE_URL}
                         onFilter={this.onFilter}
                         options={filterOptions} />
                     <br/>

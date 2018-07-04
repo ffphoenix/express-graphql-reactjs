@@ -14,17 +14,17 @@ import {
 
 import models from '../models';
 
-const userType = new GraphQLObjectType({
-    name: 'User',
-    description: 'A user',
-    fields: attributeFields(models.users, {exclude : ['password']})
+const projectType = new GraphQLObjectType({
+    name: 'Project',
+    description: 'A project',
+    fields: attributeFields(models.projects)
 });
 
-const userListType = new GraphQLObjectType({
-    name: 'UserList',
+const projectListType = new GraphQLObjectType({
+    name: 'ProjectList',
     fields : {
         rows:  {
-            type : new GraphQLList(userType)
+            type : new GraphQLList(projectType)
         },
         count:  {
             type : GraphQLInt
@@ -33,17 +33,17 @@ const userListType = new GraphQLObjectType({
 });
 
 const queries = {
-    user: {
-        type: userType,
+    project: {
+        type: projectType,
         args: {
             id: {
                 type: new GraphQLNonNull(GraphQLInt)
             }
         },
-        resolve: resolver(models.users)
+        resolve: resolver(models.projects)
     },
-    users: {
-        type: userListType,
+    projects: {
+        type: projectListType,
         args: {
             limit: {
                 type: getNullableType(GraphQLInt)
@@ -62,60 +62,49 @@ const queries = {
             args.order = [args.order.split(' ')];
             if (args.search !== undefined && args.search !== '') {
                 args.where = {
-                    [Op.or]: {username : { [Op.like] : '%' + args.search + '%' },
+                    [Op.or]: {projectname : { [Op.like] : '%' + args.search + '%' },
                     email : { [Op.like] : '%' + args.search + '%' }}
                 }
             }
-            return models.users.findAndCountAll(args).then( result => {
+            return models.projects.findAndCountAll(args).then( result => {
                 return result;
             });
         }
     }
 };
 
-const modifUserType = new GraphQLInputObjectType({
-    name: 'modifUserType',
-    fields: attributeFields(models.users, {only : ['username', 'password', 'email']})
-});
-const updateUserType = new GraphQLInputObjectType({
-    name: 'updateUserType',
-    fields: attributeFields(models.users, {only : ['username', 'email']})
+const modifProjectType = new GraphQLInputObjectType({
+    name: 'modifProjectType',
+    fields: attributeFields(models.projects, {only : ['short_name', 'title', 'description']})
 });
 
-const createUserFunc  = {
-    type: userType,
+const createProjectFunc  = {
+    type: projectType,
     args: {
         input : {
-            type : modifUserType
+            type : modifProjectType
         }
     },
-    description: 'Create a new user',
+    description: 'Create a new project',
     resolve: function(obj, {input}, context) {
-        return bcrypt.hash(input.password, 10).then(function(hash) {
-            if (input.password !== '' && input.password !== undefined)
-                input.password = hash;
-            input.created_at = new Date();
-            input.updated_at = new Date();
-            return models.users.create(input);
-        });
+        input.created_at = new Date();
+        input.updated_at = new Date();
+        return models.projects.create(input);
     }
 
 };
 
-const updateUserFunc  = {
-    type: userType,
+const updateProjectFunc  = {
+    type: projectType,
     args: {
         id : { type : new GraphQLNonNull(GraphQLInt) },
-        input : { type : updateUserType }
+        input : { type : modifProjectType }
     },
-    description: 'Update an existed user',
+    description: 'Update an existed project',
     resolve: function(obj, args) {
-        return models.users
+        return models.projects
             .findById(args.id)
             .then((quote) => {
-                args.input.password = quote.get('password');
-                // if (args.input.password !== '' && args.input.password !== undefined)
-                //     args.input.password = hash;
                 args.input.updated_at = new Date();
                 return quote.update(args.input);
             });
@@ -123,14 +112,14 @@ const updateUserFunc  = {
 
 };
 
-const deleteUserFunc  = {
-    type: userType,
+const deleteProjectFunc  = {
+    type: projectType,
     args: {
         id : { type : new GraphQLNonNull(GraphQLInt) },
     },
-    description: 'Update an existed user',
+    description: 'Update an existed project',
     resolve: function(obj, args) {
-        return models.users
+        return models.projects
             .findById(args.id)
             .then((quote) => {
                 return quote.destroy();
@@ -140,9 +129,9 @@ const deleteUserFunc  = {
 };
 
 const mutations = {
-    createUser: createUserFunc,
-    updateUser: updateUserFunc,
-    deleteUser: deleteUserFunc
+    createProject: createProjectFunc,
+    updateProject: updateProjectFunc,
+    deleteProject: deleteProjectFunc
 };
 
 module.exports =  {'queries' : queries , 'mutations' : mutations };

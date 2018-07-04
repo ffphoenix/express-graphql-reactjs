@@ -1,50 +1,54 @@
 import gql from 'graphql-tag'
 
+export const MODULE_URL = 'projects';
+
 export const DELETE_QUERY_NAME = 'deleteMutation';
 export const CREATE_QUERY_NAME = 'createMutation';
 export const UPDATE_QUERY_NAME = 'updateMutation';
-export const FEED_QUERY_NAME   = 'users';
-export const FEED_QUERY_ONE_NAME = 'user';
+export const FEED_QUERY_NAME   = 'projects';
+export const FEED_QUERY_ONE_NAME = 'project';
 
 export const CREATE_MUTATION = gql`
-  mutation createMutation($input: modifUserType!) {
-    createUser(input: $input) {
-      id
-      username
-      email
-      created_at
+    mutation createMutation($input: modifProjectType!) {
+        createProject(input: $input) {
+            id      
+            title
+            short_name
+            description
+            create_date
+        }
     }
-  }
 `;
 
 export const UPDATE_MUTATION = gql`
-  mutation updateMutation($id: Int!, $input: updateUserType!) {
-    updateUser(id: $id, input: $input) {
+  mutation updateMutation($id: Int!, $input: modifProjectType!) {
+    updateProject(id: $id, input: $input) {
       id
-      username
-      email
+      short_name
+      title
     }
   }
 `;
 
 export const DELETE_MUTATION = gql`
     mutation deleteMutation($id: Int!) {
-        deleteUser(id: $id) {
+        deleteProject(id: $id) {
             id
-            username
-            email
+            short_name
+            title
         }
     }
 `;
 
 export const FEED_QUERY = gql`
-    query users($offset: Int, $limit: Int, $order: String, $search: String) {
-        users (offset: $offset, limit: $limit, order: $order, search : $search) {
+    query projects($offset: Int, $limit: Int, $order: String, $search: String) {
+        projects (offset: $offset, limit: $limit, order: $order, search : $search) {
             count
             rows {
                 id      
-                email
-                username
+                title
+                short_name
+                description
                 create_date
             }
         }
@@ -52,12 +56,13 @@ export const FEED_QUERY = gql`
 `;
 
 export const FEED_ONE_QUERY = gql`
-    query users($id: Int!) {
-        user (id: $id) {
+    query projects($id: Int!) {
+        project (id: $id) {
             id      
-            email
-            username
-            created_at
+            title
+            short_name
+            description
+            create_date
         }
     }
 `;

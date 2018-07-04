@@ -82,6 +82,7 @@ export default class BaseForm extends React.Component {
             .catch(response => {
                 if (response.graphQLErrors !== undefined) {
                     let newState = this.state;
+                    // console.log(response.errors)
                     newState.errors = response.graphQLErrors[0].data;
                     this.setState(newState);
                 }

@@ -4,11 +4,13 @@ import {
 } from 'graphql';
 import {queries as userQueries, mutations as userMutations} from './user'
 import {queries as issueQueries, mutations as issueMutations} from './issue'
+import {queries as projectQueries, mutations as projectMutations} from './project'
 
 const schema = new GraphQLSchema({
     query : new GraphQLObjectType( {
         name : 'queries',
         fields : {
+            ...projectQueries,
             ...userQueries,
             ...issueQueries
         }
@@ -16,6 +18,7 @@ const schema = new GraphQLSchema({
     mutation : new GraphQLObjectType( {
         name : 'mutations',
         fields : {
+            ...projectMutations,
             ...userMutations,
             ...issueMutations
         }
