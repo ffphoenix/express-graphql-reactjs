@@ -1,6 +1,8 @@
 import React from 'react';
+import { ApolloProvider } from "react-apollo";
 import Loadable from 'react-loadable'
 import DefaultLayout from './containers/DefaultLayout';
+import ApolloClient from './utils/ApolloClient';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import {Grid as UserList, Create as UserCreate, Update as UserUpdate} from './components/user'
 import {Grid as ProjectList, Create as ProjectCreate, Update as ProjectUpdate} from './components/projects'
@@ -55,6 +57,6 @@ export function PrivateRoutes ({props}) {
                        )}/>)
         }
     }
-    return (<Switch>{routesSwitch}</Switch>)
+    return (<ApolloProvider client={ApolloClient}><Switch >{routesSwitch}</Switch></ApolloProvider>)
 }
 

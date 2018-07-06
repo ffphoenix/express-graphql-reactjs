@@ -15,7 +15,6 @@ const app = express();
 
 const formatError = function (error) {
     const { originalError } = error;
-
     if (originalError !== undefined
         && originalError.name === 'SequelizeValidationError') {
         let procErrors = {};
@@ -66,12 +65,12 @@ app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
 
 app.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
-        res.status(401).json({
+        res.status(401).json(formatApolloError({
             errors: {
                 code : 'invalid_token',
                 message : 'invalid token'
             }
-        });
+        }));
     }
 });
 // Start the server

@@ -33,76 +33,10 @@ import { AUTH_TOKEN } from './config';
 import { Redirect } from 'react-router-dom';
 
 class App extends Component {
-    state = {
-        hasError : false
-    }
+
     render() {
-        if (this.state.hasError) {
-            return <Redirect to='/login'/>
-        }
-
-        let errorExits = false;
-        const errorLink = onError(({networkError, graphQLErrors}) => {
-
-            // console.log(response);
-            // if (graphQLErrors) {
-            //     console.log(`[graphQLErrors error]:`, graphQLErrors);
-            // }
-
-            // graphQLErrors.map(({ message, locations, path }) =>
-            //     console.log(
-            //         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
-            //     ),
-            // );
-
-            if (networkError) {
-                this.setState({hasError : true})
-                console.log(`[Network error]:`, networkError);
-            }
-
-        });
-
-        let httpLink = createHttpLink({
-            uri : `http://localhost:4000/graphql`,
-        });
-
-        const middlewareAuthLink = new ApolloLink((operation, forward) => {
-            const token = localStorage.getItem(AUTH_TOKEN);
-            const authorizationHeader = token ? `Bearer ${token}` : null
-            operation.setContext({
-                headers: {
-                    authorization: authorizationHeader,
-                },
-            });
-            return forward(operation)
-        });
-
-        const httpLinkWithAuthToken = middlewareAuthLink.concat(httpLink);
-
-        const wsclient = new SubscriptionClient(`ws://localhost:4000/graphql`, {
-            reconnect: true
-        });
-        const wsLink = new WebSocketLink(wsclient);
-
-        let link = ApolloLink.split(
-            operation => { // check if it is a subscription
-                const operationAST = getOperationAST(operation.query, operation.operationName);
-                return !!operationAST && operationAST.operation === 'subscription';
-            },
-            wsLink,
-            httpLinkWithAuthToken
-        );
-
-        link = errorLink.concat(link);
-
-        const client = new ApolloClient({
-            link,
-            cache: new InMemoryCache(),
-            errorPolicy: 'all'
-        });
-
         return (
-            <ApolloProvider client={client}>
+
                 <HashRouter>
                     <Switch>
                         <Route exact path="/login" name="Login Page" component={Login}/>
@@ -112,7 +46,6 @@ class App extends Component {
                         <Route path="/" name="Home" component={DefaultLayout}/>
                     </Switch>
                 </HashRouter>
-            </ApolloProvider>
         );
     }
 }
