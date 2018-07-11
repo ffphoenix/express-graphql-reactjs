@@ -19,14 +19,12 @@ class Cwysiwyg extends React.Component {
         const type  = options.type || `text`;
         const placeholder  = options.placeholder || `Enter ` + label;
         const value = options.value  || ``;
-
+        console.log('Cwysiwyg', value);
         return (
             <FormGroup>
                 <Label htmlFor={key}>{label}</Label>
                 <div className="rdw-storybook-root">
                     <Editor
-                        id={key}
-                        name={key}
                         editorState={value}
                         toolbarClassName="rdw-storybook-toolbar"
                         wrapperClassName="rdw-storybook-wrapper"

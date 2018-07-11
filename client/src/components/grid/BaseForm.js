@@ -9,6 +9,7 @@ import CInput from "./formElements/CInput";
 import Cwysiwyg from "./formElements/Cwysiwyg";
 import CSelect from "./formElements/CSelect";
 import draftToHtml from 'draftjs-to-html';
+import _ from 'lodash';
 import { EditorState, convertToRaw } from 'draft-js';
 
 export default class BaseForm extends React.Component {
@@ -50,7 +51,7 @@ export default class BaseForm extends React.Component {
                 for (let key in this.state.data) {
                     newStateData[key] = propsData[key];
                 }
-                this.setState({ data : newStateData })
+               this.setState({ data : newStateData })
             }
         }
     }
@@ -59,7 +60,6 @@ export default class BaseForm extends React.Component {
         let newState = this.state;
         newState.data[name] = editorState;
         this.setState(newState)
-        console.log(name, editorState);
     }
 
     handleChange(event) {
@@ -73,15 +73,16 @@ export default class BaseForm extends React.Component {
     }
 
     prepareDataToSend(){
-        let data = this.state.data;
+        var data = _.clone(this.state.data);
         for (let i in this.options) {
             if (this.options[i].type === this.ELEMENT_TYPE_TEXT && data[i] !== undefined && data[i] !== null) {
                 data[i] = draftToHtml(convertToRaw(data[i].getCurrentContent()))
             }
         }
+        return data;
     }
 
-    handleSendData = async (event) => {
+    handleSendData(event) {
         event.preventDefault();
         event.stopPropagation();
         let dataToSend = this.prepareDataToSend();
@@ -96,14 +97,16 @@ export default class BaseForm extends React.Component {
                 this.props.history.push(`/` + this.backURL);
             })
             .catch(response => {
-                if (response.graphQLErrors !== undefined) {
+                if (response.graphQLErrors !== undefined && response.graphQLErrors.length > 0) {
                     let newState = this.state;
                     newState.errors = response.graphQLErrors[0].data;
                     this.setState(newState);
                 }
+                else if (response.message !== null) {
+                    console.error('Error mutation',response.message );
+                }
             })
         } else if (this.mode === this.UPDATE_MODE) {
-
             this.props[this.updateQueryName]({
                 variables: {
                     id: parseInt(this.props.match.params.id),
@@ -129,7 +132,7 @@ export default class BaseForm extends React.Component {
                 {this.renderFormElements(options)}
                 <div className="form-actions custom-control-inline">
                     <div className="pr-1">
-                        <Button className="" type="submit" color="primary" onClick={this.handleSendData}>Save changes</Button>
+                        <Button className="" type="button" color="primary" onClick={this.handleSendData}>Save changes</Button>
                     </div>
                     <div className="pr-1">
                         <Link className="btn btn-secondary" to={`/` + this.backURL} >Cancel</Link>
@@ -138,7 +141,6 @@ export default class BaseForm extends React.Component {
             </Form>
         )
     }
-
 
     renderFormElements(options){
         let formElements = [];

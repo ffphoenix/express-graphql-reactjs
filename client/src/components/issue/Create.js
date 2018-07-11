@@ -7,13 +7,14 @@ import {
 import { graphql, withApollo, compose } from 'react-apollo'
 import { CREATE_MUTATION, FEED_QUERY_NAME, CREATE_QUERY_NAME, UPDATE_QUERY_NAME, MODULE_URL } from './Schema'
 import BaseForm from '../grid/BaseForm'
+import { EditorState } from 'draft-js';
 
 class Create extends BaseForm {
 
     state = {
         data : {
             title: '',
-            description: '',
+            description: EditorState.createEmpty(),
             type: '',
             status: '',
         },
@@ -65,7 +66,7 @@ class Create extends BaseForm {
     }
 
     render() {
-
+        console.log('render', this.state);
 
         return (
             <Card>
