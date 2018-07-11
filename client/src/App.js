@@ -19,18 +19,6 @@ import {DefaultLayout} from './containers';
 // Pages
 import {Page404, Page500, Register} from './views/Pages';
 import Login from './components/login'
-// Apollo
-import ApolloClient from "apollo-client";
-import { ApolloProvider } from "react-apollo";
-import { ApolloLink } from 'apollo-link';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-import { WebSocketLink } from 'apollo-link-ws';
-import { createHttpLink }      from 'apollo-link-http';
-import { onError }      from 'apollo-link-error';
-import { getOperationAST } from 'graphql';
-import { SubscriptionClient } from 'subscriptions-transport-ws';
-import { AUTH_TOKEN } from './config';
-import { Redirect } from 'react-router-dom';
 
 class App extends Component {
 

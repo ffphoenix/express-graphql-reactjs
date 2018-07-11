@@ -1,5 +1,4 @@
 import ApolloClient from "apollo-client";
-import { ApolloProvider } from "react-apollo";
 import { ApolloLink } from 'apollo-link';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { WebSocketLink } from 'apollo-link-ws';
@@ -8,29 +7,21 @@ import { onError }      from 'apollo-link-error';
 import { getOperationAST } from 'graphql';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { AUTH_TOKEN } from '../config';
-import { Redirect } from 'react-router-dom';
-import axios from 'axios';
 import history from '../utils/history'
 
-const errorLink = onError((response) => {
-    console.log(response);
-    // if (graphQLErrors) {
-    //     console.log(`[graphQLErrors error]:`, graphQLErrors);
-    // }
-
-    response.graphQLErrors.map(({ message, locations, path }) =>
-        console.log(
-            `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
-        ),
-    );
-
-    // console.log(networkError, graphQLErrors);
-    // if (networkError) {
-    //     // localStorage.clear();
-    //     // history.push('#/login');
-    //     console.log(`[Network error]:`, networkError);
-    //     return false;
-    // }
+const errorLink = onError(({networkError, graphQLErrors}) => {
+    if (graphQLErrors) {
+        graphQLErrors.map(({ message, locations, path }) =>
+            console.log(
+                `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+            ),
+        );
+    }
+    else if (networkError) {
+        localStorage.clear();
+        history.push('#/login');
+        console.log(`[Network error]:`, networkError);
+    }
 
 });
 
@@ -47,7 +38,8 @@ const customFetch = (uri, options) => {
     });
 }
 let httpLink = createHttpLink({
-    uri : `http://localhost:4000/graphql`
+    uri : `http://localhost:4000/graphql`,
+    // fetch : customFetch
 });
 
 

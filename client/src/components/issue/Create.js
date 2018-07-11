@@ -13,11 +13,47 @@ class Create extends BaseForm {
     state = {
         data : {
             title: '',
-            short_name: '',
             description: '',
+            type: '',
+            status: '',
         },
         errors : {}
     }
+
+    options = {
+        title: {
+            type: this.ELEMENT_TYPE_INPUT,
+            label: 'Title',
+            placeholder: 'Enter title...'
+        },
+        description: {
+            type: this.ELEMENT_TYPE_TEXT,
+            label: 'Description',
+            placeholder: 'Enter Description...'
+        },
+        type: {
+            type: this.ELEMENT_TYPE_SELECT,
+            label: 'Type',
+            placeholder: 'Select type...',
+            options : {
+                'bug' : 'Bug',
+                'task' : 'Task',
+                'feature' : 'Feature'
+            }
+        },
+        status: {
+            type: this.ELEMENT_TYPE_SELECT,
+            label: 'Status',
+            placeholder: 'Select status...',
+            options : {
+                'new' : 'New',
+                'inprogress' : 'In Progress',
+                'reopen' : 'Re-open',
+                'feedback' : 'Feedback',
+                'testready' : 'Ready for test',
+            }
+        },
+    };
 
     constructor(props) {
         super(props);
@@ -29,38 +65,20 @@ class Create extends BaseForm {
     }
 
     render() {
-        const options = {
-            title: {
-                type: this.ELEMENT_TYPE_INPUT,
-                label: 'Title',
-                placeholder: 'Enter title...'
-            },
-            short_name: {
-                type: this.ELEMENT_TYPE_INPUT,
-                label: 'Short name',
-                placeholder: 'Enter Short name...'
-            },
-            description: {
-                type: this.ELEMENT_TYPE_PASSWORD,
-                label: 'Description',
-                placeholder: 'Enter Description...'
-            },
-        }
+
 
         return (
             <Card>
                 <CardHeader>
-                    <strong>Project</strong>
+                    <strong>Issue</strong>
                     <small> create</small>
                 </CardHeader>
                 <CardBody>
-                    {this.renderForm(options)}
+                    {this.renderForm(this.options)}
                 </CardBody>
             </Card>
         )
     }
-
-
 }
 
 export default compose(

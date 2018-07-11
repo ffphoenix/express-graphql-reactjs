@@ -79,11 +79,14 @@ class BaseTable extends React.Component {
                     query={this.props.query}
                     variables={ vars }
                     notifyOnNetworkStatusChange
+                    errorPolicy="all"
                 >
-                    {({ loading, error, data, refetch, networkStatus }) => {
+                    {({ loading, error, data, networkStatus }) => {
                         if (networkStatus === 4) return <tr><td>"Refetching!"</td></tr>;
                         if (loading) return <div>Loading</div>;
-                        if (error) return <div>`Error!: ${error}`</div>;
+                        if (error) {
+                            return (<pre>Error: {error.message}</pre>);
+                        }
 
                         const totalPages = Math.ceil(data[this.props.queryName].count / this.props.filters.limit);
                         return (

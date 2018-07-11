@@ -7,7 +7,7 @@ import {
     Label,
 } from 'reactstrap';
 
-class CustomFormGroup extends React.Component {
+class CSelect extends React.Component {
 
     render() {
         const options = this.props.options;
@@ -15,19 +15,26 @@ class CustomFormGroup extends React.Component {
         const error = options.error || undefined;
         const label  = options.label || `unlabled`;
         const type  = options.type || `text`;
-        const placeholder  = options.placeholder || `Enter ` + label;
+        const placeholder  = options.placeholder || `Select ` + label;
         const value = options.value  || ``;
 
         return (
             <FormGroup>
                 <Label htmlFor={key}>{label}</Label>
-                <Input type={type} invalid={error !== undefined} id={key} placeholder={placeholder}
+                <Input type={type}  id={key}
                        name={key}
-                       value={value} onChange={options.handleChange} />
+                        onChange={options.handleChange} >
+                    <option value="">{placeholder}</option>
+                    { Object.keys(options.options).map( skey => {
+                        return (<option key={skey} value="key">{options.options[skey]}</option>);
+                    })}
+
+                </Input>
+
                 <FormGroupError error={error} />
             </FormGroup>
         )
     }
 }
 
-export default CustomFormGroup;
+export default CSelect;

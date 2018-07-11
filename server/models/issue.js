@@ -1,4 +1,6 @@
 'use strict';
+import moment from "moment/moment";
+
 module.exports = (sequelize, DataTypes) => {
     var issues = sequelize.define('issues' , {
         id: {
@@ -53,6 +55,21 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false
         },
+        create_date: {
+            type: new DataTypes.VIRTUAL(DataTypes.DATE, ['created_at']),
+            get: function() {
+                const date = new Date(this.get('created_at'));
+                return moment(date, moment.ISO_8601).format('MM/DD/YY HH:mm:ss');
+            }
+        },
+        update_date: {
+            type: new DataTypes.VIRTUAL(DataTypes.DATE, ['updated_at']),
+            get: function() {
+                const date = new Date(this.get('updated_at'));
+                return moment(date, moment.ISO_8601).format('MM/DD/YY HH:mm:ss');
+            }
+        }
+
 
     }, {
         timestamps: true,

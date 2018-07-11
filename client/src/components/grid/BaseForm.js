@@ -2,20 +2,19 @@ import React from 'react'
 
 import {
     Button,
-    Card,
-    CardBody,
-    CardHeader,
-    FormGroup,
-    Input,
-    Label,
     Form
 } from 'reactstrap';
 import { Link } from 'react-router-dom'
-import CustomFormGroup from "./formElements/CustomFormGroup";
+import CInput from "./formElements/CInput";
+import Cwysiwyg from "./formElements/Cwysiwyg";
+import CSelect from "./formElements/CSelect";
+import draftToHtml from 'draftjs-to-html';
+import { EditorState, convertToRaw } from 'draft-js';
 
 export default class BaseForm extends React.Component {
 
     ELEMENT_TYPE_INPUT = `input`;
+    ELEMENT_TYPE_TEXT = `text`;
     ELEMENT_TYPE_PASSWORD = `password`;
     ELEMENT_TYPE_SELECT = `select`;
     ELEMENT_TYPE_CHECKBOX = `checkbox`;
@@ -36,6 +35,7 @@ export default class BaseForm extends React.Component {
     constructor(props) {
         super(props);
         this.handleChange = this.handleChange.bind(this);
+        this.handleChangeTextarea = this.handleChangeTextarea.bind(this);
         this.handleSendData = this.handleSendData.bind(this);
     }
 
@@ -55,6 +55,13 @@ export default class BaseForm extends React.Component {
         }
     }
 
+    handleChangeTextarea(name, editorState) {
+        let newState = this.state;
+        newState.data[name] = editorState;
+        this.setState(newState)
+        console.log(name, editorState);
+    }
+
     handleChange(event) {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -65,14 +72,23 @@ export default class BaseForm extends React.Component {
         this.setState(newState);
     }
 
+    prepareDataToSend(){
+        let data = this.state.data;
+        for (let i in this.options) {
+            if (this.options[i].type === this.ELEMENT_TYPE_TEXT && data[i] !== undefined && data[i] !== null) {
+                data[i] = draftToHtml(convertToRaw(data[i].getCurrentContent()))
+            }
+        }
+    }
+
     handleSendData = async (event) => {
         event.preventDefault();
         event.stopPropagation();
-
+        let dataToSend = this.prepareDataToSend();
         if (this.mode === this.CREATE_MODE) {
             this.props[this.createQueryName]({
                 variables: {
-                    input: this.state.data
+                    input: dataToSend
                 },
                 refetchQueries: [this.feedQueryName]
             })
@@ -82,7 +98,6 @@ export default class BaseForm extends React.Component {
             .catch(response => {
                 if (response.graphQLErrors !== undefined) {
                     let newState = this.state;
-                    // console.log(response.errors)
                     newState.errors = response.graphQLErrors[0].data;
                     this.setState(newState);
                 }
@@ -109,7 +124,6 @@ export default class BaseForm extends React.Component {
     }
 
     renderForm(options) {
-
         return (
             <Form>
                 {this.renderFormElements(options)}
@@ -148,7 +162,15 @@ export default class BaseForm extends React.Component {
             switch (option.type) {
                 case this.ELEMENT_TYPE_INPUT :
                 case this.ELEMENT_TYPE_PASSWORD :
-                    formElements.push(<CustomFormGroup key={key} options={option}/>)
+                    formElements.push(<CInput key={key} options={option}/>)
+                    break;
+                case this.ELEMENT_TYPE_TEXT:
+                    option.handleChange = this.handleChangeTextarea;
+                    formElements.push(<Cwysiwyg key={key} options={option}/>)
+                    break;
+                case this.ELEMENT_TYPE_SELECT:
+                    formElements.push(<CSelect key={key} options={option}/>)
+                    break;
             }
         }
 
