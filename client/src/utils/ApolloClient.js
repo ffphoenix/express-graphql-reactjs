@@ -56,7 +56,8 @@ const middlewareAuthLink = new ApolloLink((operation, forward) => {
 
 const httpLinkWithAuthToken = middlewareAuthLink.concat(httpLink);
 
-const wsclient = new SubscriptionClient(`ws://localhost:4000/graphql`, {
+
+const wsclient = new SubscriptionClient(`ws://localhost:4000/subscriptions`, {
     reconnect: true
 });
 const wsLink = new WebSocketLink(wsclient);

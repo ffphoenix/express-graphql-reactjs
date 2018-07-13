@@ -15,8 +15,9 @@ class Create extends BaseForm {
         data : {
             title: '',
             description: EditorState.createEmpty(),
-            type: '',
-            status: '',
+            type: null,
+            status: null,
+            priority: null,
         },
         errors : {}
     }
@@ -54,6 +55,18 @@ class Create extends BaseForm {
                 'testready' : 'Ready for test',
             }
         },
+        priority: {
+            type: this.ELEMENT_TYPE_SELECT,
+            label: 'Priority',
+            placeholder: 'Select priority...',
+            options : {
+                'low' : 'Low',
+                'normal' : 'Normal',
+                'hight' : 'Hight',
+                'urgent' : 'Urgent',
+                'immediate' : 'Immediate',
+            }
+        },
     };
 
     constructor(props) {
@@ -66,8 +79,6 @@ class Create extends BaseForm {
     }
 
     render() {
-        console.log('render', this.state);
-
         return (
             <Card>
                 <CardHeader>

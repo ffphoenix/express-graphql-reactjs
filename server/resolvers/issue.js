@@ -12,13 +12,12 @@ import {
 } from 'graphql';
 
 import models from '../models';
-
+let cache = {};
 const issueType = new GraphQLObjectType({
     name: 'Issue',
     description: 'A issue',
-    fields: attributeFields(models.issues)
+    fields: attributeFields(models.issues, {cache: cache})
 });
-
 const issueListType = new GraphQLObjectType({
     name: 'IssueList',
     fields : {
@@ -61,8 +60,8 @@ const queries = {
             args.order = [args.order.split(' ')];
             if (args.search !== undefined && args.search !== '') {
                 args.where = {
-                    [Op.or]: {issuename : { [Op.like] : '%' + args.search + '%' },
-                        email : { [Op.like] : '%' + args.search + '%' }}
+                    [Op.or]: {title : { [Op.like] : '%' + args.search + '%' },
+                        description : { [Op.like] : '%' + args.search + '%' }}
                 }
             }
             return models.issues.findAndCountAll(args).then( result => {
@@ -70,12 +69,13 @@ const queries = {
             });
         }
     }
-};
 
+};
 const modifIssueType = new GraphQLInputObjectType({
     name: 'modifIssueType',
-    fields: attributeFields(models.issues, {only : ['short_name', 'title', 'description']})
+    fields: attributeFields(models.issues, {exclude : ['created_at', 'updated_at', 'deleted_at', 'created_user_id'], cache: cache})
 });
+
 
 const createIssueFunc  = {
     type: issueType,

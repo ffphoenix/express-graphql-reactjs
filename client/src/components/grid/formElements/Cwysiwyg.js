@@ -6,7 +6,6 @@ import {
     Label,
 } from 'reactstrap';
 import { Editor } from 'react-draft-wysiwyg';
-
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 class Cwysiwyg extends React.Component {
@@ -19,11 +18,11 @@ class Cwysiwyg extends React.Component {
         const type  = options.type || `text`;
         const placeholder  = options.placeholder || `Enter ` + label;
         const value = options.value  || ``;
-        console.log('Cwysiwyg', value);
+
         return (
             <FormGroup>
                 <Label htmlFor={key}>{label}</Label>
-                <div className="rdw-storybook-root">
+                <div className={error ? 'form-control is-invalid' : 'form-control' }>
                     <Editor
                         editorState={value}
                         toolbarClassName="rdw-storybook-toolbar"
@@ -32,7 +31,7 @@ class Cwysiwyg extends React.Component {
                         onEditorStateChange={(state) => options.handleChange(key, state)}
                     />
                 </div>
-                <FormGroupError error={error} />
+                <FormGroupError className="rdw-storybook-root wysiwyg-block" error={error} />
             </FormGroup>
         )
     }

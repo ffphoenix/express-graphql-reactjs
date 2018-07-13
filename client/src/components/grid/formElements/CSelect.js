@@ -22,11 +22,13 @@ class CSelect extends React.Component {
             <FormGroup>
                 <Label htmlFor={key}>{label}</Label>
                 <Input type={type}  id={key}
+                       invalid={error !== undefined}
                        name={key}
-                        onChange={options.handleChange} >
+                       defaultValue={value}
+                       onChange={options.handleChange} >
                     <option value="">{placeholder}</option>
                     { Object.keys(options.options).map( skey => {
-                        return (<option key={skey} value="key">{options.options[skey]}</option>);
+                        return (<option key={skey} value="key" >{options.options[skey]}</option>);
                     })}
 
                 </Input>

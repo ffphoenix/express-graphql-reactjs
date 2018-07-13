@@ -143,6 +143,16 @@ const mutations = {
     createUser: createUserFunc,
     updateUser: updateUserFunc,
     deleteUser: deleteUserFunc
+
 };
 
-module.exports =  {'queries' : queries , 'mutations' : mutations };
+const subscription = {
+    addUser: {
+        subscribe: () => pubsub.asyncIterator('userAdded')
+    },
+    editUser: {
+        subscribe: () => pubsub.asyncIterator('userEdited')
+    },
+};
+
+module.exports =  {'queries' : queries , 'mutations' : mutations, 'subscriptions' : subscription  };

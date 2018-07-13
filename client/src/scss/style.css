@@ -9982,5 +9982,10 @@ table.table thead th.sorting.asc:after {
   content: "*";
   color: red; }
 
+.wysiwyg-block {
+  display: block;
+  border: 1px solid #e4e7ea;
+  border-radius: 0.25rem; }
+
 html body .app.flex-row.align-items-center {
   height: 100vh; }

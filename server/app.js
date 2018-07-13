@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import { formatError as formatApolloError, isInstance } from 'apollo-errors';
+import { PubSub } from 'graphql-subscriptions';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { execute, subscribe, GraphQLError } from 'graphql';
 import schema from './resolvers';
@@ -12,7 +13,7 @@ import config from './config/config';
 
 // Initialize the app
 const app = express();
-
+const pubsub = new PubSub();
 const formatError = function (error) {
     const { originalError } = error;
     if (originalError !== undefined
@@ -80,5 +81,5 @@ const httpServer = app.listen(4000, () => {
 //
 SubscriptionServer.create(
     {schema: schema, execute, subscribe},
-    {server: httpServer, path: '/graphql'},
+    {server: httpServer, path: '/subscriptions'},
 )

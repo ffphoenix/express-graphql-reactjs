@@ -62,8 +62,8 @@ const queries = {
             args.order = [args.order.split(' ')];
             if (args.search !== undefined && args.search !== '') {
                 args.where = {
-                    [Op.or]: {projectname : { [Op.like] : '%' + args.search + '%' },
-                    email : { [Op.like] : '%' + args.search + '%' }}
+                    [Op.or]: {title : { [Op.like] : '%' + args.search + '%' },
+                    description : { [Op.like] : '%' + args.search + '%' }}
                 }
             }
             return models.projects.findAndCountAll(args).then( result => {
