@@ -28,7 +28,7 @@ class CSelect extends React.Component {
                        onChange={options.handleChange} >
                     <option value="">{placeholder}</option>
                     { Object.keys(options.options).map( skey => {
-                        return (<option key={skey} value="key" >{options.options[skey]}</option>);
+                        return (<option key={skey} value={skey} >{options.options[skey]}</option>);
                     })}
 
                 </Input>

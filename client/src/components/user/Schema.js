@@ -61,3 +61,12 @@ export const FEED_ONE_QUERY = gql`
         }
     }
 `;
+export const SUBSCRIPTION_QUERY = gql`
+    subscription {
+        addUser {
+            id
+            username
+        }
+    }
+
+`

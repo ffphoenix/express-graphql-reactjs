@@ -27,16 +27,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         description: {
             type: DataTypes.STRING,
-            allowNull: false,
-            unique: {
-                args: true,
-                message: 'Description must be unique.',
-                fields: [sequelize.fn('lower', sequelize.col('username'))]
-            },
-            validate: {
-                notEmpty: true,
-                is: ["^[a-zA-Z0-9]+$",'i'],
-            }
+            allowNull: true
         },
         type: {
             type: DataTypes.ENUM('bug', 'task', 'feature'),

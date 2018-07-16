@@ -15,6 +15,7 @@ class Create extends BaseForm {
         data : {
             title: '',
             description: EditorState.createEmpty(),
+            project_id : 1,
             type: null,
             status: null,
             priority: null,

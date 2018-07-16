@@ -73,7 +73,7 @@ const queries = {
 };
 const modifIssueType = new GraphQLInputObjectType({
     name: 'modifIssueType',
-    fields: attributeFields(models.issues, {exclude : ['created_at', 'updated_at', 'deleted_at', 'created_user_id'], cache: cache})
+    fields: attributeFields(models.issues, {exclude : ['id', 'created_at', 'updated_at', 'deleted_at', 'created_user_id'], cache: cache})
 });
 
 
@@ -88,6 +88,7 @@ const createIssueFunc  = {
     resolve: function(obj, {input}, context) {
         input.created_at = new Date();
         input.updated_at = new Date();
+        input.created_user_id = context.user.id;
         return models.issues.create(input);
     }
 

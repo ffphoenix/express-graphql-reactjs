@@ -7,6 +7,7 @@ import {
 import { graphql, withApollo, compose } from 'react-apollo'
 import { CREATE_MUTATION, FEED_QUERY_NAME, CREATE_QUERY_NAME, UPDATE_QUERY_NAME, MODULE_URL } from './Schema'
 import BaseForm from '../grid/BaseForm'
+import {EditorState} from "draft-js";
 
 class Create extends BaseForm {
 
@@ -14,7 +15,7 @@ class Create extends BaseForm {
         data : {
             title: '',
             short_name: '',
-            description: '',
+            description: EditorState.createEmpty(),
         },
         errors : {}
     }
@@ -41,7 +42,7 @@ class Create extends BaseForm {
                 placeholder: 'Enter Short name...'
             },
             description: {
-                type: this.ELEMENT_TYPE_PASSWORD,
+                type: this.ELEMENT_TYPE_TEXT,
                 label: 'Description',
                 placeholder: 'Enter Description...'
             },

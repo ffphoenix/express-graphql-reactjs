@@ -8,9 +8,10 @@ import { Link } from 'react-router-dom'
 import CInput from "./formElements/CInput";
 import Cwysiwyg from "./formElements/Cwysiwyg";
 import CSelect from "./formElements/CSelect";
-import draftToHtml from 'draftjs-to-html';
+import { stateToHTML } from 'draft-js-export-html';
+import { stateFromHTML } from 'draft-js-import-html';
 import _ from 'lodash';
-import { EditorState, convertToRaw } from 'draft-js';
+import { EditorState } from 'draft-js';
 
 export default class BaseForm extends React.Component {
 
@@ -48,8 +49,12 @@ export default class BaseForm extends React.Component {
             if (!nextProps.error) {
                 const propsData = nextProps.feedOne[this.feedOneQueryName];
                 let newStateData = this.state.data;
-                for (let key in this.state.data) {
-                    newStateData[key] = propsData[key];
+                for (let key in this.options) {
+                    if (this.options[key].type === this.ELEMENT_TYPE_TEXT) {
+                        newStateData[key] = EditorState.createWithContent(stateFromHTML(propsData[key]));
+                    } else {
+                        newStateData[key] = propsData[key];
+                    }
                 }
                this.setState({ data : newStateData })
             }
@@ -66,7 +71,6 @@ export default class BaseForm extends React.Component {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
-
         let newState = this.state;
         newState.data[name] = value;
         this.setState(newState);
@@ -76,7 +80,7 @@ export default class BaseForm extends React.Component {
         var data = _.clone(this.state.data);
         for (let i in this.options) {
             if (this.options[i].type === this.ELEMENT_TYPE_TEXT && data[i] !== undefined && data[i] !== null) {
-                data[i] = draftToHtml(convertToRaw(data[i].getCurrentContent()))
+                data[i] = stateToHTML(data[i].getCurrentContent())
             }
         }
         return data;
@@ -110,7 +114,7 @@ export default class BaseForm extends React.Component {
             this.props[this.updateQueryName]({
                 variables: {
                     id: parseInt(this.props.match.params.id),
-                    input: this.state.data
+                    input: dataToSend
                 }
             })
             .then(response => {

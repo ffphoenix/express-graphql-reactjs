@@ -14,6 +14,7 @@ import {
     FEED_QUERY_ONE_NAME, MODULE_URL
 } from './Schema'
 import BaseForm from '../grid/BaseForm'
+import {EditorState} from "draft-js";
 
 class Update extends BaseForm {
 
@@ -21,10 +22,28 @@ class Update extends BaseForm {
         data : {
             title: '',
             short_name: '',
-            description: '',
+            description: EditorState.createEmpty(),
         },
         errors : {}
     };
+
+    options = {
+        title: {
+            type: this.ELEMENT_TYPE_INPUT,
+            label: 'Title',
+            placeholder: 'Enter title...'
+        },
+        short_name: {
+            type: this.ELEMENT_TYPE_INPUT,
+            label: 'Short name',
+            placeholder: 'Enter Short name...'
+        },
+        description: {
+            type: this.ELEMENT_TYPE_TEXT,
+            label: 'Description',
+            placeholder: 'Enter Description...'
+        },
+    }
 
     constructor(props) {
         super(props);
@@ -42,23 +61,7 @@ class Update extends BaseForm {
         if (loading) return (<div>Loading...</div>);
         if (error) return (<div>`Error! ${error.message}`</div>);
 
-        const options = {
-            title: {
-                type: this.ELEMENT_TYPE_INPUT,
-                label: 'Title',
-                placeholder: 'Enter title...'
-            },
-            short_name: {
-                type: this.ELEMENT_TYPE_INPUT,
-                label: 'Short name',
-                placeholder: 'Enter Short name...'
-            },
-            description: {
-                type: this.ELEMENT_TYPE_PASSWORD,
-                label: 'Description',
-                placeholder: 'Enter Description...'
-            },
-        }
+
         return (
             <Card>
                 <CardHeader>
@@ -66,7 +69,7 @@ class Update extends BaseForm {
                     <small> update</small>
                 </CardHeader>
                 <CardBody>
-                    {this.renderForm(options)}
+                    {this.renderForm(this.options)}
                 </CardBody>
             </Card>
         )

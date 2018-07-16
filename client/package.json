@@ -29,6 +29,8 @@
     "classnames": "^2.2.6",
     "core-js": "^2.5.7",
     "draft-js": "^0.10.5",
+    "draft-js-export-html": "^1.2.0",
+    "draft-js-import-html": "^1.2.1",
     "draftjs-to-html": "^0.8.4",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",

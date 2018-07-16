@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardBody, CardHeader } from 'reactstrap';
-import {DELETE_MUTATION, DELETE_QUERY_NAME, FEED_QUERY, FEED_QUERY_NAME} from './Schema';
-import { graphql } from 'react-apollo';
+import {DELETE_MUTATION, DELETE_QUERY_NAME, FEED_QUERY, FEED_QUERY_NAME, SUBSCRIPTION_QUERY} from './Schema';
+import { graphql, Subscription } from 'react-apollo';
 
 import BaseGrid from "../grid/BaseGrid";
 import BaseTable from "../grid/BaseTable";
@@ -59,6 +59,19 @@ class Grid extends BaseGrid {
                     <i className="fa fa-align-justify"></i> Users List
                 </CardHeader>
                 <CardBody>
+                    <Subscription
+                        subscription={SUBSCRIPTION_QUERY}
+                    >
+                        {({ data, loading }) => {
+                            console.log(data)
+                            if (!loading && data) {
+                                return (<h4>New user : {data.addUser.id} - {data.addUser.username}</h4>)
+                            } else {
+                                return ('');
+                            }
+
+                        }}
+                    </Subscription>
                     <BaseTableFilters
                         url={this.backURL}
                         onFilter={this.onFilter}
@@ -68,6 +81,7 @@ class Grid extends BaseGrid {
                         options={tableOptions}
                         query={FEED_QUERY}
                         queryName={FEED_QUERY_NAME}
+                        subscriptionQuery={SUBSCRIPTION_QUERY}
                         filters={this.state}
                         handleClickSortAction={this.handleClickSortAction}
                         handleChangePage={this.handleChangePage}

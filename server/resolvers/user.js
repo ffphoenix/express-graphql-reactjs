@@ -1,4 +1,5 @@
 import {resolver, attributeFields, JSONType} from 'graphql-sequelize';
+import { PubSub } from 'graphql-subscriptions';
 import { Op } from 'sequelize';
 import bcrypt from 'bcrypt';
 import {
@@ -13,6 +14,8 @@ import {
 } from 'graphql';
 
 import models from '../models';
+
+const pubsub = new PubSub();
 
 const userType = new GraphQLObjectType({
     name: 'User',
@@ -96,7 +99,12 @@ const createUserFunc  = {
                 input.password = hash;
             input.created_at = new Date();
             input.updated_at = new Date();
-            return models.users.create(input);
+            const result = models.users.create(input);
+            result.then(data => {
+                pubsub.publish('userAdded', data.get({plain : true}));
+            });
+
+            return result;
         });
     }
 
@@ -148,9 +156,16 @@ const mutations = {
 
 const subscription = {
     addUser: {
+        type: userType,
+        resolve: (payload) => {
+            return {
+                ...payload
+            };
+        },
         subscribe: () => pubsub.asyncIterator('userAdded')
     },
     editUser: {
+        type: userType,
         subscribe: () => pubsub.asyncIterator('userEdited')
     },
 };

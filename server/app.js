@@ -2,7 +2,6 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import { formatError as formatApolloError, isInstance } from 'apollo-errors';
-import { PubSub } from 'graphql-subscriptions';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { execute, subscribe, GraphQLError } from 'graphql';
 import schema from './resolvers';
@@ -10,10 +9,11 @@ import jwt from 'express-jwt';
 import authModule from './middlewares/auth';
 import cors from 'cors';
 import config from './config/config';
+import { PubSub } from 'graphql-subscriptions';
 
+const pubsub = new PubSub();
 // Initialize the app
 const app = express();
-const pubsub = new PubSub();
 const formatError = function (error) {
     const { originalError } = error;
     if (originalError !== undefined
@@ -62,7 +62,11 @@ app.use('/graphql', bodyParser.json(), graphqlExpress(request => {
 ));
 
 // GraphiQL, a visual editor for queries
-app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
+app.use('/graphiql',
+    graphiqlExpress({
+        endpointURL: '/graphql',
+        subscriptionsEndpoint: `ws://localhost:4000/subscriptions`
+}));
 
 app.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
@@ -80,6 +84,6 @@ const httpServer = app.listen(4000, () => {
 });
 //
 SubscriptionServer.create(
-    {schema: schema, execute, subscribe},
+    { execute, subscribe, schema},
     {server: httpServer, path: '/subscriptions'},
 )

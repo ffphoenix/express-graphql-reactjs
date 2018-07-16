@@ -31,7 +31,6 @@ module.exports = (sequelize, DataTypes) => {
             },
             validate: {
                 notEmpty: true,
-                is: ["^[a-zA-Z0-9]+$",'i'],
             }
         },
         description: {
