@@ -10,6 +10,15 @@ export default {
       },
     },
     {
+        name: 'Project Board',
+        url: '/project-board',
+        icon: 'icon-magic-wand',
+        badge: {
+            variant: 'info',
+            text: '!',
+        },
+    },
+    {
       name: 'Users',
       url: '/users',
       icon: 'icon-alert',

@@ -7,6 +7,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import {Grid as UserList, Create as UserCreate, Update as UserUpdate} from './components/user'
 import {Grid as ProjectList, Create as ProjectCreate, Update as ProjectUpdate} from './components/projects'
 import {Grid as IssuetList, Create as IssueCreate, Update as IssueUpdate} from './components/issue'
+import ProjectBoard from './components/projectBoard'
 import {AUTH_TOKEN} from "./config";
 
 function Loading() {
@@ -21,15 +22,16 @@ const Dashboard = Loadable({
 const routes = [
     { path: '/', exact: true, name: 'Home', component: DefaultLayout, authorize: ['user', 'admin'] },
     { path: '/dashboard', name: 'Dashboard', component: Dashboard, authorize: ['user', 'admin'] },
-    { path: '/users/create', name: 'UserCreate', component: UserCreate },
-    { path: '/users/update/:id', name: 'UserUpdate', component: UserUpdate },
+    { path: '/users/create', name: 'Create', component: UserCreate },
+    { path: '/users/update/:id', name: 'Update', component: UserUpdate },
     { path: '/users', name: 'Users', component: UserList },
-    { path: '/projects/create', name: 'ProjectCreate', component: ProjectCreate },
-    { path: '/projects/update/:id', name: 'ProjectCreate', component: ProjectUpdate },
+    { path: '/projects/create', name: 'Create', component: ProjectCreate },
+    { path: '/projects/update/:id', name: 'Update', component: ProjectUpdate },
     { path: '/projects', name: 'Projects', component: ProjectList },
-    { path: '/issues/create', name: 'IssueCreate', component: IssueCreate },
-    { path: '/issues/update/:id', name: 'IssueUpdate', component: IssueUpdate },
+    { path: '/issues/create', name: 'Create', component: IssueCreate },
+    { path: '/issues/update/:id', name: 'Update', component: IssueUpdate },
     { path: '/issues', name: 'Issues', component: IssuetList },
+    { path: '/project-board', name: 'Project Board', component: ProjectBoard },
 
 ];
 

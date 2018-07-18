@@ -21,10 +21,13 @@ class Update extends BaseForm {
     state = {
         data : {
             title: '',
-            short_name: '',
             description: EditorState.createEmpty(),
+            project_id: 1,
+            type: '',
+            status: '',
+            priority: ''
         },
-        errors : {}
+        errors: {}
     };
 
     options = {

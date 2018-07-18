@@ -24,6 +24,23 @@ class Update extends BaseForm {
         },
         errors : {}
     };
+    options = {
+        username: {
+            type: this.ELEMENT_TYPE_INPUT,
+            label: 'Username',
+            placeholder: 'Enter username...'
+        },
+        email: {
+            type: this.ELEMENT_TYPE_INPUT,
+            label: 'Email',
+            placeholder: 'Enter email...'
+        },
+        password: {
+            type: this.ELEMENT_TYPE_PASSWORD,
+            label: 'Pass',
+            placeholder: 'Enter password...'
+        },
+    }
 
     constructor(props) {
         super(props);
@@ -41,23 +58,6 @@ class Update extends BaseForm {
         if (loading) return (<div>Loading...</div>);
         if (error) return (<div>`Error! ${error.message}`</div>);
 
-        const options = {
-            username: {
-                type: this.ELEMENT_TYPE_INPUT,
-                label: 'Username',
-                placeholder: 'Enter username...'
-            },
-            email: {
-                type: this.ELEMENT_TYPE_INPUT,
-                label: 'Email',
-                placeholder: 'Enter email...'
-            },
-            password: {
-                type: this.ELEMENT_TYPE_PASSWORD,
-                label: 'Pass',
-                placeholder: 'Enter password...'
-            },
-        }
         return (
             <Card>
                 <CardHeader>
@@ -65,7 +65,7 @@ class Update extends BaseForm {
                     <small> update</small>
                 </CardHeader>
                 <CardBody>
-                    {this.renderForm(options)}
+                    {this.renderForm(this.options)}
                 </CardBody>
             </Card>
         )

@@ -30,6 +30,30 @@ const issueListType = new GraphQLObjectType({
     }
 });
 
+const issueBoardType = new GraphQLObjectType({
+    name: 'issueBoard',
+    fields : {
+        new:  {
+            type : new GraphQLList(issueType)
+        },
+        inprogress:  {
+            type : new GraphQLList(issueType)
+        },
+        reopen:  {
+            type : new GraphQLList(issueType)
+        },
+        feedback:  {
+            type : new GraphQLList(issueType)
+        },
+        testready:  {
+            type : new GraphQLList(issueType)
+        },
+        closed:  {
+            type : new GraphQLList(issueType)
+        },
+    }
+});
+
 const queries = {
     issue: {
         type: issueType,
@@ -66,6 +90,43 @@ const queries = {
             }
             return models.issues.findAndCountAll(args).then( result => {
                 return result;
+            });
+        }
+    },
+    issuesBoard: {
+        type: issueBoardType,
+        args: {
+            project_id: {
+                type: getNullableType(GraphQLInt)
+            },
+            search: {
+                type: getNullableType(GraphQLString)
+            }
+        },
+        resolve: function(obj, args, context) {
+            if (args.search !== undefined && args.search !== '') {
+                args.where = {
+                    [Op.or]: {title : { [Op.like] : '%' + args.search + '%' },
+                        description : { [Op.like] : '%' + args.search + '%' }}
+                }
+            }
+            args.raw = true;
+            return models.issues.findAll(args).then( result => {
+                let prepareBoardData = {
+                    'new' : [],
+                    'inprogress' : [],
+                    'reopen': [],
+                    'feedback' : [],
+                    'testready': [],
+                    'closed' : []
+                };
+                console.log(result);
+                for (let i in result) {
+                    if (prepareBoardData[result[i].status]) {
+                        prepareBoardData[result[i].status].push(result[i]);
+                    }
+                }
+                return prepareBoardData;
             });
         }
     }
