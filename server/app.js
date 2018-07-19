@@ -40,7 +40,7 @@ const formatError = function (error) {
     return formatApolloError(error)
 };
 const jwtCheck = jwt({ secret: config.jwt_secret }).unless({path: ['/api/login']})
-app.use(jwtCheck);
+// app.use(jwtCheck);
 app.use(cors());
 app.use(bodyParser.json());
 

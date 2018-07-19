@@ -13,10 +13,27 @@ import {
 
 import models from '../models';
 let cache = {};
+
+const issueTypeGet = attributeFields(models.issues, {cache: cache});
+
+const projectType = new GraphQLObjectType({
+    name: 'IProject',
+    fields: attributeFields(models.projects)
+});
+
 const issueType = new GraphQLObjectType({
     name: 'Issue',
     description: 'A issue',
-    fields: attributeFields(models.issues, {cache: cache})
+    fields: {
+        ...issueTypeGet,
+        project : {
+            type : projectType
+        }
+    }
+});
+console.log({
+    ...issueTypeGet,
+    project : {type : projectType}
 });
 const issueListType = new GraphQLObjectType({
     name: 'IssueList',
@@ -110,7 +127,8 @@ const queries = {
                         description : { [Op.like] : '%' + args.search + '%' }}
                 }
             }
-            args.raw = true;
+            // args.raw = true;
+            args.include = [{ model : models.projects, as : "project" }];
             return models.issues.findAll(args).then( result => {
                 let prepareBoardData = {
                     'new' : [],
@@ -171,6 +189,29 @@ const updateIssueFunc  = {
             });
     }
 
+};
+
+const boardChangeType = new GraphQLInputObjectType({
+    name: 'boardChangeType',
+    fields: attributeFields(models.issues, {only : ['id', 'status', 'order'], cache: cache})
+});
+
+
+const boardChangeFunc  = {
+    type: issueType,
+    args: {
+        id : { type : new GraphQLNonNull(GraphQLInt) },
+        input : { type : boardChangeType }
+    },
+    description: 'Update an existed issue',
+    resolve: function(obj, args) {
+        return models.issues
+            .findById(args.id)
+            .then((quote) => {
+                args.input.updated_at = new Date();
+                return quote.update(args.input);
+            });
+    }
 };
 
 const deleteIssueFunc  = {

@@ -1,5 +1,6 @@
 'use strict';
 import moment from "moment/moment";
+import project from "./project";
 
 module.exports = (sequelize, DataTypes) => {
     var issues = sequelize.define('issues' , {
@@ -59,8 +60,11 @@ module.exports = (sequelize, DataTypes) => {
                 const date = new Date(this.get('updated_at'));
                 return moment(date, moment.ISO_8601).format('MM/DD/YY HH:mm:ss');
             }
-        }
-
+        },
+        order: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
 
     }, {
         timestamps: true,
@@ -68,5 +72,7 @@ module.exports = (sequelize, DataTypes) => {
         paranoid: true,
         underscored: true
     });
+    const projects = project(sequelize, DataTypes)
+    issues.belongsTo(projects, {as: 'project', foreignKey : 'project_id'});
     return issues;
 };
