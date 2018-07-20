@@ -3,7 +3,7 @@ import {
     GraphQLSchema
 } from 'graphql';
 import {queries as userQueries, mutations as userMutations, subscriptions as userSubscriptions} from './user'
-import {queries as issueQueries, mutations as issueMutations} from './issue'
+import {queries as issueQueries, mutations as issueMutations, subscriptions as issueSubscriptions} from './issue'
 import {queries as projectQueries, mutations as projectMutations} from './project'
 
 const schema = new GraphQLSchema({
@@ -27,6 +27,7 @@ const schema = new GraphQLSchema({
         name : 'subscriptions',
         fields : {
             ...userSubscriptions,
+            ...issueSubscriptions,
         }
     })
 });
