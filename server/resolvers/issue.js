@@ -176,8 +176,10 @@ const createIssueFunc = {
 
         return models.issues.create(input).then((quote) => {
             quote.order = quote.id;
-            console.log('creatre', quote.get({plain: true, include : [{model: models.projects, as: "project"}]}));
-            pubsub.publish('issueCreated', quote.get({plain: true, include : [{model: models.projects, as: "project"}]}));
+            models.issues.findById(quote.id, {include : [{model: models.projects, as: "project"}]}).then((quote) => {
+                pubsub.publish('issueCreated', quote.get({plain: true}));
+            })
+
             return quote.save();
         });
     }

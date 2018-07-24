@@ -14,11 +14,12 @@ build:
     - cd server && npm install
     - cd client && npm install
   config:
-    ENV: development
+    NODE_ENV: development
+    NODE_VERBOSE: true
+    NPM_CONFIG_LOGLEVEL: notice
     FOO: bar
 release:
   command:
-    - rake db:migrate
 run:
   server: cd server && npm start
   client: cd client && npm start
