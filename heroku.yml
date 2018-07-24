@@ -14,7 +14,7 @@ build:
     - cd server && npm install
     - cd client && npm install
   config:
-    ENV: development
+    NODE_ENV: development
     FOO: bar
 release:
   command:
