@@ -7,7 +7,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "start": "cd server && npm install && npm start",
+    "start": "cd server && npm install && ",
     "heroku-postbuild": "cd client && npm install && npm start"
   },
   "dependencies": {
