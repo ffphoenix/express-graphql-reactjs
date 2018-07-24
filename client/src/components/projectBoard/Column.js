@@ -1,6 +1,7 @@
 import React from 'react';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { Draggable } from 'react-beautiful-dnd';
 import Issue from "./Issue"
+import styled from 'styled-components';
 
 
 const getListStyle = isDraggingOver => ({
@@ -12,12 +13,18 @@ const getListStyle = isDraggingOver => ({
     border: `1px solid #eee`
 });
 
+const ColHeader = styled.div`
+  background: #fff,
+  display: "flex",
+  
+`;
+
 export default (provided, snapshot, columnName, items) => (
     <div
         ref={provided.innerRef}
         style={getListStyle(snapshot.isDraggingOver)}
     >
-        <h1>{columnName}</h1>
+        <ColHeader>{columnName}</ColHeader>
         {Object.keys(items).map(index => (
             <Draggable key={items[index].id} draggableId={items[index].id} index={index}>
                 {(provided, snapshot) => Issue(provided, snapshot, items[index])}
