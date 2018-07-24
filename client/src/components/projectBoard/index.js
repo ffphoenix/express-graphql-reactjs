@@ -3,7 +3,7 @@ import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
 import {compose, withApollo} from "react-apollo/index";
 import styled from 'styled-components';
 import Column from "./Column";
-import {FEED_QUERY, UPDATE_POSITION_MUTATION, SUBSCRIPTION_QUERY} from "./Schema";
+import {FEED_QUERY, UPDATE_POSITION_MUTATION, SUBSCRIPTION_QUERY, EDIT_SUBSCRIPTION, CREATE_SUBSCRIPTION} from "./Schema";
 import _ from "lodash";
 
 
@@ -25,6 +25,32 @@ class ProjectBoard extends Component {
         super(props);
         this.onDragEnd = this.onDragEnd.bind(this);
         this.reorderBySubscription = this.reorderBySubscription.bind(this);
+        this.updateBySubscription = this.updateBySubscription.bind(this);
+        this.createBySubscription = this.createBySubscription.bind(this);
+    }
+
+    updateBySubscription(issue){
+        let items = _.clone(this.state.items);
+
+        for (let y in items[issue.status]) {
+            if (items[issue.status][y].id === issue.id) {
+                items[issue.status][y] = issue;
+                break;
+            }
+        }
+
+        this.setState({
+            items: items
+        });
+    }
+
+    createBySubscription(issue){
+        let items = _.clone(this.state.items);
+        items[issue.status].splice(0, 0, issue);
+
+        this.setState({
+            items: items
+        });
     }
 
     reorderBySubscription(issue, nextId){
@@ -33,20 +59,26 @@ class ProjectBoard extends Component {
 
         for (let i in items) {
             for (let y in items[i]) {
-                console.log(items[i][y], issue);
                 if (items[i][y].id === issue.id) {
                     source = {
                         droppableId : i,
                         index : y
                     }
                 }
-                if (items[i][y].id === nextId) {
+                if (nextId && items[i][y].id === nextId) {
                     destination = {
                         droppableId : i,
                         index : y
                     }
                 }
 
+            }
+        }
+
+        if (!nextId) {
+            destination = {
+                droppableId : issue.status,
+                index : 0
             }
         }
 
@@ -89,13 +121,14 @@ class ProjectBoard extends Component {
         });
     }
 
-
     componentWillReceiveProps(nextProps) {
         console.log('componentWillReceiveProps', nextProps);
     }
 
     componentDidMount() {
-        const subscriptionProcess = this.reorderBySubscription
+        const reorderSubscriptionProcess = this.reorderBySubscription;
+        const editSubscriptionProcess = this.updateBySubscription;
+        const createSubscriptionProcess = this.createBySubscription;
         this.props.client
             .query({
                 query: FEED_QUERY
@@ -107,14 +140,33 @@ class ProjectBoard extends Component {
                 }
                 this.setState({items: preparedItems})
             });
+
         this.props.client.subscribe({
             query: SUBSCRIPTION_QUERY,
             variables: {  },
         }).subscribe({
             next({data : { issuePositionChanged : {issue , nextId} }}) {
-                subscriptionProcess(issue, nextId);
-                // ... call updateQuery to integrate the new comment
-                // into the existing list of comments
+                reorderSubscriptionProcess(issue, nextId);
+            },
+            error(err) { console.error('SUBSCRIPTION ERR => ', err); },
+        });
+
+        this.props.client.subscribe({
+            query: EDIT_SUBSCRIPTION,
+            variables: {  },
+        }).subscribe({
+            next({data : { issueEdited : issue }}) {
+                editSubscriptionProcess(issue);
+            },
+            error(err) { console.error('SUBSCRIPTION ERR => ', err); },
+        });
+
+        this.props.client.subscribe({
+            query: CREATE_SUBSCRIPTION,
+            variables: {  },
+        }).subscribe({
+            next({data : { issueCreated : issue }}) {
+                createSubscriptionProcess(issue);
             },
             error(err) { console.error('SUBSCRIPTION ERR => ', err); },
         });

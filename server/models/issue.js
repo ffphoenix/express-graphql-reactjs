@@ -67,6 +67,12 @@ module.exports = (sequelize, DataTypes) => {
         },
 
     }, {
+        classMethods: {
+            associate: function (models) {
+                console.log('assoc',models);
+                issues.belongsTo(models.projects, {as: 'project', foreignKey : 'project_id'});
+            }
+        },
         timestamps: true,
         freezeTableName: true,
         paranoid: true,

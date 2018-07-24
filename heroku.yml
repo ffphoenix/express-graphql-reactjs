@@ -1,0 +1,24 @@
+setup:
+  config: {}
+build:
+  languages:
+    - nodejs
+setup:
+  addons:
+    - plan: heroku-postgresql
+      as: DATABASE
+build:
+  languages:
+    - nodejs
+  pre:
+    - cd server && npm install
+    - cd client && npm install
+  config:
+    ENV: development
+    FOO: bar
+release:
+  command:
+    - rake db:migrate
+run:
+  server: cd server && npm start
+  client: cd client && npm start

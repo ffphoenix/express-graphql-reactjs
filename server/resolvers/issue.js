@@ -122,6 +122,7 @@ const queries = {
             }
         },
         resolve: function (obj, args, context) {
+            args.order = [['order' , 'DESC']];
             if (args.search !== undefined && args.search !== '') {
                 args.where = {
                     [Op.or]: {
@@ -175,7 +176,8 @@ const createIssueFunc = {
 
         return models.issues.create(input).then((quote) => {
             quote.order = quote.id;
-            pubsub.publish('issueCreated', quote.get({plain: true}));
+            console.log('creatre', quote.get({plain: true, include : [{model: models.projects, as: "project"}]}));
+            pubsub.publish('issueCreated', quote.get({plain: true, include : [{model: models.projects, as: "project"}]}));
             return quote.save();
         });
     }
@@ -191,7 +193,7 @@ const updateIssueFunc = {
     description: 'Update an existed issue',
     resolve: function (obj, args) {
         return models.issues
-            .findById(args.id)
+            .findById(args.id, {include : [{model: models.projects, as: "project"}]})
             .then((quote) => {
                 args.input.updated_at = new Date();
 
@@ -212,7 +214,7 @@ const boardChangeArgs = {
 };
 
 const changeIssueOrder = (issue, nextId) => {
-    const query = 'UPDATE issues SET `order` = `order` + 1  WHERE `order` >= $order AND project_id = $project_id AND status = $status';
+    const query = 'UPDATE issues SET `order` = `order` + 1  WHERE `order` > $order AND project_id = $project_id AND status = $status';
     return models.sequelize.query(
         query,
         {bind: {order: issue.order, project_id: issue.project_id, status: issue.status}}
@@ -237,11 +239,11 @@ const updatePositionFunc = {
                 if (nextId !== null) {
                     return models.issues
                         .findById(nextId).then(nextQuote => {
-                            quote.order = nextQuote.order;
+                            quote.order = nextQuote.order + 1;
                             return changeIssueOrder(quote, nextId);
                         })
                 }
-                quote.order = 1;
+                quote.order = 0;
                 pubsub.publish('issuePositionChanged', {issue : quote.get({raw: true}), nextId : nextId });
                 return quote.save();
             });
@@ -261,7 +263,6 @@ const deleteIssueFunc = {
                 return quote.destroy();
             });
     }
-
 };
 
 const mutations = {

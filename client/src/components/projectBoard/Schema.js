@@ -9,6 +9,7 @@ const itemType = `{
         status
         priority
         create_date
+        order
         project {
             id
             short_name
@@ -34,6 +35,7 @@ export const UPDATE_POSITION_MUTATION = gql`
             status
             priority
             create_date
+            order
             project {
                 id
                 short_name
@@ -62,11 +64,55 @@ export const SUBSCRIPTION_QUERY = gql`
                 status
                 priority
                 create_date
+                order
                 project {
                     id
                     short_name
                     title
                 }
+            }
+        }
+    }
+
+`;
+
+export const EDIT_SUBSCRIPTION = gql`
+    subscription {
+        issueEdited {
+            id
+            project_id
+            title
+            description
+            type
+            status
+            priority
+            create_date
+            order
+            project {
+                id
+                short_name
+                title
+            }
+        }
+    }
+
+`;
+export const CREATE_SUBSCRIPTION = gql`
+    subscription {
+        issueCreated {
+            id
+            project_id
+            title
+            description
+            type
+            status
+            priority
+            create_date
+            order
+            project {
+                id
+                short_name
+                title
             }
         }
     }

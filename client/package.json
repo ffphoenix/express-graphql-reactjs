@@ -25,6 +25,7 @@
     "axios": "^0.18.0",
     "axios-fetch": "^1.1.0",
     "bootstrap": "^4.1.1",
+    "chalk": "^2.4.1",
     "chart.js": "^2.7.2",
     "classnames": "^2.2.6",
     "core-js": "^2.5.7",
