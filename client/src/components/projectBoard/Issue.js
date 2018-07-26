@@ -29,20 +29,22 @@ function getPriorityHTML(priority) {
 
     }
 }
-export default (provided, snapshot, item) => (
-    <div
-        ref={provided.innerRef}
-        {...provided.draggableProps}
-        {...provided.dragHandleProps}
-        style={getItemStyle(
-            snapshot.isDragging,
-            provided.draggableProps.style
-        )}
-    >
-        <p><code>{item.project.short_name}-{item.id}</code> {getPriorityHTML(item.priority)} | {moment(item.create_date).format('DD/MM/Y')} ({item.order})</p>
-        <p><code>></code>{item.title}</p>
-        <p dangerouslySetInnerHTML={{ __html: item.description }} ></p>
+export default (provided, snapshot, item) => {
+    return (
+        <div
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            style={getItemStyle(
+                snapshot.isDragging,
+                provided.draggableProps.style
+            )}
+        >
+            <p><code>{item.project.short_name}-{item.id}</code> {getPriorityHTML(item.priority)} | {moment(item.create_date).format('DD/MM/Y')} ({item.order})</p>
+            <p><code>></code>{item.title}</p>
+            <p dangerouslySetInnerHTML={{ __html: item.description }} ></p>
 
 
-    </div>
-);
+        </div>
+    );
+}

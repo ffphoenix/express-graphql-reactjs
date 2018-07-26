@@ -7,6 +7,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import {Grid as UserList, Create as UserCreate, Update as UserUpdate} from './components/user'
 import {Grid as ProjectList, Create as ProjectCreate, Update as ProjectUpdate} from './components/projects'
 import {Grid as IssuetList, Create as IssueCreate, Update as IssueUpdate} from './components/issue'
+import {Grid as IssueStatusesList, Create as IssueStatusesCreate, Update as IssueStatusesUpdate} from './components/issueStatuses'
 import ProjectBoard from './components/projectBoard'
 import {AUTH_TOKEN} from "./config";
 
@@ -31,6 +32,10 @@ const routes = [
     { path: '/issues/create', name: 'Create', component: IssueCreate },
     { path: '/issues/update/:id', name: 'Update', component: IssueUpdate },
     { path: '/issues', name: 'Issues', component: IssuetList },
+    { path: '/issue-statuses', name: 'Issues', component: IssueStatusesList },
+    { path: '/issue-statuses/create', name: 'Create', component: IssueStatusesCreate },
+    { path: '/issue-statuses/update/:id', name: 'Update', component: IssueStatusesUpdate },
+
     { path: '/project-board', name: 'Project Board', component: ProjectBoard },
 
 ];

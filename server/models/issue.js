@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.ENUM('bug', 'task', 'feature'),
         },
         status: {
-            type: DataTypes.ENUM('new', 'inprogress', 'reopen', 'feedback', 'testready', 'closed'),
+            type: DataTypes.INTEGER,
         },
         priority: {
             type: DataTypes.ENUM('low', 'normal', 'hight', 'urgent', 'immediate'),
@@ -51,6 +51,7 @@ module.exports = (sequelize, DataTypes) => {
             type: new DataTypes.VIRTUAL(DataTypes.DATE, ['created_at']),
             get: function() {
                 const date = new Date(this.get('created_at'));
+                console.log(date);
                 return moment(date, moment.ISO_8601).format('MM/DD/YY HH:mm:ss');
             }
         },

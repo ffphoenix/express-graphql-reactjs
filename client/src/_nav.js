@@ -33,5 +33,10 @@ export default {
       url: '/issues',
       icon: 'icon-alert',
     },
+    {
+      name: 'Statuses',
+      url: '/issue-statuses',
+      icon: 'icon-alert',
+    },
   ],
 };

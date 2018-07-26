@@ -30,9 +30,8 @@ module.exports = {
               allowNull: false
           },
           status: {
-              type: Sequelize.ENUM,
-              values: ['new', 'inprogress', 'reopen', 'feedback', 'testready', 'closed'],
-              defaultValue: 'new',
+              type: Sequelize.INTEGER,
+              defaultValue: 1,
               allowNull: false
           },
           priority: {

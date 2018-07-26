@@ -17,15 +17,10 @@ const itemType = `{
         }
     }`;
 
-const boardType = `new ` + itemType +
-    ` inprogress ` + itemType +
-    ` reopen ` + itemType +
-    ` feedback ` + itemType +
-    ` testready ` + itemType +
-    ` closed ` + itemType;
+const boardType = `board { ` + itemType + ` } `;
 
 export const UPDATE_POSITION_MUTATION = gql`
-    mutation updatePosition($id: Int!, $status: issuesstatusEnumType!, $nextId: Int) {
+    mutation updatePosition($id: Int!, $status: Int!, $nextId: Int) {
         updatePosition(id: $id, status: $status, nextId: $nextId) {
             id
             project_id
@@ -47,7 +42,25 @@ export const UPDATE_POSITION_MUTATION = gql`
 
 export const FEED_QUERY = gql(`
     query issuesBoard {
-        issuesBoard { ` + boardType + ` }
+        issuesBoard {
+            status,
+            items {
+                id
+                project_id
+                title
+                description
+                type
+                status
+                priority
+                create_date
+                order
+                project {
+                    id
+                    short_name
+                    title
+                }
+            }
+        }
     }
 `);
 

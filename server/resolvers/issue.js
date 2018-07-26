@@ -46,27 +46,15 @@ const issueListType = new GraphQLObjectType({
     }
 });
 
-const issueBoardType = new GraphQLObjectType({
-    name: 'issueBoard',
-    fields: {
-        new: {
-            type: new GraphQLList(issueType)
+const boardType = new GraphQLObjectType({
+    name : 'boardType',
+    fields : {
+        status: {
+            type : GraphQLString
         },
-        inprogress: {
-            type: new GraphQLList(issueType)
-        },
-        reopen: {
-            type: new GraphQLList(issueType)
-        },
-        feedback: {
-            type: new GraphQLList(issueType)
-        },
-        testready: {
-            type: new GraphQLList(issueType)
-        },
-        closed: {
-            type: new GraphQLList(issueType)
-        },
+        items: {
+            type : new GraphQLList(issueType)
+        }
     }
 });
 
@@ -112,7 +100,7 @@ const queries = {
         }
     },
     issuesBoard: {
-        type: issueBoardType,
+        type: new GraphQLList(boardType),
         args: {
             project_id: {
                 type: getNullableType(GraphQLInt)
@@ -134,19 +122,19 @@ const queries = {
             // args.raw = true;
             args.include = [{model: models.projects, as: "project"}];
             return models.issues.findAll(args).then(result => {
-                let prepareBoardData = {
-                    'new': [],
-                    'inprogress': [],
-                    'reopen': [],
-                    'feedback': [],
-                    'testready': [],
-                    'closed': []
-                };
+                let prepareBoardData = [];
                 for (let i in result) {
+                    if (prepareBoardData[result[i].status] === undefined) {
+                        prepareBoardData[result[i].status] = {
+                            status : result[i].status,
+                            items : []
+                        };
+                    }
                     if (prepareBoardData[result[i].status]) {
-                        prepareBoardData[result[i].status].push(result[i]);
+                        prepareBoardData[result[i].status].items.push(result[i]);
                     }
                 }
+
                 return prepareBoardData;
             });
         }

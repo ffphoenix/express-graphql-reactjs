@@ -1,11 +1,17 @@
 import React, {Component} from 'react';
-import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
+import {
+    DragDropContext,
+    Droppable,
+    Draggable,
+    DraggableProvided
+
+} from 'react-beautiful-dnd';
 import {compose, withApollo} from "react-apollo/index";
 import styled from 'styled-components';
 import Column from "./Column";
 import {FEED_QUERY, UPDATE_POSITION_MUTATION, SUBSCRIPTION_QUERY, EDIT_SUBSCRIPTION, CREATE_SUBSCRIPTION} from "./Schema";
+import {FEED_QUERY as FEED_STATUSES_QUERY} from "../issueStatuses/Schema";
 import _ from "lodash";
-
 
 const Container = styled.div`
   min-height: 100vh;
@@ -14,11 +20,45 @@ const Container = styled.div`
   display: inline-flex;
 `;
 
-const boardTypes = ['new', 'inprogress', 'reopen', 'feedback', 'testready', 'closed']
+const Header = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  background-color: #fff;
+  transition: background-color 0.1s ease;
+  &:hover {
+    background-color: #eee;
+  }
+`;
+
+const Title = styled.h4`
+  padding: 10px;
+  transition: background-color ease 0.2s;
+  flex-grow: 1;
+  user-select: none;
+  position: relative;
+  &:focus {
+    outline: 2px solid #FFF;
+    outline-offset: 2px;
+  }
+`;
+
+const getListStyle = isDraggingOver => ({
+    background: isDraggingOver ? 'lightblue' : 'lightgrey',
+    padding: 10,
+    width: 250,
+    display: "flex",
+    flexDirection: "column",
+    border: `1px solid #eee`
+});
+
 
 class ProjectBoard extends Component {
     state = {
-        items: null
+        items: null,
+        statuses: null
     }
 
     constructor(props) {
@@ -91,12 +131,19 @@ class ProjectBoard extends Component {
     }
 
     onDragEnd({destination, source, draggableId, reason}) {
+        if (destination.droppableId === 'board') {
+            console.log(destination, source);
+            return;
+        }
+
         // dropped outside the list
         if (!destination || (destination.droppableId === source.droppableId && destination.index === source.index)) {
             return;
         }
         let items = _.clone(this.state.items);
-
+        if (items[destination.droppableId] === undefined) {
+            items[destination.droppableId] = [];
+        }
         const [removed] = items[source.droppableId].splice(source.index, 1);
         items[destination.droppableId].splice(destination.index, 0, removed);
 
@@ -136,9 +183,23 @@ class ProjectBoard extends Component {
             .then(({data}) => {
                 let preparedItems = {};
                 for (let i in data.issuesBoard) {
-                    preparedItems[i] = [].slice.call(data.issuesBoard[i]);
+                    preparedItems[data.issuesBoard[i].status] = [].slice.call(data.issuesBoard[i].items);
                 }
                 this.setState({items: preparedItems})
+            });
+        this.props.client
+            .query({
+                query: FEED_STATUSES_QUERY,
+                variables : {
+                    order : 'order ASC'
+                }
+            })
+            .then(({data}) => {
+                let preparedItems = {};
+                for (let i in data.issueStatuses.rows) {
+                    preparedItems[data.issueStatuses.rows[i].id + data.issueStatuses.rows[i].title] = { id : data.issueStatuses.rows[i].id, title : data.issueStatuses.rows[i].title };
+                }
+                this.setState({statuses: preparedItems})
             });
 
         this.props.client.subscribe({
@@ -175,19 +236,23 @@ class ProjectBoard extends Component {
     // Normally you would want to split things out into separate components.
     // But in this example everything is just done in one place for simplicity
     render() {
-        if (this.state.items == undefined) {
+        if (this.state.items == undefined
+            || this.state.statuses == undefined) {
             return '';
         }
 
         return (
             <DragDropContext onDragEnd={this.onDragEnd}>
                 <Container>
-                    {boardTypes.map(droppableId => (
-                        <Droppable key={droppableId} droppableId={droppableId}>
-                            {(provided, snapshot) => Column(provided, snapshot, droppableId, this.state.items[droppableId])}
-                        </Droppable>
-                    ))}
+
+                    <Droppable droppableId="board"
+                               type="COLUMN"
+                               direction="horizontal"
+                               ignoreContainerClipping={true}>
+                        {(provided, snapshot) => Column(provided, snapshot, this.state)}
+                    </Droppable>
                 </Container>
+
             </DragDropContext>
         );
     }
