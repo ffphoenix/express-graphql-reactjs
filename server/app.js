@@ -1,44 +1,20 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
-import { formatError as formatApolloError, isInstance } from 'apollo-errors';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
-import { execute, subscribe, GraphQLError } from 'graphql';
+import { execute, subscribe } from 'graphql';
 import schema from './resolvers';
 import jwt from 'express-jwt';
 import authModule from './middlewares/auth';
 import cors from 'cors';
 import config from './config/config';
 import { PubSub } from 'graphql-subscriptions';
-
+import {errorHandle, authorizeErrorHandle} from "./middlewares/errorHandlers";
+import path from 'path';
 const pubsub = new PubSub();
 // Initialize the app
 const app = express();
-const formatError = function (error) {
-    const { originalError } = error;
-    if (originalError !== undefined
-        && originalError.name === 'SequelizeValidationError') {
-        let procErrors = {};
-        for (let i = 0; i < originalError.errors.length; i++) {
-            let error = originalError.errors[i];
-            if (!procErrors.hasOwnProperty(error.path)){
-                procErrors[error.path] = {};
-            }
-            procErrors[error.path][error.validatorKey] = error.message
-        }
-        return {
-            message : 'Bad input',
-            data : procErrors,
-        }
-    }
-    if (error instanceof GraphQLError) {
-        return {
-            message : error.message,
-            data : []
-        }
-    }
-    return formatApolloError(error)
-};
+
 const jwtCheck = jwt({ secret: config.jwt_secret }).unless({path: ['/api/login', 'graphiql']})
 // app.use(jwtCheck);
 app.use(cors());
@@ -47,7 +23,6 @@ app.use(bodyParser.json());
 app.use('/api', authModule);
 
 // The GraphQL endpoint
-// app.use('/graphql', bodyParser.json(), graphqlExpress({ formatError, schema }));
 app.use('/graphql', bodyParser.json(), graphqlExpress(request => {
     return {
         schema: schema,
@@ -56,7 +31,7 @@ app.use('/graphql', bodyParser.json(), graphqlExpress(request => {
             user : request.user,
             headers : request.rawHeaders
         },
-        formatError
+        errorHandle
     };
     }
 ));
@@ -68,16 +43,7 @@ app.use('/graphiql',
         subscriptionsEndpoint: `ws://localhost:4000/subscriptions`
 }));
 
-app.use(function (err, req, res, next) {
-    if (err.name === 'UnauthorizedError') {
-        res.status(401).json(formatApolloError({
-            errors: {
-                code : 'invalid_token',
-                message : 'invalid token'
-            }
-        }));
-    }
-});
+app.use(authorizeErrorHandle);
 // Start the server
 const httpServer = app.listen(4000, () => {
     console.log('Go to http://localhost:4000/graphiql to run queries!');
@@ -87,3 +53,6 @@ SubscriptionServer.create(
     { execute, subscribe, schema},
     {server: httpServer, path: '/subscriptions'},
 )
+
+export const fpath = path;
+export default app;

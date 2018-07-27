@@ -29,6 +29,7 @@
     "mysql-migrations": "^1.0.6",
     "mysql2": "^1.5.3",
     "nodemon": "^1.17.4",
+    "path": "^0.12.7",
     "sequelize": "^4.38.0",
     "sequelize-cli": "^4.0.0",
     "subscriptions-transport-ws": "^0.9.12"
