@@ -37,16 +37,18 @@ app.use('/graphql', bodyParser.json(), graphqlExpress(request => {
 ));
 
 // GraphiQL, a visual editor for queries
+const port = process.env.PORT || 4000;
 app.use('/graphiql',
     graphiqlExpress({
         endpointURL: '/graphql',
-        subscriptionsEndpoint: `ws://localhost:4000/subscriptions`
+        subscriptionsEndpoint: `ws://localhost:${port}/subscriptions`
 }));
 
 app.use(authorizeErrorHandle);
 // Start the server
-const httpServer = app.listen(4000, () => {
-    console.log('Go to http://localhost:4000/graphiql to run queries!');
+
+const httpServer = app.listen(port, () => {
+    console.log(`Go to http://localhost:${port}/graphiql to run queries!`);
 });
 //
 SubscriptionServer.create(

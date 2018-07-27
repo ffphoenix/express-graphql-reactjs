@@ -46,7 +46,7 @@ export default class Login extends Component {
         event.preventDefault();
 
         const variables = this.state.data;
-        axios.post(`http://localhost:4000/api/login`, variables )
+        axios.post(`/api/login`, variables )
             .then(res => {
                 if (res.data.success === true){
                     if (res.data.token){

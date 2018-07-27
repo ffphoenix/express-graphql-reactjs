@@ -38,7 +38,7 @@ const customFetch = (uri, options) => {
     });
 }
 let httpLink = createHttpLink({
-    uri : `http://localhost:4000/graphql`,
+    uri : `http://young-oasis-54384.herokuapp.com/graphql`,
     // fetch : customFetch
 });
 
@@ -57,7 +57,7 @@ const middlewareAuthLink = new ApolloLink((operation, forward) => {
 const httpLinkWithAuthToken = middlewareAuthLink.concat(httpLink);
 
 
-const wsclient = new SubscriptionClient(`ws://localhost:4000/subscriptions`, {
+const wsclient = new SubscriptionClient(`ws://young-oasis-54384.herokuapp.com/subscriptions`, {
     reconnect: true
 });
 const wsLink = new WebSocketLink(wsclient);
