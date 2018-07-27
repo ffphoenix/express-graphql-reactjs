@@ -7,8 +7,8 @@
   },
   "main": "app.js",
   "scripts": {
-    "start": "npm install && cd server && npm install",
-    "heroku-postbuild": "nodemon app.js --exec babel-node --presets es2015,stage-2"
+    "start": "npm install",
+    "heroku-postbuild": "cd server && npm install"
   },
   "dependencies": {
     "ejs": "^2.5.6",
