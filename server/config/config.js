@@ -14,7 +14,7 @@ module.exports = {
         dialect  : 'mysql',
     },
     stage: {
-        host     : CLEARDB_DATABASE_URL,
+        host     : process.env.CLEARDB_DATABASE_URL,
         username : 'b5e7b70e116a7e',
         password : 'dafa8616',
         database : 'heroku_8608fe5df80fd94',
