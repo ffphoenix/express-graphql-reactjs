@@ -1,5 +1,8 @@
-module.exports = {
+if (process.env.ENVIROMENT && process.env.ENVIROMENT === 'stage') {
+    require('dotenv').load();
+}
 
+module.exports = {
     production: {
         host     : 'localhost',
         username : 'root',
@@ -8,10 +11,10 @@ module.exports = {
         dialect  : 'mysql',
     },
     development: {
-        host     : `us-cdbr-iron-east-04.cleardb.net`,
-        username : 'b5e7b70e116a7e',
-        password : 'dafa8616',
-        database : 'heroku_8608fe5df80fd94',
+        host     : process.env.DB_HOST || 'localhost',
+        username : process.env.DB_USER || 'root' ,
+        password : process.env.DB_PASSWORD || 'root' ,
+        database : process.env.DB_DATABASE_NAME || 'task',
         dialect  : 'mysql',
     },
     jwt_secret : 'fa4wTs2*r4IIIda3151%'

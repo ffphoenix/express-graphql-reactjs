@@ -15,10 +15,12 @@ import {
 } from './Schema'
 import BaseForm from '../grid/BaseForm'
 import {EditorState} from "draft-js";
+import {FEED_QUERY as FEED_STATUSES_QUERY} from "../issueStatuses/Schema";
 
 class Update extends BaseForm {
 
     state = {
+        statuses : null,
         data : {
             title: '',
             description: EditorState.createEmpty(),
@@ -55,13 +57,7 @@ class Update extends BaseForm {
             type: this.ELEMENT_TYPE_SELECT,
             label: 'Status',
             placeholder: 'Select status...',
-            options : {
-                'new' : 'New',
-                'inprogress' : 'In Progress',
-                'reopen' : 'Re-open',
-                'feedback' : 'Feedback',
-                'testready' : 'Ready for test',
-            }
+            options : {}
         },
         priority: {
             type: this.ELEMENT_TYPE_SELECT,
@@ -87,12 +83,30 @@ class Update extends BaseForm {
         this.feedOneQueryName = FEED_QUERY_ONE_NAME;
     }
 
+    componentDidMount() {
+        this.props.client
+            .query({
+                query: FEED_STATUSES_QUERY,
+                variables: {
+                    order: 'order ASC'
+                }
+            })
+            .then(({data}) => {
+                let preparedItems = {};
+                for (let i in data.issueStatuses.rows) {
+                    preparedItems[data.issueStatuses.rows[i].id] = data.issueStatuses.rows[i].title;
+                }
+                let newState = this.state;
+                newState.statuses = preparedItems;
+                this.setState(newState);
+            });
+    }
     render() {
         const  { error, loading } = this.props.feedOne;
 
-        if (loading) return (<div>Loading...</div>);
+        if (loading || this.state.statuses === null ) return (<div>Loading...</div>);
         if (error) return (<div>`Error! ${error.message}`</div>);
-
+        this.options.status.options = this.state.statuses;
 
         return (
             <Card>

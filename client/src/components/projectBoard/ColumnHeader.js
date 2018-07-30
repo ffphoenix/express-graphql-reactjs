@@ -96,7 +96,7 @@ class ColumnHeader extends React.Component {
         if (this.state.status === null) {
             return '';
         }
-        console.log('render', this.state);
+
         let title = this.state.status.title;
         if (this.state.isEdit) {
             title = (<InputGroup>
@@ -123,4 +123,4 @@ class ColumnHeader extends React.Component {
 
 export default compose(
     withApollo
-)(ColumnHeader);;
+)(ColumnHeader);

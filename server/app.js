@@ -16,7 +16,7 @@ const pubsub = new PubSub();
 const app = express();
 
 const jwtCheck = jwt({ secret: config.jwt_secret }).unless({path: ['/api/login', 'graphiql']})
-// app.use(jwtCheck);
+//app.use(jwtCheck);
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -38,19 +38,21 @@ app.use('/graphql', bodyParser.json(), graphqlExpress(request => {
 
 // GraphiQL, a visual editor for queries
 const port = process.env.PORT || 4000;
+const host = process.env.SERVER_BASE_URL || 'http://localhost';
+const socketHost = process.env.SERVER_BASE_SOCKET_URL || 'ws://localhost';
 app.use('/graphiql',
     graphiqlExpress({
         endpointURL: '/graphql',
-        subscriptionsEndpoint: `ws://localhost:${port}/subscriptions`
+        subscriptionsEndpoint: `${socketHost}:${port}/subscriptions`
 }));
 
 app.use(authorizeErrorHandle);
 // Start the server
 
 const httpServer = app.listen(port, () => {
-    console.log(`Go to http://localhost:${port}/graphiql to run queries!`);
+    console.log(`Go to ${host}:${port}/graphiql to run queries!`);
 });
-//
+
 SubscriptionServer.create(
     { execute, subscribe, schema},
     {server: httpServer, path: '/subscriptions'},

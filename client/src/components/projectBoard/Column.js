@@ -39,7 +39,7 @@ export default (provided, snapshot, data) => {
             {Object.keys(statuses).map(droppableId => {
                 const dropKey = statuses[droppableId].id.toString();
                 return (
-                <Draggable draggableId={droppableId} index={droppableId} >
+                <Draggable draggableId={droppableId} key={droppableId} index={droppableId} >
                     {(prov, snap) => (
                         <Container innerRef={prov.innerRef} {...prov.draggableProps} >
                             <div {...prov.dragHandleProps}>

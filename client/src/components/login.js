@@ -15,7 +15,8 @@ import {
     Alert
 } from 'reactstrap';
 import axios from 'axios';
-
+const basePORT = (window.location.hostname === 'localhost') ?  ':4000' : '';
+const baseURL = (window.location.protocol === 'https:') ? 'https://' + window.location.hostname : 'http://' + window.location.hostname ;
 export default class Login extends Component {
     state = {
         data : {
@@ -46,7 +47,7 @@ export default class Login extends Component {
         event.preventDefault();
 
         const variables = this.state.data;
-        axios.post(`/api/login`, variables )
+        axios.post(`${baseURL}${basePORT}/api/login`, variables)
             .then(res => {
                 if (res.data.success === true){
                     if (res.data.token){

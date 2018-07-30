@@ -160,7 +160,7 @@ const createIssueFunc = {
     resolve: function (obj, {input}, context) {
         input.created_at = new Date();
         input.updated_at = new Date();
-        input.created_user_id = context.user.id;
+        input.created_user_id = 1;//context.user.id;
 
         return models.issues.create(input).then((quote) => {
             quote.order = quote.id;

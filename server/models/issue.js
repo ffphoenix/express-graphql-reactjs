@@ -51,7 +51,6 @@ module.exports = (sequelize, DataTypes) => {
             type: new DataTypes.VIRTUAL(DataTypes.DATE, ['created_at']),
             get: function() {
                 const date = new Date(this.get('created_at'));
-                console.log(date);
                 return moment(date, moment.ISO_8601).format('MM/DD/YY HH:mm:ss');
             }
         },
@@ -70,7 +69,6 @@ module.exports = (sequelize, DataTypes) => {
     }, {
         classMethods: {
             associate: function (models) {
-                console.log('assoc',models);
                 issues.belongsTo(models.projects, {as: 'project', foreignKey : 'project_id'});
             }
         },

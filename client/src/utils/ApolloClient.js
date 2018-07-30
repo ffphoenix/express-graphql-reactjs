@@ -8,6 +8,9 @@ import { getOperationAST } from 'graphql';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { AUTH_TOKEN } from '../config';
 import history from '../utils/history'
+const basePORT = (window.location.hostname === 'localhost') ?  ':4000' : '';
+const baseURL = (window.location.protocol === 'https:') ? 'https://' + window.location.hostname : 'http://' + window.location.hostname ;
+const socketBaseURL = (window.location.protocol === 'https:') ? 'wss://' + baseURL : 'ws://' + baseURL;
 
 const errorLink = onError(({networkError, graphQLErrors}) => {
     if (graphQLErrors) {
@@ -38,7 +41,7 @@ const customFetch = (uri, options) => {
     });
 }
 let httpLink = createHttpLink({
-    uri : `http://young-oasis-54384.herokuapp.com/graphql`,
+    uri : `${baseURL}:${basePORT}/graphql`,
     // fetch : customFetch
 });
 
@@ -57,7 +60,7 @@ const middlewareAuthLink = new ApolloLink((operation, forward) => {
 const httpLinkWithAuthToken = middlewareAuthLink.concat(httpLink);
 
 
-const wsclient = new SubscriptionClient(`ws://young-oasis-54384.herokuapp.com/subscriptions`, {
+const wsclient = new SubscriptionClient(`${socketBaseURL}${basePORT}/subscriptions`, {
     reconnect: true
 });
 const wsLink = new WebSocketLink(wsclient);

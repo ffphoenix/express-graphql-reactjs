@@ -8,10 +8,12 @@ import { graphql, withApollo, compose } from 'react-apollo'
 import { CREATE_MUTATION, FEED_QUERY_NAME, CREATE_QUERY_NAME, UPDATE_QUERY_NAME, MODULE_URL } from './Schema'
 import BaseForm from '../grid/BaseForm'
 import { EditorState } from 'draft-js';
+import {FEED_QUERY as FEED_STATUSES_QUERY} from "../issueStatuses/Schema";
 
 class Create extends BaseForm {
 
     state = {
+        statuses : null,
         data : {
             title: '',
             description: EditorState.createEmpty(),
@@ -21,7 +23,7 @@ class Create extends BaseForm {
             priority: null,
         },
         errors : {}
-    }
+    };
 
     options = {
         title: {
@@ -48,13 +50,7 @@ class Create extends BaseForm {
             type: this.ELEMENT_TYPE_SELECT,
             label: 'Status',
             placeholder: 'Select status...',
-            options : {
-                'new' : 'New',
-                'inprogress' : 'In Progress',
-                'reopen' : 'Re-open',
-                'feedback' : 'Feedback',
-                'testready' : 'Ready for test',
-            }
+            options : {}
         },
         priority: {
             type: this.ELEMENT_TYPE_SELECT,
@@ -79,7 +75,28 @@ class Create extends BaseForm {
         this.updateQueryName = UPDATE_QUERY_NAME;
     }
 
+    componentDidMount() {
+        this.props.client
+            .query({
+                query: FEED_STATUSES_QUERY,
+                variables: {
+                    order: 'order ASC'
+                }
+            })
+            .then(({data}) => {
+                let preparedItems = {};
+                for (let i in data.issueStatuses.rows) {
+                    preparedItems[data.issueStatuses.rows[i].id] = data.issueStatuses.rows[i].title;
+                }
+                let newState = this.state;
+                newState.statuses = preparedItems;
+                this.setState(newState);
+            });
+    }
     render() {
+        if (this.state.statuses === null ) return (<div>Loading...</div>);
+        this.options.status.options = this.state.statuses;
+
         return (
             <Card>
                 <CardHeader>
