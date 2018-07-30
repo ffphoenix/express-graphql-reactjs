@@ -10,7 +10,7 @@ import { AUTH_TOKEN } from '../config';
 import history from '../utils/history'
 const basePORT = (window.location.hostname === 'localhost') ?  ':4000' : '';
 const baseURL = (window.location.protocol === 'https:') ? 'https://' + window.location.hostname : 'http://' + window.location.hostname ;
-const socketBaseURL = (window.location.protocol === 'https:') ? 'wss://' + baseURL : 'ws://' + baseURL;
+const socketBaseURL = (window.location.protocol === 'https:') ? 'wss://' + window.location.hostname : 'ws://' + window.location.hostname;
 
 const errorLink = onError(({networkError, graphQLErrors}) => {
     if (graphQLErrors) {

@@ -20,8 +20,6 @@ import {DefaultLayout} from './containers';
 import {Page404, Page500, Register} from './views/Pages';
 import Login from './components/login'
 
-require('dotenv').config({path: '../'}).load();
-
 class App extends Component {
 
     render() {
