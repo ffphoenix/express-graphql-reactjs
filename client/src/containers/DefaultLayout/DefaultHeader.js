@@ -13,9 +13,7 @@ const defaultProps = {};
 class DefaultHeader extends Component {
 
     constructor(props) {
-
         super(props);
-        console.log(props);
         this.handleLogout = this.handleLogout.bind(this);
     }
 
@@ -26,7 +24,6 @@ class DefaultHeader extends Component {
 
     render() {
 
-        // eslint-disable-next-line
         const {children, ...attributes} = this.props;
 
         return (

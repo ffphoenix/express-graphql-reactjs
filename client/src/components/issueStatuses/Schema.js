@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-export const MODULE_URL = 'projects';
+export const MODULE_URL = 'issuestatuses';
 
 export const DELETE_QUERY_NAME = 'deleteMutation';
 export const CREATE_QUERY_NAME = 'createMutation';

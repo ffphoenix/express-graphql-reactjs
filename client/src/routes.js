@@ -32,10 +32,9 @@ const routes = [
     { path: '/issues/create', name: 'Create', component: IssueCreate },
     { path: '/issues/update/:id', name: 'Update', component: IssueUpdate },
     { path: '/issues', name: 'Issues', component: IssuetList },
-    { path: '/issue-statuses', name: 'Issues', component: IssueStatusesList },
-    { path: '/issue-statuses/create', name: 'Create', component: IssueStatusesCreate },
-    { path: '/issue-statuses/update/:id', name: 'Update', component: IssueStatusesUpdate },
-
+    { path: '/issuestatuses/create', name: 'Create', component: IssueStatusesCreate },
+    { path: '/issuestatuses/update/:id', name: 'Update', component: IssueStatusesUpdate },
+    { path: '/issuestatuses', name: 'Issues Statuses', component: IssueStatusesList },
     { path: '/project-board', name: 'Project Board', component: ProjectBoard },
 
 ];

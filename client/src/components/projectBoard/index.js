@@ -9,7 +9,7 @@ import {
 import {compose, withApollo} from "react-apollo/index";
 import styled from 'styled-components';
 import Column from "./Column";
-import {FEED_QUERY, UPDATE_POSITION_MUTATION, SUBSCRIPTION_QUERY, EDIT_SUBSCRIPTION, CREATE_SUBSCRIPTION} from "./Schema";
+import {FEED_QUERY, UPDATE_POSITION_MUTATION, SUBSCRIPTION_QUERY, EDIT_SUBSCRIPTION, CREATE_SUBSCRIPTION, EDIT_STATUS_SUBSCRIPTION} from "./Schema";
 import {FEED_QUERY as FEED_STATUSES_QUERY} from "../issueStatuses/Schema";
 import _ from "lodash";
 
@@ -67,6 +67,19 @@ class ProjectBoard extends Component {
         this.reorderBySubscription = this.reorderBySubscription.bind(this);
         this.updateBySubscription = this.updateBySubscription.bind(this);
         this.createBySubscription = this.createBySubscription.bind(this);
+        this.updateStatusesBySubscription = this.updateStatusesBySubscription.bind(this);
+    }
+
+    updateStatusesBySubscription(status){
+        let statuses = _.clone(this.state.statuses);
+
+        for (let i in statuses) {
+            if (statuses[i].id === status.id) {
+                statuses[i].title = status.title;
+                this.setState({statuses : statuses});
+                break;
+            }
+        }
     }
 
     updateBySubscription(issue){
@@ -176,6 +189,7 @@ class ProjectBoard extends Component {
         const reorderSubscriptionProcess = this.reorderBySubscription;
         const editSubscriptionProcess = this.updateBySubscription;
         const createSubscriptionProcess = this.createBySubscription;
+        const updateStatusesBySubscription = this.updateStatusesBySubscription;
         this.props.client
             .query({
                 query: FEED_QUERY
@@ -231,6 +245,16 @@ class ProjectBoard extends Component {
             },
             error(err) { console.error('SUBSCRIPTION ERR => ', err); },
         });
+
+        this.props.client.subscribe({
+            query: EDIT_STATUS_SUBSCRIPTION,
+            variables: {  },
+        }).subscribe({
+            next({data : { issueStatusEdited : status }}) {
+                updateStatusesBySubscription(status);
+            },
+            error(err) { console.error('SUBSCRIPTION ERR => ', err); },
+        });
     }
 
     // Normally you would want to split things out into separate components.
@@ -242,18 +266,20 @@ class ProjectBoard extends Component {
         }
 
         return (
-            <DragDropContext onDragEnd={this.onDragEnd}>
-                <Container>
+            <div id="projectBoard">
+                <DragDropContext onDragEnd={this.onDragEnd}>
+                    <Container>
 
-                    <Droppable droppableId="board"
-                               type="COLUMN"
-                               direction="horizontal"
-                               ignoreContainerClipping={true}>
-                        {(provided, snapshot) => Column(provided, snapshot, this.state)}
-                    </Droppable>
-                </Container>
+                        <Droppable droppableId="board"
+                                   type="COLUMN"
+                                   direction="horizontal"
+                                   ignoreContainerClipping={true}>
+                            {(provided, snapshot) => Column(provided, snapshot, this.state)}
+                        </Droppable>
+                    </Container>
 
-            </DragDropContext>
+                </DragDropContext>
+            </div>
         );
     }
 }

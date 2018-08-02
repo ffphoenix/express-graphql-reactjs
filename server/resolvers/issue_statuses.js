@@ -122,7 +122,11 @@ const updateIssueStatusFunc  = {
             .findById(args.id)
             .then((quote) => {
                 args.input.updated_at = new Date();
-                return quote.update(args.input);
+
+                return quote.update(args.input).then(quote => {
+                    pubsub.publish('issueStatusEdited', quote.get({raw : true}));
+                    return quote;
+                });
             });
     }
 
@@ -150,17 +154,14 @@ const mutations = {
 };
 
 const subscription = {
-    addIssueStatus: {
+    issueStatusAdded: {
         type: issueStatusType,
-        resolve: (payload) => {
-            return {
-                ...payload
-            };
-        },
+        resolve: (payload) => { return { ...payload}; },
         subscribe: () => pubsub.asyncIterator('issueStatusAdded')
     },
-    editIssueStatus: {
+    issueStatusEdited: {
         type: issueStatusType,
+        resolve: (payload) => { return { ...payload}; },
         subscribe: () => pubsub.asyncIterator('issueStatusEdited')
     },
 };

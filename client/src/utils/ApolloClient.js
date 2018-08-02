@@ -41,7 +41,7 @@ const customFetch = (uri, options) => {
     });
 }
 let httpLink = createHttpLink({
-    uri : `${baseURL}:${basePORT}/graphql`,
+    uri : `${baseURL}${basePORT}/graphql`,
     // fetch : customFetch
 });
 

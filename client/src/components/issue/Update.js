@@ -2,9 +2,10 @@ import React from 'react';
 import {
     Card,
     CardBody,
-    CardHeader
+    CardHeader,
+    Button
 } from 'reactstrap';
-
+import Modal from 'react-bootstrap-modal';
 import { graphql, compose, withApollo } from 'react-apollo'
 import {
     UPDATE_MUTATION,
@@ -29,7 +30,8 @@ class Update extends BaseForm {
             status: '',
             priority: ''
         },
-        errors: {}
+        errors: {},
+        showModal : false
     };
 
     options = {
@@ -98,27 +100,55 @@ class Update extends BaseForm {
                 }
                 let newState = this.state;
                 newState.statuses = preparedItems;
+                newState.showModal = true;
+                console.log(newState);
                 this.setState(newState);
             });
     }
+
+    renderModal() {
+        console.log('render modal', this.state.showModal)
+        return ( <Modal
+            show={this.state.showModal}
+            transition={true}
+            aria-labelledby="contained-modal-title-lg"
+        >
+            <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title-lg">
+                    <strong>Issue</strong>
+                    <small> update</small>
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                {this.renderForm(this.options)}
+            </Modal.Body>
+            <Modal.Footer>
+                <Button onClick={this.props.onHide}>Close</Button>
+            </Modal.Footer>
+        </Modal>);
+    }
+
     render() {
         const  { error, loading } = this.props.feedOne;
 
         if (loading || this.state.statuses === null ) return (<div>Loading...</div>);
         if (error) return (<div>`Error! ${error.message}`</div>);
         this.options.status.options = this.state.statuses;
-
-        return (
-            <Card>
-                <CardHeader>
-                    <strong>Issue</strong>
-                    <small> update</small>
-                </CardHeader>
-                <CardBody>
-                    {this.renderForm(this.options)}
-                </CardBody>
-            </Card>
-        )
+        if (this.props.showModal !== undefined && this.props.showModal === true) {
+            return this.renderModal();
+        } else {
+            return (
+                <Card>
+                    <CardHeader>
+                        <strong>Issue</strong>
+                        <small> update</small>
+                    </CardHeader>
+                    <CardBody>
+                        {this.renderForm(this.options)}
+                    </CardBody>
+                </Card>
+            )
+        }
     }
 }
 

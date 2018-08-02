@@ -53,7 +53,11 @@ export default (provided, snapshot, data) => {
                                     >
                                         {items[dropKey] ? Object.keys(items[dropKey]).map(index => (
                                             <Draggable key={items[dropKey][index].id} draggableId={items[dropKey][index].id} index={index}>
-                                                {(provided, snapshot) => Issue(provided, snapshot, items[dropKey][index])}
+                                                {(provided, snapshot) => {
+                                                    return (
+                                                        <Issue provided={provided} snapshot={snapshot} item={items[dropKey][index]}/>
+                                                    )
+                                                }}
                                             </Draggable>
                                         )) : ''}
                                     </div>

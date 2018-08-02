@@ -52,7 +52,7 @@ class Grid extends BaseGrid {
 
             <Card>
                 <CardHeader>
-                    <i className="fa fa-align-justify"></i> Projects List
+                    <i className="fa fa-align-justify"></i> Statuses List
                 </CardHeader>
                 <CardBody>
                     <BaseTableFilters

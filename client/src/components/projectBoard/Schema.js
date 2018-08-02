@@ -131,3 +131,13 @@ export const CREATE_SUBSCRIPTION = gql`
     }
 
 `;
+
+export const EDIT_STATUS_SUBSCRIPTION = gql`
+    subscription {
+        issueStatusEdited {
+            id
+            title
+        }
+    }
+
+`;
