@@ -52,11 +52,12 @@ export default class BaseForm extends React.Component {
                 for (let key in this.options) {
                     if (this.options[key].type === this.ELEMENT_TYPE_TEXT) {
                         newStateData[key] = EditorState.createWithContent(stateFromHTML(propsData[key]));
+                        console.log(newStateData[key], stateFromHTML(propsData[key]));
                     } else {
                         newStateData[key] = propsData[key];
                     }
                 }
-               this.setState({ data : newStateData })
+                this.setState({ data : newStateData })
             }
         }
     }
@@ -98,7 +99,11 @@ export default class BaseForm extends React.Component {
                 refetchQueries: [this.feedQueryName]
             })
             .then(response => {
-                this.props.history.push(`/` + this.backURL);
+                if (this.props.showAsModal !== undefined && this.props.showAsModal) {
+                    this.props.onCloseModal();
+                } else {
+                    this.props.history.push(`/` + this.backURL);
+                }
             })
             .catch(response => {
                 if (response.graphQLErrors !== undefined && response.graphQLErrors.length > 0) {
@@ -118,7 +123,11 @@ export default class BaseForm extends React.Component {
                 }
             })
             .then(response => {
-                this.props.history.push(`/` + this.backURL);
+                if (this.props.showAsModal !== undefined && this.props.showAsModal) {
+                    this.props.onCloseModal();
+                } else {
+                    this.props.history.push(`/` + this.backURL);
+                }
             })
             .catch(response => {
                 if (response.graphQLErrors !== undefined) {
@@ -130,18 +139,28 @@ export default class BaseForm extends React.Component {
         }
     }
 
+    renderButtons(){
+        if (this.props.showAsModal !== undefined && this.props.showAsModal === true) {
+            return '';
+        }
+
+        return (
+            <div className="form-actions custom-control-inline">
+                <div className="pr-1">
+                    <Button className="" type="button" color="primary" onClick={this.handleSendData}>Save
+                        changes</Button>
+                </div>
+                <div className="pr-1">
+                    <Link className="btn btn-secondary" to={`/` + this.backURL}>Cancel</Link>
+                </div>
+            </div>
+        );
+    }
     renderForm(options) {
         return (
             <Form>
                 {this.renderFormElements(options)}
-                <div className="form-actions custom-control-inline">
-                    <div className="pr-1">
-                        <Button className="" type="button" color="primary" onClick={this.handleSendData}>Save changes</Button>
-                    </div>
-                    <div className="pr-1">
-                        <Link className="btn btn-secondary" to={`/` + this.backURL} >Cancel</Link>
-                    </div>
-                </div>
+                {this.renderButtons()}
             </Form>
         )
     }

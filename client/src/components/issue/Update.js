@@ -3,9 +3,12 @@ import {
     Card,
     CardBody,
     CardHeader,
-    Button
+    Button,
+    Modal,
+    ModalHeader,
+    ModalBody,
+    ModalFooter
 } from 'reactstrap';
-import Modal from 'react-bootstrap-modal';
 import { graphql, compose, withApollo } from 'react-apollo'
 import {
     UPDATE_MUTATION,
@@ -31,7 +34,8 @@ class Update extends BaseForm {
             priority: ''
         },
         errors: {},
-        showModal : false
+        showModal : false,
+        showAsModal : false
     };
 
     options = {
@@ -108,24 +112,19 @@ class Update extends BaseForm {
 
     renderModal() {
         console.log('render modal', this.state.showModal)
-        return ( <Modal
-            show={this.state.showModal}
-            transition={true}
-            aria-labelledby="contained-modal-title-lg"
-        >
-            <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-lg">
-                    <strong>Issue</strong>
-                    <small> update</small>
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                {this.renderForm(this.options)}
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={this.props.onHide}>Close</Button>
-            </Modal.Footer>
-        </Modal>);
+        return ( <div>
+            <Modal isOpen={this.state.showModal} toggle={this.props.onCloseModal} className="">
+                <ModalHeader toggle={this.props.onCloseModal}>Issue update</ModalHeader>
+                <ModalBody>
+                    {this.renderForm(this.options)}
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="primary" onClick={this.handleSendData}>Save</Button>{' '}
+                    <Button color="secondary" onClick={this.props.onCloseModal}>Cancel</Button>
+                </ModalFooter>
+            </Modal>
+        </div>
+        );
     }
 
     render() {
@@ -134,7 +133,7 @@ class Update extends BaseForm {
         if (loading || this.state.statuses === null ) return (<div>Loading...</div>);
         if (error) return (<div>`Error! ${error.message}`</div>);
         this.options.status.options = this.state.statuses;
-        if (this.props.showModal !== undefined && this.props.showModal === true) {
+        if (this.props.showAsModal !== undefined && this.props.showAsModal === true) {
             return this.renderModal();
         } else {
             return (

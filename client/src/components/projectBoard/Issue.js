@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import moment from "moment";
-import IssueModal from "./IssueModal";
 import {compose, withApollo} from "react-apollo/index";
+import IssueModal from "./IssueModal";
 
 const getItemStyle = (isDragging, draggableStyle) => ({
     // some basic styles to make the items look a bit nicer
@@ -40,16 +40,21 @@ class Issue extends Component {
     constructor(props) {
         super(props);
         this.onDoubleClickHandler = this.onDoubleClickHandler.bind(this);
+        this.onCloseModal = this.onCloseModal.bind(this);
     }
 
     onDoubleClickHandler(){
-
         this.setState({showModal : true});
     }
 
+    onCloseModal(){
+        this.setState({showModal : false});
+    }
+
     render() {
-        console.log(this.state.showModal);
-        const {provided, snapshot, item} = this.props;
+        const { provided, snapshot, item } = this.props;
+        const match = {params : {id : item.id}};
+
         return (
             <span>
                 <div
@@ -68,8 +73,7 @@ class Issue extends Component {
 
 
                 </div>
-
-                <IssueModal showModal={this.state.showModal} item={item}/>
+                {this.state.showModal === true ? <IssueModal showAsModal={true} onCloseModal={this.onCloseModal}  showModal={this.state.showModal} match={match} /> : ''}
             </span>
         );
     }
