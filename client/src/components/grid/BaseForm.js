@@ -52,7 +52,6 @@ export default class BaseForm extends React.Component {
                 for (let key in this.options) {
                     if (this.options[key].type === this.ELEMENT_TYPE_TEXT) {
                         newStateData[key] = EditorState.createWithContent(stateFromHTML(propsData[key]));
-                        console.log(newStateData[key], stateFromHTML(propsData[key]));
                     } else {
                         newStateData[key] = propsData[key];
                     }

@@ -1,5 +1,5 @@
 require('dotenv').load();
-console.log(process.env);
+console.log('Global server started!');
 // Base modules
 import app, { fpath } from './server/app';
 import express from 'express';

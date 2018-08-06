@@ -1,6 +1,8 @@
 import {resolver, attributeFields, JSONType} from 'graphql-sequelize';
 import {Op} from 'sequelize';
 import {PubSub} from 'graphql-subscriptions';
+import dataStorage from "../helpers/dataStorage";
+
 import {
     GraphQLObjectType,
     GraphQLInputObjectType,
@@ -8,12 +10,15 @@ import {
     GraphQLNonNull,
     GraphQLInt,
     GraphQLString,
-    getNullableType
+    getNullableType,
+    GraphQLBoolean
 
 } from 'graphql';
 import models from '../models';
 
 const pubsub = new PubSub();
+const storage = new dataStorage();
+
 let cache = {};
 
 const issueTypeGet = attributeFields(models.issues, {cache: cache});
@@ -64,9 +69,31 @@ const queries = {
         args: {
             id: {
                 type: new GraphQLNonNull(GraphQLInt)
+            },
+            collaborative: {
+                type: getNullableType(GraphQLBoolean)
             }
         },
-        resolve: resolver(models.issues)
+        resolve: function (obj, args, context) {
+            if (args.collaborative === undefined || !args.collaborative) {
+                return models.issues.findById(args.id, {include : [{model: models.projects, as: "project"}]});
+            } else {
+                const key = 'issue' + args.id;
+                let issue = storage.get(key);
+                if (issue !== undefined) {
+                    return issue;
+                } else {
+                    return models.issues.findById(args.id, {include : [{model: models.projects, as: "project"}]}).then((quote) => {
+                        let value = quote.get({raw : true});
+                        value.project = value.project.get({raw : true});
+                        storage.set(key, value);
+                        return quote;
+                    })
+                }
+                return ;
+            }
+
+        }
     },
     issues: {
         type: issueListType,
@@ -193,7 +220,6 @@ const updateIssueFunc = {
                 });
             });
     }
-
 };
 
 const boardChangeArgs = {
@@ -240,6 +266,69 @@ const updatePositionFunc = {
     }
 };
 
+const issueEditProcessType = new GraphQLInputObjectType({
+    name: 'issueEditProcessType',
+    description: 'Collaborate edit',
+    fields: {
+        row : {
+            type : GraphQLString
+        },
+        result: {
+            type: GraphQLString
+        },
+        revision : {
+            type : GraphQLInt
+        }
+    }
+});
+
+const issueProcessType = new GraphQLObjectType({
+    name: 'issueProcessType',
+    description: 'Collaborate edit',
+    fields: {
+        row : {
+            type : GraphQLString
+        },
+        result: {
+            type: GraphQLString
+        },
+        revision : {
+            type : GraphQLInt
+        }
+    }
+});
+
+const editProcess = {
+    type: issueProcessType,
+    args: {
+        id : {
+            type : GraphQLInt
+        },
+        input : {
+            type : issueEditProcessType
+        }
+    },
+    description: 'Update an issue row',
+    resolve: function (obj, {id, nextId, status}) {
+        return models.issues
+            .findById(id)
+            .then((quote) => {
+                quote.status = status;
+                quote.updated_at = new Date();
+                if (nextId !== null) {
+                    return models.issues
+                        .findById(nextId).then(nextQuote => {
+                            quote.order = nextQuote.order + 1;
+                            return changeIssueOrder(quote, nextId);
+                        })
+                }
+                quote.order = 0;
+                pubsub.publish('editProcess', {issue : quote.get({raw: true}), nextId : nextId });
+                return quote.save();
+            });
+    }
+};
+
 const deleteIssueFunc = {
     type: issueType,
     args: {
@@ -259,7 +348,8 @@ const mutations = {
     createIssue: createIssueFunc,
     updateIssue: updateIssueFunc,
     deleteIssue: deleteIssueFunc,
-    updatePosition: updatePositionFunc
+    updatePosition: updatePositionFunc,
+    editProcess: editProcess
 };
 
 const changePositionType = new GraphQLObjectType({
@@ -274,6 +364,7 @@ const changePositionType = new GraphQLObjectType({
         }
     }
 });
+
 const subscription = {
     issuePositionChanged: {
         type: changePositionType,
@@ -292,6 +383,15 @@ const subscription = {
             };
         },
         subscribe: () => pubsub.asyncIterator('issueEdited')
+    },
+    issueEditProcess: {
+        type: issueProcessType,
+        resolve: (payload) => {
+            return {
+                ...payload
+            };
+        },
+        subscribe: () => pubsub.asyncIterator('issueEditProcess')
     },
     issueCreated: {
         type: issueType,

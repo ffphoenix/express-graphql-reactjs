@@ -111,7 +111,7 @@ class IssueModal extends BaseForm {
         this.options.status.options = this.state.statuses;
 
         return ( <div>
-                <Modal isOpen={this.state.showModal} toggle={this.props.onCloseModal} className="">
+                <Modal isOpen={this.state.showModal} toggle={this.props.onCloseModal} size="lg" >
                     <ModalHeader toggle={this.props.onCloseModal}>Issue update</ModalHeader>
                     <ModalBody>
                         {this.renderForm(this.options)}
@@ -131,7 +131,7 @@ export default
 compose(
     graphql(FEED_ONE_QUERY, {
         options: ({ match }) => ({
-            variables: { id: match.params.id },
+            variables: { id: match.params.id, collab: true },
             fetchPolicy: 'cache-and-network'
         }),
         name: 'feedOne'

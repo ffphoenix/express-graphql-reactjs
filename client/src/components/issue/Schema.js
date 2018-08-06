@@ -38,6 +38,14 @@ export const UPDATE_MUTATION = gql`
     }
 `;
 
+export const PROCESS_MUTATION = gql`
+    mutation editProcess($id: Int!, $input: issueEditProcessType) {
+        editProcess(id: $id, input: $input) {
+            issueProcessType
+        }
+    }
+`;
+
 export const DELETE_MUTATION = gql`
     mutation deleteMutation($id: Int!) {
         deleteIssue(id: $id) {
@@ -72,8 +80,8 @@ export const FEED_QUERY = gql`
 `;
 
 export const FEED_ONE_QUERY = gql`
-    query issues($id: Int!) {
-        issue (id: $id) {
+    query issues($id: Int!, $collab: Boolean) {
+        issue (id: $id, collaborative: $collab) {
             id   
             project_id   
             title
