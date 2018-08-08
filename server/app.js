@@ -11,12 +11,36 @@ import config from './config/config';
 import { PubSub } from 'graphql-subscriptions';
 import {errorHandle, authorizeErrorHandle} from "./middlewares/errorHandlers";
 import path from 'path';
+import unless from "express-unless";
+import url from 'url';
+
 const pubsub = new PubSub();
 // Initialize the app
 const app = express();
+let statics = express.static(path.join(__dirname, '/client/build'));
+statics.unless = unless;
 
-const jwtCheck = jwt({ secret: config.jwt_secret }).unless({path: ['/api/login', 'graphiql']})
-//app.use(jwtCheck);
+// const jwtCheck = jwt({ secret: config.jwt_secret }).unless({path: ['/api/login', 'graphiql', '/', '/static/*']})
+const jwtCheck = jwt({ secret: config.jwt_secret }).unless(function (req, res, next) {
+    const regexCases = [
+        /\/api\/login.*/g,
+        /\/graphiql.*/g,
+        /\/static.*/g,
+        /\.*\.jpg/g,
+        /\.*\.html/g,
+        /\.*\.css/g,
+        /\.*\.js/g,
+        /\.*\.ico/g,
+    ];
+    for (let i in regexCases) {
+        if (regexCases[i].exec(req.originalUrl)) {
+            return true;
+        }
+    }
+    return false;
+});
+
+app.use(jwtCheck);
 app.use(cors());
 app.use(bodyParser.json());
 

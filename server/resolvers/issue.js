@@ -1,7 +1,7 @@
 import {resolver, attributeFields, JSONType} from 'graphql-sequelize';
 import {Op} from 'sequelize';
 import {PubSub} from 'graphql-subscriptions';
-import dataStorage from "../helpers/dataStorage";
+import revisionsManager from "../revisionsManager";
 
 import {
     GraphQLObjectType,
@@ -17,7 +17,7 @@ import {
 import models from '../models';
 
 const pubsub = new PubSub();
-const storage = new dataStorage();
+const storage = new revisionsManager();
 
 let cache = {};
 
@@ -79,14 +79,16 @@ const queries = {
                 return models.issues.findById(args.id, {include : [{model: models.projects, as: "project"}]});
             } else {
                 const key = 'issue' + args.id;
-                let issue = storage.get(key);
+                let issue = storage.get(key, context.user);
                 if (issue !== undefined) {
+                    console.log(issue);
                     return issue;
                 } else {
                     return models.issues.findById(args.id, {include : [{model: models.projects, as: "project"}]}).then((quote) => {
                         let value = quote.get({raw : true});
-                        value.project = value.project.get({raw : true});
-                        storage.set(key, value);
+                        value.project = value.project.get({raw: true});
+
+                        storage.set(key, value, context.user);
                         return quote;
                     })
                 }
@@ -187,7 +189,7 @@ const createIssueFunc = {
     resolve: function (obj, {input}, context) {
         input.created_at = new Date();
         input.updated_at = new Date();
-        input.created_user_id = 1;//context.user.id;
+        input.created_user_id = context.user.id;
 
         return models.issues.create(input).then((quote) => {
             quote.order = quote.id;

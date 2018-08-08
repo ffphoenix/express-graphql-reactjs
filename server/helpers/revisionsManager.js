@@ -1,6 +1,9 @@
 const cacheDriver = require( "node-cache" );
 
-export default class dataStorage {
+export default class revisionsManager {
+
+    INPUT_TYPE_TEXT = 'text';
+    INPUT_TYPE_DRAFTJS = 'draftjs';
 
     driver = null;
 
@@ -10,19 +13,24 @@ export default class dataStorage {
 
     get(key) {
         try {
-            return this.driver.get(key, true );
+
+            return this.driver.get(key, true);
         } catch( err ) {
             return undefined;
         }
     }
 
-    set(key, value) {
+    set(key, value, user) {
         try {
             return this.driver.set(key, value);
         } catch( err ) {
             console.log(err);
             return err;
         }
+    }
+
+    setUserOffline() {
+
     }
 
     del(key){
