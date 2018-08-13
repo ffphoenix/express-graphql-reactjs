@@ -87,6 +87,11 @@ class Update extends BaseForm {
         this.createQueryName = CREATE_QUERY_NAME;
         this.updateQueryName = UPDATE_QUERY_NAME;
         this.feedOneQueryName = FEED_QUERY_ONE_NAME;
+        this.reciveDataForForm = this.reciveDataForForm.bind(this);
+    }
+
+    reciveDataForForm(props) {
+        return props.feedOne[this.feedOneQueryName].object;
     }
 
     componentDidMount() {

@@ -82,14 +82,17 @@ export const FEED_QUERY = gql`
 export const FEED_ONE_QUERY = gql`
     query issues($id: Int!, $collab: Boolean) {
         issue (id: $id, collaborative: $collab) {
-            id   
-            project_id   
-            title
-            description
-            type
-            status
-            priority
-            create_date
+            lastRevId 
+            object {
+                id   
+                project_id   
+                title
+                description
+                type
+                status
+                priority
+                create_date
+            }
         }
     }
 `;

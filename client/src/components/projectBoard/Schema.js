@@ -1,6 +1,7 @@
 import gql from 'graphql-tag'
 
-const itemType = `{
+const itemType = `
+    {
         id
         project_id
         title
@@ -15,7 +16,8 @@ const itemType = `{
             short_name
             title
         }
-    }`;
+    }
+`;
 
 const boardType = `board { ` + itemType + ` } `;
 
@@ -37,6 +39,11 @@ export const UPDATE_POSITION_MUTATION = gql`
                 title
             }
         }
+    }
+`;
+export const UPDATE_SET_USER_OFFLINE = gql`
+    mutation setUserOffline($id: Int!) {
+        setUserOffline(id: $id) 
     }
 `;
 
@@ -86,7 +93,6 @@ export const SUBSCRIPTION_QUERY = gql`
             }
         }
     }
-
 `;
 
 export const EDIT_SUBSCRIPTION = gql`
@@ -108,8 +114,8 @@ export const EDIT_SUBSCRIPTION = gql`
             }
         }
     }
-
 `;
+
 export const CREATE_SUBSCRIPTION = gql`
     subscription {
         issueCreated {
@@ -129,7 +135,6 @@ export const CREATE_SUBSCRIPTION = gql`
             }
         }
     }
-
 `;
 
 export const EDIT_STATUS_SUBSCRIPTION = gql`
@@ -139,5 +144,27 @@ export const EDIT_STATUS_SUBSCRIPTION = gql`
             title
         }
     }
+`;
 
+export const CHANGE_ONLINE_SUBSCRIPTION = gql`
+    subscription {
+        changeOnlineUser {
+            id      
+            email
+            username
+            action
+        }
+    }
+`;
+
+export const USERS_ONLINE_FEED = gql`
+    query issueUsersOnline($id: Int!) {
+        issueUsersOnline(id : $id)
+            {
+                id      
+                email
+                username
+            }
+        
+    }
 `;

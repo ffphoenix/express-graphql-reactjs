@@ -20,6 +20,11 @@ const app = express();
 let statics = express.static(path.join(__dirname, '/client/build'));
 statics.unless = unless;
 
+// Constants configuration
+const port = process.env.PORT || 4000;
+const host = process.env.SERVER_BASE_URL || 'http://localhost';
+const socketHost = process.env.SERVER_BASE_SOCKET_URL || 'ws://localhost';
+
 // const jwtCheck = jwt({ secret: config.jwt_secret }).unless({path: ['/api/login', 'graphiql', '/', '/static/*']})
 const jwtCheck = jwt({ secret: config.jwt_secret }).unless(function (req, res, next) {
     const regexCases = [
@@ -32,11 +37,17 @@ const jwtCheck = jwt({ secret: config.jwt_secret }).unless(function (req, res, n
         /\.*\.js/g,
         /\.*\.ico/g,
     ];
+
     for (let i in regexCases) {
         if (regexCases[i].exec(req.originalUrl)) {
             return true;
         }
     }
+
+    if (req.headers.referer === host + ':' + port + '/graphiql') {
+        return true;
+    }
+
     return false;
 });
 
@@ -61,9 +72,6 @@ app.use('/graphql', bodyParser.json(), graphqlExpress(request => {
 ));
 
 // GraphiQL, a visual editor for queries
-const port = process.env.PORT || 4000;
-const host = process.env.SERVER_BASE_URL || 'http://localhost';
-const socketHost = process.env.SERVER_BASE_SOCKET_URL || 'ws://localhost';
 app.use('/graphiql',
     graphiqlExpress({
         endpointURL: '/graphql',

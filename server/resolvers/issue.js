@@ -2,6 +2,7 @@ import {resolver, attributeFields, JSONType} from 'graphql-sequelize';
 import {Op} from 'sequelize';
 import {PubSub} from 'graphql-subscriptions';
 import revisionsManager from "../revisionsManager";
+import { userType } from  './user';
 
 import {
     GraphQLObjectType,
@@ -12,12 +13,12 @@ import {
     GraphQLString,
     getNullableType,
     GraphQLBoolean
-
 } from 'graphql';
+
 import models from '../models';
 
 const pubsub = new PubSub();
-const storage = new revisionsManager();
+const storage = new revisionsManager(pubsub);
 
 let cache = {};
 
@@ -35,6 +36,19 @@ const issueType = new GraphQLObjectType({
         ...issueTypeGet,
         project: {
             type: projectType
+        }
+    }
+});
+
+const issueTypeWithRevision = new GraphQLObjectType({
+    name: 'IssueWRev',
+    description: 'A issue with revision',
+    fields: {
+        lastRevId : {
+            type: GraphQLInt
+        },
+        object: {
+            type: issueType
         }
     }
 });
@@ -65,7 +79,7 @@ const boardType = new GraphQLObjectType({
 
 const queries = {
     issue: {
-        type: issueType,
+        type: issueTypeWithRevision,
         args: {
             id: {
                 type: new GraphQLNonNull(GraphQLInt)
@@ -74,23 +88,31 @@ const queries = {
                 type: getNullableType(GraphQLBoolean)
             }
         },
-        resolve: function (obj, args, context) {
+        resolve: async function (obj, args, context) {
             if (args.collaborative === undefined || !args.collaborative) {
                 return models.issues.findById(args.id, {include : [{model: models.projects, as: "project"}]});
             } else {
                 const key = 'issue' + args.id;
-                let issue = storage.get(key, context.user);
+                var user = await models.users.findById(context.user.id).then(async (quote) => {
+                    return quote.get({raw: true});
+                });
+
+                let issue = storage.get(key, user);
+                // console.log('=====[storage]=====> ', issue);
                 if (issue !== undefined) {
-                    console.log(issue);
+                    // console.log(issue);
                     return issue;
                 } else {
                     return models.issues.findById(args.id, {include : [{model: models.projects, as: "project"}]}).then((quote) => {
                         let value = quote.get({raw : true});
                         value.project = value.project.get({raw: true});
+                        storage.set(key, value, user);
 
-                        storage.set(key, value, context.user);
-                        return quote;
-                    })
+                        return {
+                            lastRevId : 1,
+                            object : value
+                        };
+                    });
                 }
                 return ;
             }
@@ -166,6 +188,18 @@ const queries = {
 
                 return prepareBoardData;
             });
+        }
+    },
+    issueUsersOnline: {
+        type: new GraphQLList(userType),
+        args: {
+            id: {
+                type: getNullableType(GraphQLInt)
+            }
+        },
+        resolve: function (obj, args, context) {
+            console.log('-----------> ', storage.getUsersOnline(args.id), args);
+            return storage.getUsersOnline(args.id);
         }
     }
 };
@@ -345,13 +379,28 @@ const deleteIssueFunc = {
             });
     }
 };
+const setUserOffline = {
+    type: GraphQLBoolean,
+    args: {
+        id: {type: new GraphQLNonNull(GraphQLInt)},
+    },
+    description: 'set user offline',
+    resolve: function (obj, args, context) {
+        models.users.findById(context.user.id).then((user) => {
+            storage.setUserOffline(args.id, user.get({raw:true}));
+        });
+
+        return true;
+    }
+};
 
 const mutations = {
     createIssue: createIssueFunc,
     updateIssue: updateIssueFunc,
     deleteIssue: deleteIssueFunc,
     updatePosition: updatePositionFunc,
-    editProcess: editProcess
+    editProcess: editProcess,
+    setUserOffline: setUserOffline
 };
 
 const changePositionType = new GraphQLObjectType({
@@ -363,6 +412,17 @@ const changePositionType = new GraphQLObjectType({
         },
         issue: {
             type: issueType
+        }
+    }
+});
+
+const userTypeOnline = new GraphQLObjectType({
+    name: 'userTypeAdd',
+    description: 'A user',
+    fields: {
+        ...attributeFields(models.users, {only : ['id', 'email', 'username']}),
+        action : {
+            type : GraphQLString
         }
     }
 });
@@ -404,6 +464,25 @@ const subscription = {
         },
         subscribe: () => pubsub.asyncIterator('issueCreated')
     },
+    issueCreated: {
+        type: issueType,
+        resolve: (payload) => {
+            return {
+                ...payload
+            };
+        },
+        subscribe: () => pubsub.asyncIterator('issueCreated')
+    },
+    changeOnlineUser : {
+        type: userTypeOnline,
+        resolve: (payload) => {
+            return {
+                ...payload
+            };
+        },
+        subscribe: () => pubsub.asyncIterator('changeOnlineUser')
+    }
+
 };
 
 module.exports = {'queries': queries, 'mutations': mutations, 'subscriptions': subscription};

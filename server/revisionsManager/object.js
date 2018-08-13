@@ -10,7 +10,6 @@ export default class ValueObject {
     }
 
     get(key) {
-
         try {
             let data = this.driver.get(key);
             if (data !== undefined ) {
@@ -22,14 +21,16 @@ export default class ValueObject {
     }
 
     set(key, value) {
-        console.log('ser object');
-
         try {
             let data = this.driver.get(key);
-            data = j.patch(data, value);
-            console.log(data);
+            if (data !== undefined) {
+                data = j.patch(data, value);
+            } else {
+                data = value;
+            }
             return this.driver.set(key, data);
         } catch( err ) {
+            console.log('ERR---> ', err);
             return err;
         }
     }

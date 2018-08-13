@@ -14,16 +14,15 @@ import {
 } from 'graphql';
 
 import models from '../models';
-
 const pubsub = new PubSub();
 
-const userType = new GraphQLObjectType({
+export const userType = new GraphQLObjectType({
     name: 'User',
     description: 'A user',
     fields: attributeFields(models.users, {exclude : ['password']})
 });
 
-const userListType = new GraphQLObjectType({
+export const userListType = new GraphQLObjectType({
     name: 'UserList',
     fields : {
         rows:  {
@@ -35,7 +34,7 @@ const userListType = new GraphQLObjectType({
     }
 });
 
-const queries = {
+export const queries = {
     user: {
         type: userType,
         args: {
@@ -147,14 +146,14 @@ const deleteUserFunc  = {
 
 };
 
-const mutations = {
+export const mutations = {
     createUser: createUserFunc,
     updateUser: updateUserFunc,
     deleteUser: deleteUserFunc
 
 };
 
-const subscription = {
+export  const subscription = {
     addUser: {
         type: userType,
         resolve: (payload) => {
@@ -170,4 +169,3 @@ const subscription = {
     },
 };
 
-module.exports =  {'queries' : queries , 'mutations' : mutations, 'subscriptions' : subscription  };

@@ -4,12 +4,13 @@ import Revision from './revision';
 
 export default class revisionsManager {
 
-    constructor() {
-        this.User = new User();
+    constructor(pubsub) {
+        this.User = new User(pubsub);
         this.ValueObject = new ValueObject();
         this.Revision = new Revision();
 
     }
+
     get(key, user) {
         try {
             this.User.setOnline(key, user);
@@ -40,7 +41,7 @@ export default class revisionsManager {
     }
 
     getUsersOnline(key) {
-        return this.User.getOnline(key);
+        return this.User.getOnline('issue' + key);
     }
 
     setUserOnline(key, user) {
@@ -48,6 +49,6 @@ export default class revisionsManager {
     }
 
     setUserOffline(key, user) {
-        return this.User.setOffline(key, user);
+        return this.User.setOffline('issue' + key, user);
     }
 }

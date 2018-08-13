@@ -39,24 +39,34 @@ export default class BaseForm extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleChangeTextarea = this.handleChangeTextarea.bind(this);
         this.handleSendData = this.handleSendData.bind(this);
+        this.reciveDataForForm = this.reciveDataForForm.bind(this);
     }
 
+    reciveDataForForm(props) {
+        return props.feedOne[this.feedOneQueryName];
+    }
     componentWillReceiveProps(nextProps) {
         // networkStatus changed from 1 to 7, meaning initial load finished successfully
         if (this.mode === this.UPDATE_MODE
             && this.props.feedOne.networkStatus === 1
             && nextProps.feedOne.networkStatus === 7) {
             if (!nextProps.error) {
-                const propsData = nextProps.feedOne[this.feedOneQueryName];
+                const propsData = this.reciveDataForForm(nextProps);
                 let newStateData = this.state.data;
-                for (let key in this.options) {
-                    if (this.options[key].type === this.ELEMENT_TYPE_TEXT) {
-                        newStateData[key] = EditorState.createWithContent(stateFromHTML(propsData[key]));
-                    } else {
-                        newStateData[key] = propsData[key];
+                if (propsData !== undefined && propsData !== null) {
+                    for (let key in this.options) {
+                        if (propsData[key] !== undefined) {
+                            if (this.options[key].type === this.ELEMENT_TYPE_TEXT) {
+                                newStateData[key] = EditorState.createWithContent(stateFromHTML(propsData[key]));
+                            } else {
+                                newStateData[key] = propsData[key];
+                            }
+                        } else {
+                            console.log(`Not found props in [` + this.feedQueryName + `]`);
+                        }
                     }
+                    this.setState({data: newStateData})
                 }
-                this.setState({ data : newStateData })
             }
         }
     }
