@@ -45,6 +45,7 @@ export default class BaseForm extends React.Component {
     reciveDataForForm(props) {
         return props.feedOne[this.feedOneQueryName];
     }
+
     componentWillReceiveProps(nextProps) {
         // networkStatus changed from 1 to 7, meaning initial load finished successfully
         if (this.mode === this.UPDATE_MODE

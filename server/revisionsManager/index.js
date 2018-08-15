@@ -40,6 +40,22 @@ export default class revisionsManager {
         }
     }
 
+    setAsIs(key, value, user) {
+        try {
+            this.User.setOnline(key, user);
+            if (this.ValueObject.setAsIs(key, value)) {
+                this.Revision.add(key, value, user);
+            }
+            return {
+                lastRevId : this.Revision.getAll(key).length,
+                object : this.ValueObject.get(key)
+            };
+        } catch( err ) {
+            console.log(err);
+            return err;
+        }
+    }
+
     getUsersOnline(key) {
         return this.User.getOnline('issue' + key);
     }

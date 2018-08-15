@@ -1,5 +1,6 @@
 import React from 'react';
 import BaseForm from '../grid/BaseForm';
+import _ from "lodash";
 import {
     Button,
     Modal,
@@ -22,6 +23,9 @@ import {
     USERS_ONLINE_FEED,
     UPDATE_SET_USER_OFFLINE,
     CHANGE_ONLINE_SUBSCRIPTION,
+    CHANGE_ISSUE_SUBSCRIPTION,
+    INIT_REVISION_MUTATION,
+    ONCHANGE_MUTATION
 } from "./Schema";
 
 class IssueModal extends BaseForm {
@@ -39,7 +43,8 @@ class IssueModal extends BaseForm {
         errors: {},
         users : [],
         showModal : false,
-        showAsModal : false
+        showAsModal : false,
+        revisionId : null
     };
 
     options = {
@@ -94,13 +99,32 @@ class IssueModal extends BaseForm {
         this.reciveDataForForm = this.reciveDataForForm.bind(this);
         this.changeOnline = this.changeOnline.bind(this);
         this.setOnlineUsers = this.setOnlineUsers.bind(this);
+        this.changeIssue = this.changeIssue.bind(this);
         this.onCloseModal = this.onCloseModal.bind(this);
     }
 
     reciveDataForForm(props) {
+        this.setState({ revisionId : props.feedOne[this.feedOneQueryName].lastRevId });
         return props.feedOne[this.feedOneQueryName].object;
     }
 
+    componentDidUpdate() {
+        console.log(this.state.revisionId);
+        if (this.state.revisionId === 0) {
+            console.log('INIT_REVISION_MUTATION', {
+                id : this.props.match.params.id,
+                input : this.state.data
+            });
+            this.props.client
+                .mutate({
+                    mutation: INIT_REVISION_MUTATION,
+                    variables: {
+                        id : this.props.match.params.id,
+                        input : this.state.data
+                    }
+                });
+        }
+    }
     changeOnline(user) {
         let users = this.state.users;
         if (user.action !== null && user.action === 'add') {
@@ -113,7 +137,6 @@ class IssueModal extends BaseForm {
                 }
             }
         }
-
         this.setState({ users : users });
     }
 
@@ -121,9 +144,22 @@ class IssueModal extends BaseForm {
         this.setState({ users : users });
     }
 
+    changeIssue(nextIssue) {
+        let issueState = _.clone(this.state.data);
+        for (let i in issueState) {
+            if (i === 'description') {
+                issueState.description = EditorState.push(issueState.description, nextIssue.description);
+            } else {
+                issueState[i] = nextIssue[i];
+            }
+        }
+        this.setState({ data : issueState });
+    }
+
     componentDidMount() {
         const changeOnlineProcess = this.changeOnline;
         const setOnlineProcess = this.setOnlineUsers;
+        const changeIssueProcess = this.changeIssue;
         this.props.client
             .query({
                 query: FEED_STATUSES_QUERY,
@@ -166,6 +202,18 @@ class IssueModal extends BaseForm {
             },
             error(err) { console.error('SUBSCRIPTION ERR => ', err); },
         });
+
+        this.props.client.subscribe({
+            query: CHANGE_ISSUE_SUBSCRIPTION,
+            variables: {  },
+        }).subscribe({
+            next({data }) {
+                console.log('CHANGE_ISSUE_SUBSCRIPTION', data);
+                // changeIssueProcess(changeIssue);
+            },
+            error(err) { console.error('SUBSCRIPTION ERR => ', err); },
+        });
+
     }
 
     renderUsersOnline(users) {

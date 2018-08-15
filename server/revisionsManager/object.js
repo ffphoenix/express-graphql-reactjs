@@ -35,4 +35,13 @@ export default class ValueObject {
         }
     }
 
+    setAsIs(key, value) {
+        try {
+            let data = value;
+            return this.driver.set(key, data);
+        } catch( err ) {
+            return err;
+        }
+    }
+
 }

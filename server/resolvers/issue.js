@@ -1,8 +1,9 @@
-import {resolver, attributeFields, JSONType} from 'graphql-sequelize';
+import {attributeFields, JSONType} from 'graphql-sequelize';
 import {Op} from 'sequelize';
 import {PubSub} from 'graphql-subscriptions';
 import revisionsManager from "../revisionsManager";
 import { userType } from  './user';
+import j from 'jsondiffpatch';
 
 import {
     GraphQLObjectType,
@@ -14,6 +15,7 @@ import {
     getNullableType,
     GraphQLBoolean
 } from 'graphql';
+import GraphQLJSON from 'graphql-type-json';
 
 import models from '../models';
 
@@ -93,9 +95,7 @@ const queries = {
                 return models.issues.findById(args.id, {include : [{model: models.projects, as: "project"}]});
             } else {
                 const key = 'issue' + args.id;
-                var user = await models.users.findById(context.user.id).then(async (quote) => {
-                    return quote.get({raw: true});
-                });
+                var user = context.user;
 
                 let issue = storage.get(key, user);
                 // console.log('=====[storage]=====> ', issue);
@@ -109,7 +109,7 @@ const queries = {
                         storage.set(key, value, user);
 
                         return {
-                            lastRevId : 1,
+                            lastRevId : 0,
                             object : value
                         };
                     });
@@ -198,7 +198,6 @@ const queries = {
             }
         },
         resolve: function (obj, args, context) {
-            console.log('-----------> ', storage.getUsersOnline(args.id), args);
             return storage.getUsersOnline(args.id);
         }
     }
@@ -229,7 +228,7 @@ const createIssueFunc = {
             quote.order = quote.id;
             models.issues.findById(quote.id, {include : [{model: models.projects, as: "project"}]}).then((quote) => {
                 pubsub.publish('issueCreated', quote.get({plain: true}));
-            })
+            });
 
             return quote.save();
         });
@@ -356,10 +355,10 @@ const editProcess = {
                         .findById(nextId).then(nextQuote => {
                             quote.order = nextQuote.order + 1;
                             return changeIssueOrder(quote, nextId);
-                        })
+                        });
                 }
                 quote.order = 0;
-                pubsub.publish('editProcess', {issue : quote.get({raw: true}), nextId : nextId });
+                pubsub.publish('editProcess', { issue : quote.get({raw: true}), nextId : nextId });
                 return quote.save();
             });
     }
@@ -394,13 +393,69 @@ const setUserOffline = {
     }
 };
 
+let updateAttiributes = attributeFields(models.issues, {
+    exclude: ['id', 'created_at', 'updated_at', 'deleted_at', 'created_user_id'],
+    cache: cache
+});
+updateAttiributes.description = {
+    type : GraphQLJSON
+}
+const updateType = new GraphQLInputObjectType({
+    name: 'updateAttiributes',
+    fields: {
+        ...updateAttiributes
+    }
+});
+
+const initMutation = {
+    type: GraphQLBoolean,
+    args: {
+        id : {
+            type : GraphQLInt
+        },
+        input : {
+            type : updateType
+        }
+    },
+    description: 'initMutation',
+    resolve: function (obj, args, context) {
+        console.log('initMutation <-----', args);
+        try {
+            storage.setAsIs('issue' + args.input.id, args.input, context.user);
+        } catch(err)  {
+            return err;
+        }
+        return true;
+    }
+};
+
+
+const onChangeIssue = {
+    type: GraphQLJSON,
+    args: {
+        id: {type: new GraphQLNonNull(GraphQLInt)},
+        input: {type: updateType}
+    },
+    description: 'Update an existed issue',
+    resolve: function (obj, args) {
+        console.log('onChangeMutation', args);
+        let issue = storage.get('issue' + args.input.id);
+        let delta = j.diff(issue, args.input)
+        storage.set('issue' + args.input.id, delta, context.user);
+        return delta;
+    }
+};
+
+
 const mutations = {
     createIssue: createIssueFunc,
     updateIssue: updateIssueFunc,
     deleteIssue: deleteIssueFunc,
     updatePosition: updatePositionFunc,
     editProcess: editProcess,
-    setUserOffline: setUserOffline
+    setUserOffline: setUserOffline,
+    initIssueRevision: initMutation,
+    onChangeIssue : onChangeIssue
 };
 
 const changePositionType = new GraphQLObjectType({
@@ -481,7 +536,17 @@ const subscription = {
             };
         },
         subscribe: () => pubsub.asyncIterator('changeOnlineUser')
-    }
+    },
+    issueOnChange : {
+        type: userTypeOnline,
+        resolve: (payload) => {
+            return {
+                ...payload
+            };
+        },
+        subscribe: () => pubsub.asyncIterator('issueOnChange')
+    },
+
 
 };
 

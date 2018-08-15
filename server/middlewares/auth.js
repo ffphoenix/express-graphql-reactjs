@@ -19,7 +19,8 @@ router.post('/login', (req, res) => {
                         if (result === true) {
                             var payload = {
                                 id: findedUser.id,
-                                name: findedUser.name,
+                                username: findedUser.username,
+                                create_date: findedUser.create_date,
                                 email: findedUser.email
                             }
                             var token = jwt.sign(payload, jwt_secret, {

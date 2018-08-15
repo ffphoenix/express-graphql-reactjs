@@ -157,6 +157,43 @@ export const CHANGE_ONLINE_SUBSCRIPTION = gql`
     }
 `;
 
+export const CHANGE_ISSUE_SUBSCRIPTION = gql`
+    subscription {
+        issueOnChange {
+            id
+            project_id
+            title
+            description
+            type
+            status
+            priority
+            create_date
+            order
+        }
+    }
+`;
+
+export const INIT_REVISION_MUTATION = gql`
+    mutation initIssueRevision($id: Int!, $input: modifIssueType!) {
+        initIssueRevision(id: $id, input: $input) 
+    }
+`;
+export const ONCHANGE_MUTATION = gql`
+    mutation onChangeIssue($id: Int!, $input: modifIssueType!) {
+        onChangeIssue(id: $id, input: $input) {
+            id   
+            project_id   
+            title
+            description
+            type
+            status
+            priority
+            create_date
+        }
+    }
+`;
+
+
 export const USERS_ONLINE_FEED = gql`
     query issueUsersOnline($id: Int!) {
         issueUsersOnline(id : $id)

@@ -16,7 +16,7 @@ const errorLink = onError(({networkError, graphQLErrors}) => {
     if (graphQLErrors) {
         graphQLErrors.map(({ message, locations, path }) =>
             console.log(
-                `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+                `[GraphQL error]: Message: ${message}, Location: `,locations, `, Path: ${path}`,
             ),
         );
     }
@@ -47,6 +47,7 @@ let httpLink = createHttpLink({
 
 
 const middlewareAuthLink = new ApolloLink((operation, forward) => {
+    console.log(operation);
     const token = localStorage.getItem(AUTH_TOKEN);
     const authorizationHeader = token ? `Bearer ${token}` : null
     operation.setContext({
