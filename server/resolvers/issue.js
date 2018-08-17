@@ -3,7 +3,7 @@ import {Op} from 'sequelize';
 import {PubSub} from 'graphql-subscriptions';
 import revisionsManager from "../revisionsManager";
 import { userType } from  './user';
-import j from 'jsondiffpatch';
+import * as j from 'jsondiffpatch';
 
 import {
     GraphQLObjectType,
@@ -98,16 +98,14 @@ const queries = {
                 var user = context.user;
 
                 let issue = storage.get(key, user);
-                // console.log('=====[storage]=====> ', issue);
                 if (issue !== undefined) {
-                    // console.log(issue);
+                    issue.object.description = JSON.stringify(issue.object.description);
                     return issue;
                 } else {
                     return models.issues.findById(args.id, {include : [{model: models.projects, as: "project"}]}).then((quote) => {
                         let value = quote.get({raw : true});
                         value.project = value.project.get({raw: true});
                         storage.set(key, value, user);
-
                         return {
                             lastRevId : 0,
                             object : value
@@ -407,7 +405,7 @@ const updateType = new GraphQLInputObjectType({
     }
 });
 
-const initMutation = {
+const initIssueRevision = {
     type: GraphQLBoolean,
     args: {
         id : {
@@ -419,9 +417,10 @@ const initMutation = {
     },
     description: 'initMutation',
     resolve: function (obj, args, context) {
+
         console.log('initMutation <-----', args);
         try {
-            storage.setAsIs('issue' + args.input.id, args.input, context.user);
+            storage.setAsIs('issue' + args.id, args.input, context.user);
         } catch(err)  {
             return err;
         }
@@ -429,20 +428,30 @@ const initMutation = {
     }
 };
 
+const issueNewPatch = new GraphQLObjectType({
+    name: 'issueNewPatch',
+    fields: {
+        id: {
+            type: GraphQLInt
+        },
+        delta: {
+            type: GraphQLJSON
+        }
+    }
+});
 
 const onChangeIssue = {
-    type: GraphQLJSON,
+    type: issueNewPatch,
     args: {
         id: {type: new GraphQLNonNull(GraphQLInt)},
-        input: {type: updateType}
+        input: {type: GraphQLJSON}
     },
     description: 'Update an existed issue',
-    resolve: function (obj, args) {
-        console.log('onChangeMutation', args);
-        let issue = storage.get('issue' + args.input.id);
-        let delta = j.diff(issue, args.input)
-        storage.set('issue' + args.input.id, delta, context.user);
-        return delta;
+    resolve: function (obj, args, context) {
+        const result = storage.set('issue' + args.id, args.input, context.user);
+        pubsub.publish('issueOnChange', { id : result.lastRevId, delta : args.input });
+        console.log('+===========Update',{ id : result.lastRevId, delta : args.input },result )
+        return { id : result.lastRevId, delta : args.input } ;
     }
 };
 
@@ -454,7 +463,7 @@ const mutations = {
     updatePosition: updatePositionFunc,
     editProcess: editProcess,
     setUserOffline: setUserOffline,
-    initIssueRevision: initMutation,
+    initIssueRevision: initIssueRevision,
     onChangeIssue : onChangeIssue
 };
 
@@ -472,7 +481,7 @@ const changePositionType = new GraphQLObjectType({
 });
 
 const userTypeOnline = new GraphQLObjectType({
-    name: 'userTypeAdd',
+    name: 'userTypeOnline',
     description: 'A user',
     fields: {
         ...attributeFields(models.users, {only : ['id', 'email', 'username']}),
@@ -538,7 +547,7 @@ const subscription = {
         subscribe: () => pubsub.asyncIterator('changeOnlineUser')
     },
     issueOnChange : {
-        type: userTypeOnline,
+        type: issueNewPatch,
         resolve: (payload) => {
             return {
                 ...payload

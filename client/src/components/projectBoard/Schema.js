@@ -161,34 +161,22 @@ export const CHANGE_ISSUE_SUBSCRIPTION = gql`
     subscription {
         issueOnChange {
             id
-            project_id
-            title
-            description
-            type
-            status
-            priority
-            create_date
-            order
+            delta
         }
     }
 `;
 
 export const INIT_REVISION_MUTATION = gql`
-    mutation initIssueRevision($id: Int!, $input: modifIssueType!) {
+    mutation initIssueRevision($id: Int!, $input: updateAttiributes!) {
         initIssueRevision(id: $id, input: $input) 
     }
 `;
+
 export const ONCHANGE_MUTATION = gql`
-    mutation onChangeIssue($id: Int!, $input: modifIssueType!) {
+    mutation onChangeIssue($id: Int!, $input: JSON) {
         onChangeIssue(id: $id, input: $input) {
-            id   
-            project_id   
-            title
-            description
-            type
-            status
-            priority
-            create_date
+            id
+            delta
         }
     }
 `;

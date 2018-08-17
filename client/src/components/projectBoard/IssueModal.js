@@ -8,7 +8,7 @@ import {
     ModalBody,
     ModalFooter
 } from 'reactstrap';
-import {EditorState} from "draft-js";
+import {EditorState, convertToRaw, convertFromRaw} from "draft-js";
 import {compose, graphql, withApollo} from "react-apollo/index";
 import {
     CREATE_QUERY_NAME,
@@ -27,6 +27,8 @@ import {
     INIT_REVISION_MUTATION,
     ONCHANGE_MUTATION
 } from "./Schema";
+import * as j from 'jsondiffpatch';
+import {stateFromHTML} from "draft-js-import-html";
 
 class IssueModal extends BaseForm {
 
@@ -101,15 +103,60 @@ class IssueModal extends BaseForm {
         this.setOnlineUsers = this.setOnlineUsers.bind(this);
         this.changeIssue = this.changeIssue.bind(this);
         this.onCloseModal = this.onCloseModal.bind(this);
+        this.propsProcessing = this.propsProcessing.bind(this);
     }
 
     reciveDataForForm(props) {
+        let data = _.clone(props.feedOne[this.feedOneQueryName].object);
+        if (props.feedOne[this.feedOneQueryName].lastRevId !== 0) {
+            console.log('reciveDataForForm---->', data, props.feedOne[this.feedOneQueryName].lastRevId);
+            data.description = EditorState.createWithContent(convertFromRaw(JSON.parse(data.description)));
+        }
         this.setState({ revisionId : props.feedOne[this.feedOneQueryName].lastRevId });
-        return props.feedOne[this.feedOneQueryName].object;
+        return {propsData : data, revisionId : props.feedOne[this.feedOneQueryName].lastRevId};
+    }
+
+    propsProcessing({propsData, revisionId}){
+        let newStateData = _.clone(this.state.data);
+        for (let key in this.options) {
+            if (propsData[key] !== undefined) {
+                console.log('4$$$$$$$$$$$$$$$', revisionId);
+                if (this.options[key].type === this.ELEMENT_TYPE_TEXT && revisionId === 0) {
+                    newStateData[key] = EditorState.createWithContent(stateFromHTML(propsData[key]));
+                } else {
+                    newStateData[key] = propsData[key];
+                }
+            } else {
+                console.log(`Not found props in [` + this.feedQueryName + `]`);
+            }
+        }
+        console.log('edit init )))))',newStateData);
+        this.setState({data: newStateData})
+    }
+
+    onFormDataDidChange(left, right) {
+        left.description = convertToRaw(left.description.getCurrentContent());
+        right.description = convertToRaw(right.description.getCurrentContent());
+        const delta = j.diff(left, right);
+
+        if(delta !== undefined && delta !== null) {
+            this.props.client
+                .mutate({
+                    mutation: ONCHANGE_MUTATION,
+                    variables: {
+                        id: this.props.match.params.id,
+                        input: delta
+                    }
+                }).then(resp => {
+                    console.log('ssssss->>>>>>>>>', resp);
+                });
+        }
     }
 
     componentDidUpdate() {
-        console.log(this.state.revisionId);
+        console.log('-------->', this.state.revisionId);
+        let data = _.clone(this.state.data);
+        data.description = convertToRaw(data.description.getCurrentContent());
         if (this.state.revisionId === 0) {
             console.log('INIT_REVISION_MUTATION', {
                 id : this.props.match.params.id,
@@ -120,11 +167,14 @@ class IssueModal extends BaseForm {
                     mutation: INIT_REVISION_MUTATION,
                     variables: {
                         id : this.props.match.params.id,
-                        input : this.state.data
+                        input : data
                     }
-                });
+                }).then(()=> {
+                this.state.revisionId = 1;
+            });
         }
     }
+
     changeOnline(user) {
         let users = this.state.users;
         if (user.action !== null && user.action === 'add') {
@@ -144,16 +194,14 @@ class IssueModal extends BaseForm {
         this.setState({ users : users });
     }
 
-    changeIssue(nextIssue) {
+    changeIssue({id , delta}) {
         let issueState = _.clone(this.state.data);
-        for (let i in issueState) {
-            if (i === 'description') {
-                issueState.description = EditorState.push(issueState.description, nextIssue.description);
-            } else {
-                issueState[i] = nextIssue[i];
-            }
-        }
-        this.setState({ data : issueState });
+        console.log('patch----->', issueState, delta)
+        issueState.description = convertToRaw(issueState.description.getCurrentContent());
+        issueState = j.patch(issueState, delta);
+        issueState.description = EditorState.createWithContent(convertFromRaw(issueState.description));
+
+        this.setState({ data : issueState, revisionId : id });
     }
 
     componentDidMount() {
@@ -207,9 +255,9 @@ class IssueModal extends BaseForm {
             query: CHANGE_ISSUE_SUBSCRIPTION,
             variables: {  },
         }).subscribe({
-            next({data }) {
-                console.log('CHANGE_ISSUE_SUBSCRIPTION', data);
-                // changeIssueProcess(changeIssue);
+            next({data : { issueOnChange }}) {
+                console.log('CHANGE_ISSUE_SUBSCRIPTION', issueOnChange);
+                changeIssueProcess(issueOnChange);
             },
             error(err) { console.error('SUBSCRIPTION ERR => ', err); },
         });
@@ -240,7 +288,6 @@ class IssueModal extends BaseForm {
     }
 
     render() {
-        console.log(this.state.users);
         const  { error, loading } = this.props.feedOne;
 
         if (loading || this.state.statuses === null ) return (<div>Loading...</div>);

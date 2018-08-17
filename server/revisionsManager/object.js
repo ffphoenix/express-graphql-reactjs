@@ -1,4 +1,4 @@
-import j from 'jsondiffpatch';
+import * as j from 'jsondiffpatch';
 import cacheDriver from "node-cache";
 
 export default class ValueObject {
@@ -23,6 +23,7 @@ export default class ValueObject {
     set(key, value) {
         try {
             let data = this.driver.get(key);
+            console.log('+++++++++<', data, value);
             if (data !== undefined) {
                 data = j.patch(data, value);
             } else {
@@ -37,8 +38,8 @@ export default class ValueObject {
 
     setAsIs(key, value) {
         try {
-            let data = value;
-            return this.driver.set(key, data);
+            console.log('set as is ', value);
+            return this.driver.set(key, value);
         } catch( err ) {
             return err;
         }

@@ -43,6 +43,7 @@ export default class Revision {
                 value : value
             }
             revisions.push(rev);
+            console.log('Revisions +++>', revisions);
             return this.driver.set(key, revisions);
         } catch( err ) {
             console.log(err);

@@ -84,7 +84,6 @@ export const FEED_ONE_QUERY = gql`
         issue (id: $id, collaborative: $collab) {
             lastRevId 
             object {
-                id   
                 project_id   
                 title
                 description

@@ -40,10 +40,30 @@ export default class BaseForm extends React.Component {
         this.handleChangeTextarea = this.handleChangeTextarea.bind(this);
         this.handleSendData = this.handleSendData.bind(this);
         this.reciveDataForForm = this.reciveDataForForm.bind(this);
+        this.onFormDataDidChange = this.onFormDataDidChange.bind(this);
+        this.propsProcessing = this.propsProcessing.bind(this);
     }
+
+    onFormDataDidChange(left, right) {}
 
     reciveDataForForm(props) {
         return props.feedOne[this.feedOneQueryName];
+    }
+
+    propsProcessing(propsData){
+        let newStateData = this.state.data;
+        for (let key in this.options) {
+            if (propsData[key] !== undefined) {
+                if (this.options[key].type === this.ELEMENT_TYPE_TEXT) {
+                    newStateData[key] = EditorState.createWithContent(stateFromHTML(propsData[key]));
+                } else {
+                    newStateData[key] = propsData[key];
+                }
+            } else {
+                console.log(`Not found props in [` + this.feedQueryName + `]`);
+            }
+        }
+        this.setState({data: newStateData})
     }
 
     componentWillReceiveProps(nextProps) {
@@ -53,38 +73,30 @@ export default class BaseForm extends React.Component {
             && nextProps.feedOne.networkStatus === 7) {
             if (!nextProps.error) {
                 const propsData = this.reciveDataForForm(nextProps);
-                let newStateData = this.state.data;
                 if (propsData !== undefined && propsData !== null) {
-                    for (let key in this.options) {
-                        if (propsData[key] !== undefined) {
-                            if (this.options[key].type === this.ELEMENT_TYPE_TEXT) {
-                                newStateData[key] = EditorState.createWithContent(stateFromHTML(propsData[key]));
-                            } else {
-                                newStateData[key] = propsData[key];
-                            }
-                        } else {
-                            console.log(`Not found props in [` + this.feedQueryName + `]`);
-                        }
-                    }
-                    this.setState({data: newStateData})
+                    this.propsProcessing(propsData);
                 }
             }
         }
     }
 
     handleChangeTextarea(name, editorState) {
+        const left = _.clone(this.state.data);
         let newState = this.state;
         newState.data[name] = editorState;
-        this.setState(newState)
+        this.setState(newState);
+        this.onFormDataDidChange(left, _.clone(newState.data));
     }
 
     handleChange(event) {
+        const left = _.clone(this.state.data)
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
         let newState = this.state;
         newState.data[name] = value;
         this.setState(newState);
+        this.onFormDataDidChange(left, _.clone(newState.data));
     }
 
     prepareDataToSend(){
