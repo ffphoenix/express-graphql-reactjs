@@ -21,13 +21,15 @@ let statics = express.static(path.join(__dirname, '/client/build'));
 statics.unless = unless;
 
 // Constants configuration
-const port = process.env.SERVER_BASE_PORT || 4000;
+const port = process.env.PORT || 4000;
 const host = process.env.SERVER_BASE_URL || 'http://localhost';
 const socketHost = process.env.SERVER_BASE_SOCKET_URL || 'ws://localhost';
 
 // const jwtCheck = jwt({ secret: config.jwt_secret }).unless({path: ['/api/login', 'graphiql', '/', '/static/*']})
 const jwtCheck = jwt({ secret: config.jwt_secret }).unless(function (req, res, next) {
     const regexCases = [
+        /\//g,
+        /\/\#/g,
         /\/api\/login.*/g,
         /\/graphiql.*/g,
         /\/static.*/g,
