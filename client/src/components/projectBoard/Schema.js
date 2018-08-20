@@ -162,6 +162,7 @@ export const CHANGE_ISSUE_SUBSCRIPTION = gql`
         issueOnChange {
             id
             delta
+            hash
         }
     }
 `;
@@ -173,10 +174,11 @@ export const INIT_REVISION_MUTATION = gql`
 `;
 
 export const ONCHANGE_MUTATION = gql`
-    mutation onChangeIssue($id: Int!, $input: JSON) {
-        onChangeIssue(id: $id, input: $input) {
+    mutation onChangeIssue($id: Int!, $input: JSON, $hash: String!) {
+        onChangeIssue(id: $id, input: $input, hash: $hash) {
             id
             delta
+            hash
         }
     }
 `;

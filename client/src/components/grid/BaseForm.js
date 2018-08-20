@@ -7,6 +7,7 @@ import {
 import { Link } from 'react-router-dom'
 import CInput from "./formElements/CInput";
 import Cwysiwyg from "./formElements/Cwysiwyg";
+import CwysiwygCollab from "./formElements/CwysiwygCollab";
 import CSelect from "./formElements/CSelect";
 import { stateToHTML } from 'draft-js-export-html';
 import { stateFromHTML } from 'draft-js-import-html';
@@ -17,6 +18,7 @@ export default class BaseForm extends React.Component {
 
     ELEMENT_TYPE_INPUT = `input`;
     ELEMENT_TYPE_TEXT = `text`;
+    ELEMENT_TYPE_TEXT_COLLAB = `text-collab`;
     ELEMENT_TYPE_PASSWORD = `password`;
     ELEMENT_TYPE_SELECT = `select`;
     ELEMENT_TYPE_CHECKBOX = `checkbox`;
@@ -54,7 +56,8 @@ export default class BaseForm extends React.Component {
         let newStateData = this.state.data;
         for (let key in this.options) {
             if (propsData[key] !== undefined) {
-                if (this.options[key].type === this.ELEMENT_TYPE_TEXT) {
+                if (this.options[key].type === this.ELEMENT_TYPE_TEXT
+                    || this.options[key].type === this.ELEMENT_TYPE_TEXT_COLLAB) {
                     newStateData[key] = EditorState.createWithContent(stateFromHTML(propsData[key]));
                 } else {
                     newStateData[key] = propsData[key];
@@ -214,6 +217,15 @@ export default class BaseForm extends React.Component {
                 case this.ELEMENT_TYPE_TEXT:
                     option.handleChange = this.handleChangeTextarea;
                     formElements.push(<Cwysiwyg key={key} options={option}/>)
+                    break;
+                case this.ELEMENT_TYPE_TEXT_COLLAB:
+                    option.customStyleMap = {};
+                    if (this.state.data[key + '_custom_style'] !== undefined) {
+                        option.customStyleMap = this.state.data[key + '_custom_style'];
+                    }
+
+                    option.handleChange = this.handleChangeTextarea;
+                    formElements.push(<CwysiwygCollab key={key} options={option}/>)
                     break;
                 case this.ELEMENT_TYPE_SELECT:
                     formElements.push(<CSelect key={key} options={option}/>)

@@ -32,6 +32,7 @@
     "draft-js": "^0.10.5",
     "draft-js-export-html": "^1.2.0",
     "draft-js-import-html": "^1.2.1",
+    "draft-js-text-width": "0.0.1",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "flag-icon-css": "^3.0.0",

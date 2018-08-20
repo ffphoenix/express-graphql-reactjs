@@ -436,6 +436,9 @@ const issueNewPatch = new GraphQLObjectType({
         },
         delta: {
             type: GraphQLJSON
+        },
+        hash: {
+            type: GraphQLString
         }
     }
 });
@@ -444,14 +447,15 @@ const onChangeIssue = {
     type: issueNewPatch,
     args: {
         id: {type: new GraphQLNonNull(GraphQLInt)},
-        input: {type: GraphQLJSON}
+        input: {type: GraphQLJSON},
+        hash: {type: GraphQLString}
     },
     description: 'Update an existed issue',
     resolve: function (obj, args, context) {
         const result = storage.set('issue' + args.id, args.input, context.user);
-        pubsub.publish('issueOnChange', { id : result.lastRevId, delta : args.input });
-        console.log('+===========Update',{ id : result.lastRevId, delta : args.input },result )
-        return { id : result.lastRevId, delta : args.input } ;
+        pubsub.publish('issueOnChange', { id : result.lastRevId, delta : args.input, hash : args.hash });
+        console.log('+===========Update',{ id : result.lastRevId, delta : args.input,  hash : args.hash } )
+        return { id : result.lastRevId, delta : args.input, hash : args.hash } ;
     }
 };
 

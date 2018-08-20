@@ -30,6 +30,19 @@ import {
 import * as j from 'jsondiffpatch';
 import {stateFromHTML} from "draft-js-import-html";
 
+export const colors = [
+    '#c8ea09',
+    '#f8b220',
+    '#e1b337',
+    '#d1c449',
+    '#c5c559',
+    '#bbd66b',
+    '#b3e77c',
+    '#b2e882',
+    '#b2d99b',
+    '#c8ea09'
+]
+
 class IssueModal extends BaseForm {
 
     state = {
@@ -37,6 +50,7 @@ class IssueModal extends BaseForm {
         data : {
             title: '',
             description: EditorState.createEmpty(),
+            // description_custom_style: {},
             project_id: 1,
             type: '',
             status: '',
@@ -44,8 +58,10 @@ class IssueModal extends BaseForm {
         },
         errors: {},
         users : [],
+        cursors : [],
         showModal : false,
         showAsModal : false,
+        revisions : [],
         revisionId : null
     };
 
@@ -56,7 +72,7 @@ class IssueModal extends BaseForm {
             placeholder: 'Enter title...'
         },
         description: {
-            type: this.ELEMENT_TYPE_TEXT,
+            type: this.ELEMENT_TYPE_TEXT_COLLAB,
             label: 'Description',
             placeholder: 'Enter Description...'
         },
@@ -121,7 +137,9 @@ class IssueModal extends BaseForm {
         for (let key in this.options) {
             if (propsData[key] !== undefined) {
                 console.log('4$$$$$$$$$$$$$$$', revisionId);
-                if (this.options[key].type === this.ELEMENT_TYPE_TEXT && revisionId === 0) {
+                if ((this.options[key].type === this.ELEMENT_TYPE_TEXT ||
+                    this.options[key].type === this.ELEMENT_TYPE_TEXT_COLLAB)
+                    && revisionId === 0) {
                     newStateData[key] = EditorState.createWithContent(stateFromHTML(propsData[key]));
                 } else {
                     newStateData[key] = propsData[key];
@@ -135,17 +153,25 @@ class IssueModal extends BaseForm {
     }
 
     onFormDataDidChange(left, right) {
+
+        console.log(right.description.getSelection());
+
         left.description = convertToRaw(left.description.getCurrentContent());
         right.description = convertToRaw(right.description.getCurrentContent());
         const delta = j.diff(left, right);
 
         if(delta !== undefined && delta !== null) {
+            const revHash = '_' + Math.random().toString(36).substr(2, 9);
+            let revisions = _.clone(this.state.revisions);
+            revisions.push({hash : revHash, delta : delta});
+            this.setState({revisions : revisions});
             this.props.client
                 .mutate({
                     mutation: ONCHANGE_MUTATION,
                     variables: {
                         id: this.props.match.params.id,
-                        input: delta
+                        input: delta,
+                        hash: revHash
                     }
                 }).then(resp => {
                     console.log('ssssss->>>>>>>>>', resp);
@@ -157,6 +183,7 @@ class IssueModal extends BaseForm {
         console.log('-------->', this.state.revisionId);
         let data = _.clone(this.state.data);
         data.description = convertToRaw(data.description.getCurrentContent());
+
         if (this.state.revisionId === 0) {
             console.log('INIT_REVISION_MUTATION', {
                 id : this.props.match.params.id,
@@ -194,12 +221,44 @@ class IssueModal extends BaseForm {
         this.setState({ users : users });
     }
 
-    changeIssue({id , delta}) {
+    changeIssue({id , delta, hash}) {
         let issueState = _.clone(this.state.data);
+
+        let revisions = _.clone(this.state.revisions);
+        for (let i in revisions) {
+            if (revisions[i].hash === hash) {
+                console.log('rev found', hash, revisions);
+                revisions.splice(i, 1);
+                return this.setState({
+                    revisionId : id,
+                    revisions : revisions
+                });
+            }
+        }
         console.log('patch----->', issueState, delta)
         issueState.description = convertToRaw(issueState.description.getCurrentContent());
         issueState = j.patch(issueState, delta);
         issueState.description = EditorState.createWithContent(convertFromRaw(issueState.description));
+
+        // this.setState({
+        //     customStyleMap: {
+        //         ...customStyleMap,
+        //         [this.props.userId]: {
+        //             backgroundColor: 'transparent'
+        //         }
+        //     },
+        //     editorState: nextEditorState
+        // }, () => {
+        //     deferredUpdates(() => {
+        //         let cursors = users
+        //             .filter(user => user.selection && user.id !== this.props.userId)
+        //             .map(({ selection, id }) => getCursorStyle(nextEditorState, selection))
+        //             .filter(style => style)
+        //         this.setState({
+        //             cursors
+        //         })
+        //     })
+        // })
 
         this.setState({ data : issueState, revisionId : id });
     }
@@ -266,9 +325,9 @@ class IssueModal extends BaseForm {
 
     renderUsersOnline(users) {
         if (users !== null && users.length > 0) {
-            return <span>Users online:
-                    {Object.keys(this.state.users).map(key => {
-                        return <span key={key} className="badge badge-light">{this.state.users[key].username}</span>
+            return <span>Users online : {' '}
+                    {Object.keys(users).map(key => {
+                        return <span key={key} className="badge badge-pill" style={{backgroundColor : colors[key], margin: '2px'}}>{users[key].username}</span>
                     })}
                 </span>
         }
