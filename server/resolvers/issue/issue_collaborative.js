@@ -1,7 +1,4 @@
-import { PubSub } from 'graphql-subscriptions';
-import revisionsManager from "../../revisionsManager/index";
 import { userType } from '../user';
-
 import {
     issueNewPatch,
     updateType,
@@ -18,11 +15,8 @@ import {
 } from 'graphql';
 
 import GraphQLJSON from 'graphql-type-json';
-
+import { storage, pubsub } from "../../helpers/dataManagers";
 import models from '../../models/index';
-
-const pubsub = new PubSub();
-const storage = new revisionsManager(pubsub);
 
 
 const queries = {

@@ -1,6 +1,5 @@
 import { Op } from 'sequelize';
-import { PubSub } from 'graphql-subscriptions';
-import revisionsManager from "../../revisionsManager/index";
+import {storage, pubsub} from "../../helpers/dataManagers";
 import { userType } from '../user';
 
 import {
@@ -23,9 +22,6 @@ import {
 
 import models from '../../models/index';
 
-const pubsub = new PubSub();
-const storage = new revisionsManager(pubsub);
-
 const queries = {
     issue: {
         type: issueTypeWithRevision,
@@ -47,12 +43,14 @@ const queries = {
                 let issue = storage.get(key, user);
                 if (issue !== undefined) {
                     issue.object.description = JSON.stringify(issue.object.description);
+                    console.log('-----> getted issue +++>', issue);
                     return issue;
                 } else {
                     return models.issues.findById(args.id, {include : [{model: models.projects, as: "project"}]}).then((quote) => {
                         let value = quote.get({raw : true});
                         value.project = value.project.get({raw: true});
                         storage.set(key, value, user);
+
                         return {
                             lastRevId : 0,
                             object : value

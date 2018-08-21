@@ -12,6 +12,7 @@ export default class ValueObject {
     get(key) {
         try {
             let data = this.driver.get(key);
+            console.log('---> storage get object ---> [' + key + '] ' , data)
             if (data !== undefined ) {
                 return data;
             }
@@ -23,7 +24,7 @@ export default class ValueObject {
     set(key, value) {
         try {
             let data = this.driver.get(key);
-            console.log('+++++++++<', data, value);
+            console.log('---> storage just set object ---> [' + key + '] ', data, value);
             if (data !== undefined) {
                 data = j.patch(data, value);
             } else {
@@ -38,7 +39,7 @@ export default class ValueObject {
 
     setAsIs(key, value) {
         try {
-            console.log('set as is ', value);
+            console.log('---> storage set as is  object ---> [' + key + '] ', value);
             return this.driver.set(key, value);
         } catch( err ) {
             return err;

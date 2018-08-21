@@ -1,6 +1,4 @@
 import {Op} from 'sequelize';
-import {PubSub} from 'graphql-subscriptions';
-
 import {
     issueType,
     boardType,
@@ -16,8 +14,7 @@ import {
 } from 'graphql';
 
 import models from '../../models/index';
-
-const pubsub = new PubSub();
+import { pubsub } from "../../helpers/dataManagers";
 
 const queries = {
     issuesBoard: {
