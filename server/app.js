@@ -28,8 +28,8 @@ const socketHost = process.env.SERVER_BASE_SOCKET_URL || 'ws://localhost';
 // const jwtCheck = jwt({ secret: config.jwt_secret }).unless({path: ['/api/login', 'graphiql', '/', '/static/*']})
 const jwtCheck = jwt({ secret: config.jwt_secret }).unless(function (req, res, next) {
     const regexCases = [
-        /\//g,
-        /\/\#/g,
+        // /\//g,
+        // /\/\#/g,
         /\/api\/login.*/g,
         /\/graphiql.*/g,
         /\/static.*/g,
@@ -61,15 +61,15 @@ app.use('/api', authModule);
 
 // The GraphQL endpoint
 app.use('/graphql', bodyParser.json(), graphqlExpress(request => {
-    return {
-        schema: schema,
-        context: {
-            startTime: Date.now(),
-            user : request.user,
-            headers : request.rawHeaders
-        },
-        errorHandle
-    };
+        return {
+            schema: schema,
+            context: {
+                startTime: Date.now(),
+                user : request.user,
+                headers : request.rawHeaders
+            },
+            errorHandle
+        };
     }
 ));
 
@@ -78,7 +78,7 @@ app.use('/graphiql',
     graphiqlExpress({
         endpointURL: '/graphql',
         subscriptionsEndpoint: `${socketHost}:${port}/subscriptions`
-}));
+    }));
 
 app.use(authorizeErrorHandle);
 // Start the server

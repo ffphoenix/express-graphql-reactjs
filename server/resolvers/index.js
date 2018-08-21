@@ -3,7 +3,9 @@ import {
     GraphQLSchema
 } from 'graphql';
 import {queries as userQueries, mutations as userMutations, subscriptions as userSubscriptions} from './user'
-import {queries as issueQueries, mutations as issueMutations, subscriptions as issueSubscriptions} from './issue'
+import {queries as issueQueries, mutations as issueMutations, subscriptions as issueSubscriptions} from './issue/issue'
+import {queries as issueBoardQueries, mutations as issueBoardMutations, subscriptions as issueBoardSubscriptions} from './issue/issue_board'
+import {queries as issueCollabQueries, mutations as issueCollabMutations, subscriptions as issueCollabSubscriptions} from './issue/issue_collaborative'
 import {queries as projectQueries, mutations as projectMutations} from './project'
 import {queries as issueStatusesQueries, mutations as issueStatusesMutations, subscriptions as issuesStatusesSubscription} from './issue_statuses'
 
@@ -14,6 +16,8 @@ const schema = new GraphQLSchema({
             ...projectQueries,
             ...userQueries,
             ...issueQueries,
+            ...issueBoardQueries,
+            ...issueCollabQueries,
             ...issueStatusesQueries
         }
     }),
@@ -23,6 +27,8 @@ const schema = new GraphQLSchema({
             ...projectMutations,
             ...userMutations,
             ...issueMutations,
+            ...issueBoardMutations,
+            ...issueCollabMutations,
             ...issueStatusesMutations,
         }
     }),
@@ -31,6 +37,8 @@ const schema = new GraphQLSchema({
         fields : {
             ...userSubscriptions,
             ...issueSubscriptions,
+            ...issueBoardSubscriptions,
+            ...issueCollabSubscriptions,
             ...issuesStatusesSubscription
         }
     })

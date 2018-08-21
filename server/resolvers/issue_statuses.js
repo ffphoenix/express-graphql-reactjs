@@ -1,7 +1,6 @@
 import {resolver, attributeFields, JSONType} from 'graphql-sequelize';
 import { PubSub } from 'graphql-subscriptions';
 import { Op } from 'sequelize';
-import bcrypt from 'bcrypt';
 import {
     GraphQLObjectType,
     GraphQLInputObjectType,
@@ -13,7 +12,7 @@ import {
 
 } from 'graphql';
 
-import models from '../models';
+import models from '../models/index';
 
 const pubsub = new PubSub();
 const issueStatusType = new GraphQLObjectType({
