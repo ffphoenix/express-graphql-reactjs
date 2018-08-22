@@ -8,7 +8,7 @@ import {
     ModalBody,
     ModalFooter
 } from 'reactstrap';
-import {EditorState, convertToRaw, convertFromRaw} from "draft-js";
+import {EditorState, SelectionState, convertToRaw, convertFromRaw} from "draft-js";
 import {compose, graphql, withApollo} from "react-apollo/index";
 import {
     CREATE_QUERY_NAME,
@@ -29,6 +29,8 @@ import {
 } from "./Schema";
 import * as j from 'jsondiffpatch';
 import {stateFromHTML} from "draft-js-import-html";
+import { AUTH_TOKEN } from '../../config';
+import * as jwt_decode from 'jwt-decode';
 
 export const colors = [
     '#c8ea09',
@@ -41,7 +43,22 @@ export const colors = [
     '#b2e882',
     '#b2d99b',
     '#c8ea09'
-]
+];
+
+const SENDTIME_PERIOD = 1000;
+
+export const getCursorStyle = (editorState, selection) => {
+    let rect = textWidth(selection)
+    if (rect) {
+        return {
+            left: rect.left + rect.width,
+            top: rect.top,
+            height: rect.height
+        }
+    }
+    return undefined
+}
+
 
 class IssueModal extends BaseForm {
 
@@ -50,7 +67,6 @@ class IssueModal extends BaseForm {
         data : {
             title: '',
             description: EditorState.createEmpty(),
-            // description_custom_style: {},
             project_id: 1,
             type: '',
             status: '',
@@ -64,6 +80,8 @@ class IssueModal extends BaseForm {
         revisions : [],
         revisionId : null
     };
+
+    subscriptions = [];
 
     options = {
         title: {
@@ -106,6 +124,14 @@ class IssueModal extends BaseForm {
         },
     };
 
+    userSelection     = null;
+    revisionInitData  = null;
+    revisionStartTime = 0;
+    senderLink   = null;
+    revisingInProcess = false;
+
+    shouldUpdate = true;
+
     constructor(props) {
         super(props);
         this.backURL = MODULE_URL;
@@ -120,14 +146,18 @@ class IssueModal extends BaseForm {
         this.changeIssue = this.changeIssue.bind(this);
         this.onCloseModal = this.onCloseModal.bind(this);
         this.propsProcessing = this.propsProcessing.bind(this);
+        this.sendChangedData = this.sendChangedData.bind(this);
+        console.log(props);
     }
 
     reciveDataForForm(props) {
         let data = _.clone(props.feedOne[this.feedOneQueryName].object);
         if (props.feedOne[this.feedOneQueryName].lastRevId !== 0) {
-            console.log('reciveDataForForm---->', data, props.feedOne[this.feedOneQueryName].lastRevId);
-            data.description = EditorState.createWithContent(convertFromRaw(JSON.parse(data.description)));
+            data.description = JSON.parse(data.description);
+            this.revisionInitData = data;
+            data.description = EditorState.createWithContent(convertFromRaw(data.description));
         }
+
         this.setState({ revisionId : props.feedOne[this.feedOneQueryName].lastRevId });
         return {propsData : data, revisionId : props.feedOne[this.feedOneQueryName].lastRevId};
     }
@@ -136,7 +166,6 @@ class IssueModal extends BaseForm {
         let newStateData = _.clone(this.state.data);
         for (let key in this.options) {
             if (propsData[key] !== undefined) {
-                console.log('4$$$$$$$$$$$$$$$', revisionId);
                 if ((this.options[key].type === this.ELEMENT_TYPE_TEXT ||
                     this.options[key].type === this.ELEMENT_TYPE_TEXT_COLLAB)
                     && revisionId === 0) {
@@ -152,18 +181,14 @@ class IssueModal extends BaseForm {
         this.setState({data: newStateData})
     }
 
-    onFormDataDidChange(left, right) {
-
-        console.log(right.description.getSelection());
-
-        left.description = convertToRaw(left.description.getCurrentContent());
-        right.description = convertToRaw(right.description.getCurrentContent());
-        const delta = j.diff(left, right);
+    sendChangedData(nextData) {
+        this.revisingInProcess = true;
+        const delta = j.diff(this.revisionInitData, nextData);
 
         if(delta !== undefined && delta !== null) {
             const revHash = '_' + Math.random().toString(36).substr(2, 9);
             let revisions = _.clone(this.state.revisions);
-            revisions.push({hash : revHash, delta : delta});
+            revisions.push({ hash : revHash, delta : delta });
             this.setState({revisions : revisions});
             this.props.client
                 .mutate({
@@ -171,11 +196,40 @@ class IssueModal extends BaseForm {
                     variables: {
                         id: this.props.match.params.id,
                         input: delta,
-                        hash: revHash
+                        hash: revHash,
+                        cursour : this.userSelection
                     }
                 }).then(resp => {
-                    console.log('ssssss->>>>>>>>>', resp);
-                });
+                console.log('-----> Revision sended ----->', resp);
+            });
+        }
+        this.revisionStartTime = 0;
+        this.revisingInProcess = false;
+    }
+
+    onFormDataDidChange(left, right) {
+
+        this.userSelection = right.description.getSelection();
+        left.description = convertToRaw(left.description.getCurrentContent());
+        right.description = convertToRaw(right.description.getCurrentContent());
+        const delta = j.diff(left, right);
+        const timeNow = Date.now();
+        if(delta !== undefined && delta !== null && !this.revisingInProcess) {
+            if (this.revisionStartTime === 0) {
+                this.revisionStartTime = timeNow;
+                this.senderLink = setTimeout(() => {
+                    this.sendChangedData(right);
+                }, SENDTIME_PERIOD);
+            } else if (timeNow - this.revisionStartTime < SENDTIME_PERIOD) {
+                clearTimeout(this.senderLink);
+                this.senderLink = setTimeout(() => {
+                    this.sendChangedData(right);
+                }, timeNow - this.revisionStartTime);
+            } else {
+                clearTimeout(this.senderLink);
+                this.revisingInProcess = true;
+                this.sendChangedData(right);
+            }
         }
     }
 
@@ -189,6 +243,7 @@ class IssueModal extends BaseForm {
                 id : this.props.match.params.id,
                 input : this.state.data
             });
+            this.revisionInitData = data;
             this.props.client
                 .mutate({
                     mutation: INIT_REVISION_MUTATION,
@@ -221,7 +276,9 @@ class IssueModal extends BaseForm {
         this.setState({ users : users });
     }
 
-    changeIssue({id , delta, hash}) {
+    changeIssue({id , delta, hash, cursours}) {
+        let token = jwt_decode(localStorage.getItem(AUTH_TOKEN));
+        console.log('aaaaa ->>>> ', cursours, token);
         let issueState = _.clone(this.state.data);
 
         let revisions = _.clone(this.state.revisions);
@@ -229,6 +286,7 @@ class IssueModal extends BaseForm {
             if (revisions[i].hash === hash) {
                 console.log('rev found', hash, revisions);
                 revisions.splice(i, 1);
+                this.shouldUpdate = false;
                 return this.setState({
                     revisionId : id,
                     revisions : revisions
@@ -239,6 +297,7 @@ class IssueModal extends BaseForm {
         issueState.description = convertToRaw(issueState.description.getCurrentContent());
         issueState = j.patch(issueState, delta);
         issueState.description = EditorState.createWithContent(convertFromRaw(issueState.description));
+        issueState.description = EditorState.forceSelection(issueState.description, this.userSelection);
 
         // this.setState({
         //     customStyleMap: {
@@ -263,7 +322,17 @@ class IssueModal extends BaseForm {
         this.setState({ data : issueState, revisionId : id });
     }
 
+    shouldComponentUpdate() {
+        if (!this.shouldUpdate) {
+            this.shouldUpdate = true;
+            return false;
+        }
+
+        return true;
+    }
+
     componentDidMount() {
+        this.userSelection = new SelectionState();
         const changeOnlineProcess = this.changeOnline;
         const setOnlineProcess = this.setOnlineUsers;
         const changeIssueProcess = this.changeIssue;
@@ -300,7 +369,7 @@ class IssueModal extends BaseForm {
                 }
             });
 
-        this.props.client.subscribe({
+        this.subscriptions.push(this.props.client.subscribe({
             query: CHANGE_ONLINE_SUBSCRIPTION,
             variables: {  },
         }).subscribe({
@@ -308,9 +377,9 @@ class IssueModal extends BaseForm {
                 changeOnlineProcess(changeOnlineUser);
             },
             error(err) { console.error('SUBSCRIPTION ERR => ', err); },
-        });
+        }));
 
-        this.props.client.subscribe({
+        this.subscriptions.push(this.props.client.subscribe({
             query: CHANGE_ISSUE_SUBSCRIPTION,
             variables: {  },
         }).subscribe({
@@ -319,13 +388,18 @@ class IssueModal extends BaseForm {
                 changeIssueProcess(issueOnChange);
             },
             error(err) { console.error('SUBSCRIPTION ERR => ', err); },
-        });
+        }));
+    }
 
+    componentWillUnmount(){
+        for (let i in this.subscriptions) {
+           this.subscriptions[i].unsubscribe();
+        }
     }
 
     renderUsersOnline(users) {
         if (users !== null && users.length > 0) {
-            return <span>Users online : {' '}
+            return <span>Editors on page : {' '}
                     {Object.keys(users).map(key => {
                         return <span key={key} className="badge badge-pill" style={{backgroundColor : colors[key], margin: '2px'}}>{users[key].username}</span>
                     })}
@@ -347,12 +421,13 @@ class IssueModal extends BaseForm {
     }
 
     render() {
+
         const  { error, loading } = this.props.feedOne;
 
         if (loading || this.state.statuses === null ) return (<div>Loading...</div>);
         if (error) return (<div>`Error! ${error.message}`</div>);
         this.options.status.options = this.state.statuses;
-
+        console.log('<------REREREREnder--------->');
         return (
             <div>
                 <Modal isOpen={this.state.showModal} toggle={this.onCloseModal} size="lg" >

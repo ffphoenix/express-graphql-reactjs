@@ -15,7 +15,8 @@ import {
     Alert
 } from 'reactstrap';
 import axios from 'axios';
-const basePORT = (window.location.hostname === 'localhost') ?  ':4000' : '';
+//const basePORT = (window.location.hostname === 'localhost') ?  ':4000' : '';
+const basePORT = ':4000';
 const baseURL = (window.location.protocol === 'https:') ? 'https://' + window.location.hostname : 'http://' + window.location.hostname ;
 export default class Login extends Component {
     state = {

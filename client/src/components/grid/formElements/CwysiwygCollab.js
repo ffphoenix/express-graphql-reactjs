@@ -24,7 +24,7 @@ class CwysiwygCollab extends React.Component {
         return (
             <FormGroup>
                 <Label htmlFor={key}>{label}</Label>
-                <React.Fragment>
+                <div className={error ? 'form-control is-invalid' : 'form-control' }>
                     {cursors.map((cursor, i) =>
                         <span className={'cursor'} style={cursor} key={i} />
                     )}
@@ -37,7 +37,7 @@ class CwysiwygCollab extends React.Component {
                         onEditorStateChange={(state) => options.handleChange(key, state)}
                         customStyleMap={customStyleMap}
                     />
-                </React.Fragment>
+                </div>
                 <FormGroupError className="rdw-storybook-root wysiwyg-block" error={error} />
             </FormGroup>
         )

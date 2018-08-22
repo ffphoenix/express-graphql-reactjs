@@ -76,14 +76,24 @@ const onChangeIssue = {
     args: {
         id: {type: new GraphQLNonNull(GraphQLInt)},
         input: {type: GraphQLJSON},
-        hash: {type: GraphQLString}
+        hash: {type: GraphQLString},
+        cursour : {type: GraphQLJSON}
     },
     description: 'Update an existed issue',
     resolve: function (obj, args, context) {
         const result = storage.set('issue' + args.id, args.input, context.user);
-        pubsub.publish('issueOnChange', { id : result.lastRevId, delta : args.input, hash : args.hash });
-        console.log('+===========Update',{ id : result.lastRevId, delta : args.input,  hash : args.hash } )
-        return { id : result.lastRevId, delta : args.input, hash : args.hash } ;
+        let cursours = storage.get('cursours' + args.id, context.user);
+        if (cursours !== undefined) {
+            cursours = cursours.object;
+        } else {
+            cursours = {};
+        }
+        cursours[context.user.id] = args.cursour;
+        console.log('cusorsss->>', cursours);
+        storage.setAsIs('cursours' + args.id, cursours, context.user);
+        pubsub.publish('issueOnChange', { id : result.lastRevId, delta : args.input, hash : args.hash, cursours : cursours });
+        console.log('+===========Update',{ id : result.lastRevId, delta : args.input,  hash : args.hash, cursours : cursours } )
+        return { id : result.lastRevId, delta : args.input, hash : args.hash, cursours : cursours } ;
     }
 };
 

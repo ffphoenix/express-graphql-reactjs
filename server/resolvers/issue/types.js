@@ -168,6 +168,9 @@ export const issueNewPatch = new GraphQLObjectType({
         },
         hash: {
             type: GraphQLString
+        },
+        cursours: {
+            type: GraphQLJSON
         }
     }
 });
